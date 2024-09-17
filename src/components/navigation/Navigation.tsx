@@ -1,9 +1,8 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, View } from 'react-native';
 import TabBarIcon from '../TabBarIcon/TabBarIcon.tsx';
-import {DefaultNavigatorOptions} from "@react-navigation/core/lib/typescript/src/types";
-import {RouteProp} from "@react-navigation/core/src/types.tsx";
+import {RouteProp} from '@react-navigation/core/src/types.tsx';
 
 type RootTabParams = {
   Home: undefined;
