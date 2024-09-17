@@ -1,11 +1,9 @@
-import React from 'react';
+import React, {useCallback, useMemo} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { Text, View, TouchableOpacity } from 'react-native';
-import Heart from '../../assets/Icons/Heart.svg';
-import HomeButton from '../HomeButton/HomeButton';
-import Cart from '../../assets/Icons/Cart.svg';
-import User from '../../assets/Icons/User.svg';
-import Category from '../../assets/Icons/Category.svg';
+import { Text, View } from 'react-native';
+import TabBarIcon from '../TabBarIcon/TabBarIcon.tsx';
+import {DefaultNavigatorOptions} from "@react-navigation/core/lib/typescript/src/types";
+import {RouteProp} from "@react-navigation/core/src/types.tsx";
 
 type RootTabParams = {
   Home: undefined;
@@ -59,36 +57,23 @@ function FavouriteScreen() {
 const Tab = createBottomTabNavigator<RootTabParams>();
 
 export const Navigation = () => {
+
+  const getOptions = useCallback(({ route, navigation }: {route: RouteProp<{ Favourite: any; Home: any; Cart: any; Category: any; User: any}>; navigation: any;}) => ({
+    // eslint-disable-next-line react/no-unstable-nested-components
+    tabBarIcon: ({focused}: {focused: boolean}) => {
+      return <TabBarIcon routeName={route.name} focused={focused} navigation={navigation}/>;
+    },
+    tabBarActiveTintColor: 'yellow',
+    tabBarInactiveTintColor: 'white',
+    tabBarShowLabel: false,
+    tabBarStyle: {
+      height: 80,
+      backgroundColor: '#171717',
+    },
+  }), []);
   return (
       <Tab.Navigator
-          screenOptions={({ route, navigation }) => ({
-            tabBarIcon: ({focused}) => {
-              const icons = {
-                Home: HomeButton,
-                Favourite: Heart,
-                Cart: Cart,
-                Category: Category,
-                User: User,
-              };
-
-              const IconComponent = icons[route.name];
-              console.log(IconComponent, route.name);
-              const onPress = () => {
-                navigation.navigate(route.name);
-              };
-              return IconComponent ? (
-                  <TouchableOpacity onPress={onPress}><IconComponent color={focused ? 'yellow' : 'white'}/></TouchableOpacity>
-              ) : undefined;
-            },
-            tabBarActiveTintColor: 'yellow',
-            tabBarInactiveTintColor: 'white',
-            tabBarShowLabel: false,
-            tabBarStyle: {
-              height: 80,
-              backgroundColor: '#171717',
-
-            },
-          })}
+          screenOptions = {getOptions}
       >
         <Tab.Screen name="Favourite" component={FavouriteScreen} />
         <Tab.Screen name="Cart" component={CartScreen} />
