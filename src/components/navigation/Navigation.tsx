@@ -1,8 +1,11 @@
 import React, {useCallback} from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, View } from 'react-native';
-import TabBarIcon from '../TabBarIcon/TabBarIcon.tsx';
 import {RouteProp} from '@react-navigation/core/src/types.tsx';
+import {nh} from '../../../normalize.helper.ts';
+
+import TabBarIcon from '../TabBarIcon/TabBarIcon.tsx';
+import HomeScreen from '../../Screens/HomeScreen/HomeScreen.tsx';
 
 type RootTabParams = {
   Home: undefined;
@@ -12,13 +15,6 @@ type RootTabParams = {
   User: undefined;
 }
 
-function HomeScreen() {
-  return (
-      <View>
-        <Text>HomeScreen</Text>
-      </View>
-  );
-}
 
 function CartScreen() {
   return (
@@ -62,11 +58,14 @@ export const Navigation = () => {
     tabBarIcon: ({focused}: {focused: boolean}) => {
       return <TabBarIcon routeName={route.name} focused={focused} navigation={navigation}/>;
     },
+    header: () => {
+      return false;
+    },
     tabBarActiveTintColor: 'yellow',
     tabBarInactiveTintColor: 'white',
     tabBarShowLabel: false,
     tabBarStyle: {
-      height: 80,
+      height: nh(80),
       backgroundColor: '#171717',
     },
   }), []);
@@ -79,7 +78,6 @@ export const Navigation = () => {
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Category" component={CategoryScreen} />
         <Tab.Screen name="User" component={UserScreen} />
-
       </Tab.Navigator>
   );
 };

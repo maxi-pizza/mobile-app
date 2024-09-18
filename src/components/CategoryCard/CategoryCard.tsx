@@ -13,6 +13,7 @@ const cardStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: nw(10),
+    marginRight: nw(15),
   },
   image: {
     width: nw(40),
