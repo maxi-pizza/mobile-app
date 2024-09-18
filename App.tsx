@@ -1,6 +1,5 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { nw } from './normalize.helper.ts';
 import { Navigation } from './src/components/navigation/Navigation';
 import { NavigationContainer } from '@react-navigation/native';
 import Header from './src/components/Header/Header.tsx';

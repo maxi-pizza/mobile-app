@@ -32,17 +32,17 @@ const ProductCard = () => {
 const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: '#1C1C1C',
-    width: nw(165),
+    width: nw(175),
     height: nh(197),
-    marginLeft: nw(13),
     borderRadius: nw(10),
     position: 'relative',
+    marginBottom: nh(15),
   },
   image: {
     width: nw(121),
     height: nh(78),
-    marginLeft: nw(22),
-    marginRight: nw(22),
+    marginLeft: nw(27),
+    marginRight: nw(27),
     marginTop: nh(20),
   },
   weight: {
@@ -52,8 +52,8 @@ const styles = StyleSheet.create({
     padding: nw(5),
     borderRadius: 10,
     zIndex: 1,
-    marginLeft: 5,
-    marginTop: 5,
+    marginLeft: nw(5),
+    marginTop: nh(5),
     height: nh(25),
     fontSize: 12,
   },
@@ -73,8 +73,11 @@ const styles = StyleSheet.create({
     marginTop: nh(5),
   },
   title: {
+    color: 'white',
+    fontFamily: 'MontserratRegular',
     marginLeft: nw(10),
     marginTop: nh(10),
+    fontWeight: '400',
   },
   button: {
     width: nw(35),
@@ -102,13 +105,14 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     lineHeight: 18,
+    color: 'white',
   },
   regularPrice: {
     fontSize: 12,
     color: '#727272',
     fontWeight: '600',
     lineHeight: 15,
-    marginLeft: 5,
+    marginLeft: nw(5),
     textDecorationLine: 'line-through',
   },
 });

@@ -1,21 +1,22 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {ScrollView, StyleSheet, Text} from 'react-native';
+import {nh, nw} from '../../../normalize.helper.ts';
+
+
 import Banner from '../../components/Banner/Banner.tsx';
 import Category from '../../components/Category/Category.tsx';
-import ProductCard from '../../components/ProductCard/ProductCard.tsx';
-import {nh, nw} from "../../../normalize.helper.ts";
+import ProductsGrid from '../../components/ProductsGrid/ProductsGrid.tsx';
+import Search from '../../components/Search/Search.tsx';
 
 const HomeScreen = () => {
   return (
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
         <Banner/>
         <Category/>
-        <Text style={styles.product}>Бестселлеры</Text>
-        <ProductCard/>
-        <ProductCard/>
-        <ProductCard/>
-
-      </View>
+        <Search/>
+        <Text style={styles.product}>Товары</Text>
+        <ProductsGrid/>
+      </ScrollView>
   );
 };
 
@@ -26,6 +27,7 @@ const styles = StyleSheet.create({
     height: '100%',
   },
   product: {
+    color: 'white',
     fontWeight: '600',
     fontSize: 20,
     lineHeight: 24,

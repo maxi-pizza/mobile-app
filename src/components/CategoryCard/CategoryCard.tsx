@@ -20,10 +20,11 @@ const cardStyles = StyleSheet.create({
     height: nw(40),
   },
   text: {
+    fontFamily: 'MontserratRegular',
     color: 'white',
     paddingLeft: nw(15),
     fontSize: nh(13),
-    fontWeight: '300',
+    fontWeight: '400',
   },
 });
 

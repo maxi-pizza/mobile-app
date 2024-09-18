@@ -13,9 +13,8 @@ const Banner = () => {
 
 const styles = StyleSheet.create({
   wrapper: {
-    marginTop: 50,
-    display: 'flex',
-    alignItems: 'center',
+    marginTop: nh(40),
+    marginLeft: nw(13),
   },
   banner: {
     width: nw(365),
