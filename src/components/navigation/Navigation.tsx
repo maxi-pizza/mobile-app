@@ -6,6 +6,9 @@ import {nh} from '../../../normalize.helper.ts';
 
 import TabBarIcon from '../TabBarIcon/TabBarIcon.tsx';
 import HomeScreen from '../../Screens/HomeScreen/HomeScreen.tsx';
+import FavouriteScreen from '../../Screens/FavouriteScreen/FavouriteScreen.tsx';
+import CategoryScreen from '../../Screens/CategoryScreen/CategoryScreen.tsx';
+import CartScreen from '../../Screens/CartScreen/CartScreen.tsx';
 
 type RootTabParams = {
   Home: undefined;
@@ -16,21 +19,7 @@ type RootTabParams = {
 }
 
 
-function CartScreen() {
-  return (
-      <View>
-        <Text>CartScreen</Text>
-      </View>
-  );
-}
 
-function CategoryScreen() {
-  return (
-      <View>
-        <Text>CategoryScreen</Text>
-      </View>
-  );
-}
 
 function UserScreen() {
   return (
@@ -40,13 +29,6 @@ function UserScreen() {
   );
 }
 
-function FavouriteScreen() {
-  return (
-      <View>
-        <Text>FavouriteScreen</Text>
-      </View>
-  );
-}
 
 
 const Tab = createBottomTabNavigator<RootTabParams>();

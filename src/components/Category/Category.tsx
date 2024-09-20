@@ -19,10 +19,12 @@ const Category = () => {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: nh(30),
+    marginBottom: nh(15),
     marginLeft: nw(13),
   },
   title: {
+    color: 'white',
+    fontFamily: 'MontserratRegular',
     marginTop: nh(30),
     fontSize: 20,
     marginBottom: nw(15),
