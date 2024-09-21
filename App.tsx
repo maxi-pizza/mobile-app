@@ -1,8 +1,10 @@
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
+import './gesture-handler';
 import { Navigation } from './src/components/navigation/Navigation';
 import { NavigationContainer } from '@react-navigation/native';
 import Header from './src/components/Header/Header.tsx';
+
 
 
 const styles = StyleSheet.create({
@@ -17,9 +19,8 @@ function App(): JSX.Element {
     <View style={styles.container}>
       <Header/>
       <NavigationContainer>
-        <Navigation />
+        <Navigation/>
       </NavigationContainer>
-
     </View>
   );
 
