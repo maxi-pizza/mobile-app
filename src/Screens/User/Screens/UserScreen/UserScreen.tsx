@@ -1,16 +1,16 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {nh, nw} from '../../../normalize.helper.ts';
+import {nh, nw} from '../../../../../normalize.helper.ts';
 
-import UserOption from '../../components/UserOption/UserOption.tsx';
+import UserOption from '../../../../components/UserOption/UserOption.tsx';
 
-import UserCircle from '../../assets/Icons/UserCircle.svg';
-import Caret from '../../assets/Icons/Caret.svg';
-import ClockCounter from '../../assets/Icons/ClockCounterClockwise.svg';
-import Truck from '../../assets/Icons/Truck.svg';
-import Phone from '../../assets/Icons/Phone.svg';
-import CreditCard from '../../assets/Icons/CreditCard.svg';
-import Coins from '../../assets/Icons/Coins.svg';
+import UserCircle from '../../../../assets/Icons/UserCircle.svg';
+import Caret from '../../../../assets/Icons/Caret.svg';
+import ClockCounter from '../../../../assets/Icons/ClockCounterClockwise.svg';
+import Truck from '../../../../assets/Icons/Truck.svg';
+import Phone from '../../../../assets/Icons/Phone.svg';
+import CreditCard from '../../../../assets/Icons/CreditCard.svg';
+import Coins from '../../../../assets/Icons/Coins.svg';
 
 
 
@@ -39,11 +39,11 @@ const UserScreen = ({navigation}: {navigation: any} ) => {
                 <Text style={styles.signInText}>Увійдіть в акаунт</Text>
                 <Text style={styles.descriptionText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</Text>
                 <View style={styles.btnWrapper}>
-                  <TouchableOpacity style={styles.signUpBtn}>
+                  <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={styles.signUpBtn}>
                     <Text style={styles.signUpBtnText}>Реєстрація</Text>
                   </TouchableOpacity>
 
-                  <TouchableOpacity style={styles.signInBtn}>
+                  <TouchableOpacity onPress={() => navigation.navigate('SignIn')} style={styles.signInBtn}>
                     <Text style={styles.signInBtnText}>Увійти</Text>
                   </TouchableOpacity>
                 </View>

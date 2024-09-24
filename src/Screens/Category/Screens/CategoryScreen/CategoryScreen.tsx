@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {CategoryCard} from '../../components/CategoryCard/CategoryCard.tsx';
-import {nh, nw} from '../../../normalize.helper.ts';
+import {CategoryCard} from '../../../../components/CategoryCard/CategoryCard.tsx';
+import {nh, nw} from '../../../../../normalize.helper.ts';
 
 const CategoryScreen = () => {
   return (

@@ -1,12 +1,12 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import EmptyCart from '../../assets/Icons/EmptyCart.svg';
-import {nh, nw} from '../../../normalize.helper.ts';
-import ProductCartCard from '../../components/ProductCartCard/ProductCartCard.tsx';
-import Minus from '../../assets/Icons/Minus.svg';
-import Plus from '../../assets/Icons/Plus.svg';
-import ForkKnife from '../../assets/Icons/ForkKnife.svg';
+import EmptyCart from '../../../../assets/Icons/EmptyCart.svg';
+import {nh, nw} from '../../../../../normalize.helper.ts';
+import ProductCartCard from '../../../../components/ProductCartCard/ProductCartCard.tsx';
+import Minus from '../../../../assets/Icons/Minus.svg';
+import Plus from '../../../../assets/Icons/Plus.svg';
+import ForkKnife from '../../../../assets/Icons/ForkKnife.svg';
 
 const CartScreen = () => {
   return (

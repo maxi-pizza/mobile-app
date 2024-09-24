@@ -1,12 +1,12 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text} from 'react-native';
-import {nh, nw} from '../../../normalize.helper.ts';
+import {nh, nw} from '../../../../../normalize.helper.ts';
 
 
-import Banner from '../../components/Banner/Banner.tsx';
-import Category from '../../components/Category/Category.tsx';
-import ProductsGrid from '../../components/ProductsGrid/ProductsGrid.tsx';
-import Search from '../../components/Search/Search.tsx';
+import Banner from '../../../../components/Banner/Banner.tsx';
+import Category from '../../../../components/Category/Category.tsx';
+import ProductsGrid from '../../../../components/ProductsGrid/ProductsGrid.tsx';
+import Search from '../../../../components/Search/Search.tsx';
 
 const HomeScreen = () => {
   return (

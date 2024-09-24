@@ -4,11 +4,11 @@ import {RouteProp} from '@react-navigation/core/src/types.tsx';
 import {nh} from '../../../normalize.helper.ts';
 
 import TabBarIcon from '../TabBarIcon/TabBarIcon.tsx';
-import HomeScreen from '../../Screens/HomeScreen/HomeScreen.tsx';
-import FavouriteScreen from '../../Screens/FavouriteScreen/FavouriteScreen.tsx';
-import CategoryScreen from '../../Screens/CategoryScreen/CategoryScreen.tsx';
-import CartScreen from '../../Screens/CartScreen/CartScreen.tsx';
-import StackNavigation from '../../Screens/UserScreen/StackNavigation.tsx';
+import HomeScreen from '../../Screens/Home/Screens/HomeScreen/HomeScreen.tsx';
+import FavouriteScreen from '../../Screens/Favourite/Screens/FavouriteScreen/FavouriteScreen.tsx';
+import CategoryScreen from '../../Screens/Category/Screens/CategoryScreen/CategoryScreen.tsx';
+import CartScreen from '../../Screens/Cart/Screens/CartScreen/CartScreen.tsx';
+import StackNavigation from '../../Screens/User/StackNavigation.tsx';
 
 
 

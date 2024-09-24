@@ -1,7 +1,7 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import ProductsGrid from "../../components/ProductsGrid/ProductsGrid.tsx";
-import {nh, nw} from "../../../normalize.helper.ts";
+import ProductsGrid from "../../../../components/ProductsGrid/ProductsGrid.tsx";
+import {nh, nw} from "../../../../../normalize.helper.ts";
 
 
 const FavouriteScreen = () => {
