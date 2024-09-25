@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   },
   buttonMinus: {
     width: nw(35),
-    height: nh(35),
+    height: nw(35),
     borderRadius: 20,
     backgroundColor: '#2A2A2A',
     display: 'flex',
@@ -103,8 +103,8 @@ const styles = StyleSheet.create({
   },
   buttonPlus: {
     width: nw(35),
-    height: nh(35),
-    borderRadius: 20,
+    height: nw(35),
+    borderRadius: 35,
     backgroundColor: '#2A2A2A',
     display: 'flex',
     justifyContent: 'center',

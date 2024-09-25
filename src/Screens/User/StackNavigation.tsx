@@ -7,7 +7,10 @@ import UserScreen from './Screens/UserScreen/UserScreen.tsx';
 import ContactsScreen from './Screens/ContactsScreen/ContactsScreen.tsx';
 import SignInScreen from './Screens/SignInScreen/SignInScreen.tsx';
 import SignUpScreen from './Screens/SignUpScreen/SignUpScreen.tsx';
-import ResetPasswordScreen from "./Screens/ResetPasswordScreen/ResetPasswordScreen.tsx";
+import ResetPasswordScreen from './Screens/ResetPasswordScreen/ResetPasswordScreen.tsx';
+import OrderHistoryScreen from './Screens/OrderHistoryScreen/OrderHistoryScreen.tsx';
+import SavedAddressesScreen from './Screens/SavedAddressesScreen/SavedAddressesScreen.tsx';
+
 
 type ScreenProps = {
   Profile: undefined;
@@ -23,24 +26,6 @@ type ScreenProps = {
 }
 
 
-function OrderHistory({navigation}: {navigation: any}) {
-  return (
-      <View>
-        <Text><TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text>Назад</Text>
-        </TouchableOpacity></Text>
-      </View>
-  );
-}
-function SavedAddresses({navigation}: {navigation: any}) {
-  return (
-      <View>
-        <Text><TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text>Назад</Text>
-        </TouchableOpacity></Text>
-      </View>
-  );
-}
 function DeliveryAndPayment({navigation}: {navigation: any}) {
   return (
       <View>
@@ -51,15 +36,6 @@ function DeliveryAndPayment({navigation}: {navigation: any}) {
   );
 }
 function RefundRules({navigation}: {navigation: any}) {
-  return (
-      <View>
-        <Text><TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text>Назад</Text>
-        </TouchableOpacity></Text>
-      </View>
-  );
-}
-function Profile({navigation}: {navigation: any}) {
   return (
       <View>
         <Text><TouchableOpacity onPress={() => navigation.goBack()}>
@@ -86,14 +62,14 @@ const StackNavigation = () => {
       >
         <Stack.Screen name="UserScreen" component={UserScreen}/>
         <Stack.Screen name="OrderHistory"
-                      component={OrderHistory}
+                      component={OrderHistoryScreen}
                       options={{
                         gestureEnabled: true,
                         gestureDirection: 'horizontal',
                       }}
         />
         <Stack.Screen name="SavedAddresses"
-                      component={SavedAddresses}
+                      component={SavedAddressesScreen}
                       options={{
                         gestureEnabled: true,
                         gestureDirection: 'horizontal',
@@ -113,12 +89,6 @@ const StackNavigation = () => {
                         gestureDirection: 'horizontal',
                       }}
         />
-        <Stack.Screen name="Profile"
-                      component={Profile}
-                      options={{
-                        gestureEnabled: true,
-                        gestureDirection: 'horizontal',
-                      }} />
         <Stack.Screen name="Contacts"
                       component={ContactsScreen}
                       options={{

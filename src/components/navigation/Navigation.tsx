@@ -12,6 +12,7 @@ import StackNavigation from '../../Screens/User/StackNavigation.tsx';
 
 
 
+
 type RootTabParams = {
   Home: undefined;
   Favourite: undefined;
@@ -29,7 +30,7 @@ const Tab = createBottomTabNavigator<RootTabParams>();
 
 export const Navigation = () => {
 
-  const getOptions = useCallback(({ route, navigation }: {route: RouteProp<{ Favourite: any; Home: any; Cart: any; Category: any; User: any}>; navigation: any | undefined;}) => ({
+  const getOptions = useCallback(({ route, navigation }: {route: RouteProp<{ Favourite: any; Home: any; Cart: any; Category: any; User: any;}>; navigation: any | undefined;}) => ({
     // eslint-disable-next-line react/no-unstable-nested-components
     tabBarIcon: ({focused}: {focused: boolean}) => {
       return <TabBarIcon routeName={route.name} focused={focused} navigation={navigation}/>;

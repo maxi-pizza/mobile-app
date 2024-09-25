@@ -3,6 +3,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
 import UserOption from '../../../../components/UserOption/UserOption.tsx';
+import ProfileScreen from '../ProfileScreen/ProfileScreen.tsx';
 
 import UserCircle from '../../../../assets/Icons/UserCircle.svg';
 import Caret from '../../../../assets/Icons/Caret.svg';
@@ -15,12 +16,13 @@ import Coins from '../../../../assets/Icons/Coins.svg';
 
 
 const UserScreen = ({navigation}: {navigation: any} ) => {
-  const [logged, setLogged] = useState(false);
+  const [logged, setLogged] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   return (
       <View style={styles.container}>
         {logged ? (
-            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+            <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
               <View style={styles.profileContainer}>
                 <View style={styles.profileTextUserWrapper}>
                   <View style={styles.userCircle}><UserCircle color="#727272"/></View>
@@ -51,7 +53,8 @@ const UserScreen = ({navigation}: {navigation: any} ) => {
 
             </View>
         )}
-        <View style={styles.horizontalLine}></View>
+        <ProfileScreen visible={isVisible} setIsVisible={setIsVisible}/>
+        <View style={styles.horizontalLine} />
         <TouchableOpacity onPress={() => navigation.navigate('OrderHistory')}>
           <UserOption title="Історія замовлень" svgIcon={<ClockCounter color="#727272"/>}/>
         </TouchableOpacity>
@@ -59,7 +62,7 @@ const UserScreen = ({navigation}: {navigation: any} ) => {
           <UserOption title="Збережені адреси" svgIcon={<Truck color="#727272"/>}/>
         </TouchableOpacity>
 
-        <View style={styles.horizontalLine}></View>
+        <View style={styles.horizontalLine} />
 
         <TouchableOpacity onPress={() => navigation.navigate('Contacts')}>
           <UserOption title="Контакти" svgIcon={<Phone color="#727272"/>}/>

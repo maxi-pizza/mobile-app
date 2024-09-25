@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
   },
   shadowProp: {
     shadowColor: '#FFE60080',
-    elevation: 20,
+    elevation: 7,
   },
   margin: {
     marginBottom: nh(50),

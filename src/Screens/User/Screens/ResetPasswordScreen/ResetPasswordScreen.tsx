@@ -45,6 +45,7 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: nh(10),
     marginBottom: nh(20),
+    width: nw(365),
   },
   btn: {
     display: 'flex',
