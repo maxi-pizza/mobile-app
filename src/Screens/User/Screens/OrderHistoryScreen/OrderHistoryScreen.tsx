@@ -7,7 +7,7 @@ import OrderCard from './components/OrderCard.tsx';
 const OrderHistoryScreen = () => {
   return (
       <View style={styles.container}>
-        <ScrollView>
+        <ScrollView showsVerticalScrollIndicator={false}>
           <Text style={styles.header}>Історія замовлень</Text>
           <OrderCard status={true}/>
           <OrderCard status={false}/>

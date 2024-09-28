@@ -6,7 +6,7 @@ import {nh, nw} from "../../../../../normalize.helper.ts";
 
 const FavouriteScreen = () => {
   return (
-      <ScrollView style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <Text style={styles.text}>Вибране</Text>
         <ProductsGrid/>
       </ScrollView>

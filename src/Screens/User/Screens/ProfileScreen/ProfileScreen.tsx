@@ -1,11 +1,10 @@
 import React from 'react';
-import {Modal, Pressable, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
 import Header from '../../../../components/Header/Header.tsx';
 import InformationInput from '../../components/InformationInput/InformationInput.tsx';
-
-import Caret from '../../../../assets/Icons/Caret.svg';
+import BackButtonModal from '../../../../components/BackButtonModal/BackButtonModal.tsx';
 
 
 const ProfileScreen = ({visible, setIsVisible}: {visible: boolean, setIsVisible: (a: boolean) => void}) => {
@@ -19,7 +18,7 @@ const ProfileScreen = ({visible, setIsVisible}: {visible: boolean, setIsVisible:
        >
          <View style={styles.container}>
            <Header/>
-          <Pressable style={styles.hideBtn} onPress={() => setIsVisible(!visible)}><Caret style={styles.caret} width="21" height="21" color="black"/></Pressable>
+          <BackButtonModal setIsVisible={setIsVisible} visible={visible}/>
            <ScrollView>
              <Text style={styles.header}>Профиль</Text>
              <View style={styles.inputsWrapper}>
@@ -54,21 +53,6 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     backgroundColor: '#141414',
-  },
-  caret: {
-    transform: [{rotate: '90deg'}],
-  },
-  hideBtn: {
-    position: 'absolute',
-    marginTop: nw(15),
-    marginLeft: nw(13),
-    width: nw(31),
-    height: nw(31),
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#FFE600',
-    borderRadius: 5,
   },
   header: {
     fontFamily: 'MontserratRegular',

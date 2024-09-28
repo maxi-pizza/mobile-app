@@ -10,7 +10,7 @@ import Search from '../../../../components/Search/Search.tsx';
 
 const HomeScreen = () => {
   return (
-      <ScrollView style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <Banner/>
         <Category/>
         <Search/>

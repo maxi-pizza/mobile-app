@@ -7,8 +7,9 @@ import TabBarIcon from '../TabBarIcon/TabBarIcon.tsx';
 import HomeScreen from '../../Screens/Home/Screens/HomeScreen/HomeScreen.tsx';
 import FavouriteScreen from '../../Screens/Favourite/Screens/FavouriteScreen/FavouriteScreen.tsx';
 import CategoryScreen from '../../Screens/Category/Screens/CategoryScreen/CategoryScreen.tsx';
-import CartScreen from '../../Screens/Cart/Screens/CartScreen/CartScreen.tsx';
+
 import StackNavigation from '../../Screens/User/StackNavigation.tsx';
+import CartNavigation from '../../Screens/Cart/CartNavigation.tsx';
 
 
 
@@ -52,7 +53,7 @@ export const Navigation = () => {
           initialRouteName="Home"
       >
         <Tab.Screen name="Favourite" component={FavouriteScreen} />
-        <Tab.Screen name="Cart" component={CartScreen} />
+        <Tab.Screen name="Cart" component={CartNavigation} />
         <Tab.Screen name="Home" component={HomeScreen} />
         <Tab.Screen name="Category" component={CategoryScreen} />
         <Tab.Screen name="User" component={StackNavigation} />

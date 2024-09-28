@@ -8,7 +8,7 @@ const Search = () => {
   return (
       <View style={styles.container}>
         <MagnifyingGlass style={styles.magnify}/>
-        <TextInput style={styles.input} placeholder="Что-то ищете?" />
+        <TextInput placeholderTextColor="#3F3F3F" style={styles.input} placeholder="Что-то ищете?" />
       </View>
   );
 };

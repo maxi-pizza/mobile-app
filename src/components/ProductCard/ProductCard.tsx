@@ -56,6 +56,7 @@ const styles = StyleSheet.create({
     marginTop: nh(5),
     height: nh(25),
     fontSize: 12,
+    color: 'white',
   },
   heartContainer: {
     width: nw(30),

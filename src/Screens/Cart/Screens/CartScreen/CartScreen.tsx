@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import EmptyCart from '../../../../assets/Icons/EmptyCart.svg';
@@ -7,8 +7,15 @@ import ProductCartCard from '../../../../components/ProductCartCard/ProductCartC
 import Minus from '../../../../assets/Icons/Minus.svg';
 import Plus from '../../../../assets/Icons/Plus.svg';
 import ForkKnife from '../../../../assets/Icons/ForkKnife.svg';
+import CheckoutWithoutAccount from './modals/CheckoutWithoutAccount.tsx';
+import DropDown from '../../../../components/DropDown/DropDown.tsx';
 
-const CartScreen = () => {
+const CartScreen = ({navigation}: {navigation: any}) => {
+  const rds = [
+      'fsdfsd',
+      'fsdfsrd',
+  ];
+
   return (
       <View style={styles.container}>
         {/*<View style={styles.emptyCart}>*/}
@@ -38,7 +45,7 @@ const CartScreen = () => {
               </TouchableOpacity>
             </View>
           </View>
-          <TouchableOpacity style={styles.orderButton}>
+          <TouchableOpacity onPress={() => navigation.navigate('CheckoutWithoutAccount')} style={styles.orderButton}>
             <Text style={styles.checkoutText}>Оформить заказ | 15 906 ₴</Text>
           </TouchableOpacity>
         </View>

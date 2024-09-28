@@ -76,6 +76,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     textAlign: 'center',
+    color: 'white',
   },
   phoneSvgWrapper: {
     display: 'flex',

@@ -7,7 +7,7 @@ const CategoryScreen = () => {
   return (
       <View style={styles.container}>
         <Text style={styles.category}>Категории</Text>
-        <ScrollView contentContainerStyle={styles.categoryContainer} >
+        <ScrollView showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryContainer} >
           <CategoryCard/>
           <CategoryCard/>
           <CategoryCard/>

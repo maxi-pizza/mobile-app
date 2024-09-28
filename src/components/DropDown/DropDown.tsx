@@ -4,7 +4,7 @@ import {nh, nw} from '../../../normalize.helper.ts';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 import Caret from '../../assets/Icons/Caret.svg';
-import MapPin from "../../assets/Icons/MapPinMapPin.svg";
+import MapPin from '../../assets/Icons/MapPinMapPin.svg';
 
 
 
@@ -28,13 +28,13 @@ const DropDown = ({placeholder, options}: {placeholder: string; options: string[
   return (
       <Pressable style={styles.container} onPress={openBottomSheet}>
         <View style={styles.inputContainer}>
-          <Text style={styles.selectOption}>{placeholder}</Text>
+          <Text style={styles.selectOption}>{isActive ? isActive : placeholder}</Text>
           <Caret color="#727272" width="15"/>
         </View>
 
         <BottomSheetModal
             ref={bottomSheetModalRef}
-            snapPoints={['25%']}
+            snapPoints={['30%']}
             backgroundStyle={styles.bottom}
             handleIndicatorStyle={styles.indicator}
             style={styles.modal}
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   },
   dropDownContent: {
     width: nw(365),
-    backgroundColor: '#1C1C1C',
+    backgroundColor: 'transparent',
   },
   inputContainer: {
     display: 'flex',
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   },
   bottomSheetContent: {
     backgroundColor: '#1C1C1C',
-    height: nh(166),
+    height: nh(190),
     paddingLeft: nw(15),
     width: nw(365),
     borderRadius: 10,
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     paddingBottom: nh(10),
   },
   bottom: {
-    backgroundColor: '#1C1C1C',
+    backgroundColor: 'transparent',
     borderRadius: 15,
   },
   indicator: {
