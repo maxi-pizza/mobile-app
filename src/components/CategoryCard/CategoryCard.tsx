@@ -16,15 +16,13 @@ export const CategoryCard = () => {
 const cardStyles = StyleSheet.create({
   container: {
     backgroundColor: '#1C1C1C',
-    width: nw(165),
+    width: nw(175),
     height: nh(70),
     borderRadius: nw(10),
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: nw(10),
-    marginRight: nw(15),
-    marginBottom: nh(15),
   },
   image: {
     width: nw(40),

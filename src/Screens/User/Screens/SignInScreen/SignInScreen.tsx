@@ -4,10 +4,12 @@ import {nh, nw} from '../../../../../normalize.helper.ts';
 
 import InformationInput from '../../components/InformationInput/InformationInput.tsx';
 import PasswordInput from '../../components/PasswordInput/PasswordInput.tsx';
+import Header from '../../../../components/Header/Header.tsx';
 
-const SignInScreen = ({navigation}: {navigation: any}) => {
+const SignInScreen = ({navigation, route}: {navigation: any, route: any}) => {
   return (
     <View style={styles.container}>
+      <Header route={route}/>
       <Text style={styles.header}>Вход в аккаунт</Text>
       <View>
         <InformationInput placeholder={'Email'} inputMode={'email'}/>

@@ -1,23 +1,46 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {CategoryCard} from '../../../../components/CategoryCard/CategoryCard.tsx';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
-const CategoryScreen = () => {
+import {CategoryCard} from '../../../../components/CategoryCard/CategoryCard.tsx';
+import Header from '../../../../components/Header/Header.tsx';
+
+const CategoryScreen = ({ route}: { route: any}) => {
   return (
       <View style={styles.container}>
+        <Header route={route}/>
         <Text style={styles.category}>Категории</Text>
         <ScrollView showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryContainer} >
-          <CategoryCard/>
-          <CategoryCard/>
-          <CategoryCard/>
-          <CategoryCard/>
-          <CategoryCard/>
-          <CategoryCard/>
-          <CategoryCard/>
-          <CategoryCard/>
-          <CategoryCard/>
-          <CategoryCard/>
+          <View style={styles.categoryWrapper}>
+            <CategoryCard/>
+          </View>
+          <View style={styles.categoryWrapper}>
+            <CategoryCard/>
+          </View>
+          <View style={styles.categoryWrapper}>
+            <CategoryCard/>
+          </View>
+          <View style={styles.categoryWrapper}>
+            <CategoryCard/>
+          </View>
+          <View style={styles.categoryWrapper}>
+            <CategoryCard/>
+          </View>
+          <View style={styles.categoryWrapper}>
+            <CategoryCard/>
+          </View>
+          <View style={styles.categoryWrapper}>
+            <CategoryCard/>
+          </View>
+          <View style={styles.categoryWrapper}>
+            <CategoryCard/>
+          </View>
+          <View style={styles.categoryWrapper}>
+            <CategoryCard/>
+          </View>
+          <View style={styles.categoryWrapper}>
+            <CategoryCard/>
+          </View>
         </ScrollView>
       </View>
   );
@@ -27,10 +50,15 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#141414',
     height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+  },
+  categoryWrapper: {
+    marginBottom: nh(15),
   },
   category: {
     marginTop: nh(30),
-    marginLeft: nw(13),
+    width: nw(365),
     marginBottom: nh(15),
     fontSize: 20,
     fontWeight: '600',
@@ -38,11 +66,11 @@ const styles = StyleSheet.create({
     lineHeight: 24,
   },
   categoryContainer: {
-    width: nw(390),
+    width: nw(365),
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    justifyContent: 'center',
+    justifyContent: 'space-between',
   },
 });
 

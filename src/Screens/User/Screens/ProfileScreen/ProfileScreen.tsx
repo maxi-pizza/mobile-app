@@ -7,7 +7,7 @@ import InformationInput from '../../components/InformationInput/InformationInput
 import BackButtonModal from '../../../../components/BackButtonModal/BackButtonModal.tsx';
 
 
-const ProfileScreen = ({visible, setIsVisible}: {visible: boolean, setIsVisible: (a: boolean) => void}) => {
+const ProfileScreen = ({visible, setIsVisible,route}: {visible: boolean, setIsVisible: (a: boolean) => void,route?: any}) => {
 
 
 
@@ -17,7 +17,7 @@ const ProfileScreen = ({visible, setIsVisible}: {visible: boolean, setIsVisible:
            onRequestClose={() => setIsVisible(!visible)}
        >
          <View style={styles.container}>
-           <Header/>
+           <Header route={route}/>
           <BackButtonModal setIsVisible={setIsVisible} visible={visible}/>
            <ScrollView>
              <Text style={styles.header}>Профиль</Text>

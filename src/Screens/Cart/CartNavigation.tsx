@@ -2,12 +2,12 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import CartScreen from './Screens/CartScreen/CartScreen.tsx';
-import CheckoutWithoutAccount from './Screens/CartScreen/modals/CheckoutWithoutAccount.tsx';
+import Checkout from './Screens/CartScreen/modals/Checkout.tsx';
 
 
 type ScreenProps = {
   CartScreen: undefined;
-  CheckoutWithoutAccount: undefined;
+  Checkout: undefined;
 }
 
 
@@ -29,8 +29,8 @@ const CartNavigation = () => {
           <Stack.Screen name="CartScreen" component={CartScreen}/>
         </Stack.Group>
         <Stack.Group screenOptions={{presentation: 'modal', headerShown: false,animationTypeForReplace: 'push'}}>
-          <Stack.Screen name="CheckoutWithoutAccount"
-                        component={CheckoutWithoutAccount}
+          <Stack.Screen name="Checkout"
+                        component={Checkout}
           />
         </Stack.Group>
       </Stack.Navigator>

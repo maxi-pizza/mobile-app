@@ -1,11 +1,13 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../normalize.helper.ts';
 
 import CartProduct from '../../assets/CartProduct.png';
-import Plus from '../../assets/Icons/Plus.svg';
-import Minus from '../../assets/Icons/Minus.svg';
 import Trash from '../../assets/Icons/Trash.svg';
+
+import Counter from '../Counter/Counter.tsx';
+
+// todo: make list of products not a grid
 
 const ProductCartCard = () => {
   return (
@@ -17,19 +19,10 @@ const ProductCartCard = () => {
             <Text style={styles.description}>Помідор, огурець, авокадо...</Text>
           </View>
         </View>
-        <View style={styles.buttonContainer}>
-          <TouchableOpacity style={styles.buttonMinus}>
-            <Minus color="white" width="16" height="16"/>
-          </TouchableOpacity>
-          <View style={styles.textWrapper}>
-            <Text style={styles.countText}>2</Text>
-          </View>
-          <TouchableOpacity style={styles.buttonPlus}>
-            <Plus color="white" width="16" height="16"/>
-          </TouchableOpacity>
-        </View>
         <Trash color="#CD3838" style={styles.trash}/>
-
+        <View style={styles.counterWrapper}>
+          <Counter/>
+        </View>
         <View style={styles.priceWrapper}>
           <Text style={styles.regularPrice}>9556 ₴</Text>
           <Text style={styles.discountPrice}>7953 ₴</Text>
@@ -58,6 +51,10 @@ const styles = StyleSheet.create({
     height: nh(17),
     overflow: 'hidden',
   },
+  counterWrapper: {
+    marginTop: nh(15),
+    marginLeft: nw(10),
+  },
   description: {
     color: '#838383',
     fontFamily: 'MontserratRegular',
@@ -80,43 +77,6 @@ const styles = StyleSheet.create({
   titleDescriptionContainer: {
     marginTop: nh(15),
     marginLeft: nw(10),
-  },
-  buttonMinus: {
-    width: nw(35),
-    height: nw(35),
-    borderRadius: 20,
-    backgroundColor: '#2A2A2A',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonPlus: {
-    width: nw(35),
-    height: nw(35),
-    borderRadius: 20,
-    backgroundColor: '#2A2A2A',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    width: nw(111),
-    justifyContent: 'space-between',
-    marginLeft: nw(10),
-    marginTop: nh(15),
-  },
-  countText: {
-    fontWeight: '600',
-    fontFamily: 'MontserratRegular',
-    fontSize: 18,
-    lineHeight: 22,
-  },
-  textWrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   trash: {
     position: 'absolute',

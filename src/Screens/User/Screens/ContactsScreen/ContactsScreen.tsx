@@ -5,10 +5,12 @@ import {nh, nw} from '../../../../../normalize.helper.ts';
 import Phone from '../../../../assets/Icons/Phone.svg';
 import Instagram from '../../../../assets/Icons/Instagram.svg';
 import Telegram from '../../../../assets/Icons/Telegram.svg';
+import Header from '../../../../components/Header/Header.tsx';
 
-const ContactsScreen = () => {
+const ContactsScreen = ({ route}: { route: any}) => {
   return (
       <View style={styles.container}>
+        <Header route={route}/>
         <Text style={styles.header}>Контакты</Text>
         <View style={styles.btnWrapper}>
           <TouchableOpacity style={styles.btn}><Instagram width="17" height="17" color="black"/><Text style={styles.btnText}> Наш инстаграм | @emoji_sushi</Text></TouchableOpacity>

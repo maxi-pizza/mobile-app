@@ -10,6 +10,7 @@ import SignUpScreen from './Screens/SignUpScreen/SignUpScreen.tsx';
 import ResetPasswordScreen from './Screens/ResetPasswordScreen/ResetPasswordScreen.tsx';
 import OrderHistoryScreen from './Screens/OrderHistoryScreen/OrderHistoryScreen.tsx';
 import SavedAddressesScreen from './Screens/SavedAddressesScreen/SavedAddressesScreen.tsx';
+import DeliveryAndPayment from './Screens/DeliveryAndPayment/DeliveryAndPayment.tsx';
 
 
 type ScreenProps = {
@@ -26,15 +27,7 @@ type ScreenProps = {
 }
 
 
-function DeliveryAndPayment({navigation}: {navigation: any}) {
-  return (
-      <View>
-        <Text><TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text>Назад</Text>
-        </TouchableOpacity></Text>
-      </View>
-  );
-}
+
 function RefundRules({navigation}: {navigation: any}) {
   return (
       <View>

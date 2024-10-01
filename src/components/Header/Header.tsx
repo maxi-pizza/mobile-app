@@ -3,20 +3,18 @@ import { StyleSheet, View} from 'react-native';
 import {nh, nw} from '../../../normalize.helper.ts';
 
 import CityDropDown from '../CityDropDown/CityDropDown.tsx';
-import {useNavigationContext} from '../../context/NavigationContext.tsx';
 
 import Logo from '../../assets/Logo.svg';
 import LanguageChange from '../LanguageChange/LanguageChange.tsx';
 
 
+// todo: header for every screen!
 
-
-const Header = () => {
-  const { routeName } = useNavigationContext();
+const Header = ({ route}: {navigation?: any; route?: any}) => {
 
   return (
       <View style={styles.container}>
-        {routeName === 'Home' ? (
+        {route?.name === 'Home' || route?.name === 'UserScreen' ? (
             <LanguageChange/>
         ) : (
             <View style={styles.block}/>
@@ -35,6 +33,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     height: nh(61),
+    width: '100%',
   },
   logo: {
     width: nw(73),

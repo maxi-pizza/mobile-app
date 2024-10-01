@@ -7,11 +7,19 @@ const Category = () => {
   return (
      <View style={styles.container}>
        <Text style={styles.title}>Категории</Text>
-       <ScrollView horizontal={true} contentContainerStyle={styles.categoryCardsContainer}>
+       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryCardsContainer}>
+         <View style={styles.categoryWrapper}>
            <CategoryCard/>
+         </View>
+         <View style={styles.categoryWrapper}>
            <CategoryCard/>
+         </View>
+         <View style={styles.categoryWrapper}>
            <CategoryCard/>
+         </View>
+         <View style={styles.categoryWrapper}>
            <CategoryCard/>
+         </View>
        </ScrollView>
      </View>
   );
@@ -20,7 +28,7 @@ const Category = () => {
 const styles = StyleSheet.create({
   container: {
     marginBottom: nh(15),
-    marginLeft: nw(13),
+    width: nw(365),
   },
   title: {
     color: 'white',
@@ -32,6 +40,9 @@ const styles = StyleSheet.create({
   categoryCardsContainer: {
     display: 'flex',
     flexDirection: 'row',
+  },
+  categoryWrapper: {
+    marginRight: nw(15),
   },
 });
 

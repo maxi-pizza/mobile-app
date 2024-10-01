@@ -3,10 +3,12 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
 import InformationInput from '../../components/InformationInput/InformationInput.tsx';
+import Header from '../../../../components/Header/Header.tsx';
 
-const ResetPasswordScreen = () => {
+const ResetPasswordScreen = ({ route}: { route: any}) => {
   return (
       <View style={styles.container}>
+        <Header route={route}/>
         <Text style={styles.header}>
           Восстановление пароля
         </Text>

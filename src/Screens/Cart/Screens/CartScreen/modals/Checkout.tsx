@@ -1,14 +1,15 @@
 import React  from 'react';
-import {ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '../../../../../../normalize.helper.ts';
 
-import ProductCardInCheckout from '../components/ProductCardInCheckout.tsx';
 import Swiper from '../components/Swiper.tsx';
 import InformationInput from '../../../../User/components/InformationInput/InformationInput.tsx';
 import DropDown from '../../../../../components/DropDown/DropDown.tsx';
+import Header from '../../../../../components/Header/Header.tsx';
+import BackButtonScreen from '../../../../../components/BackButtonScreen/BackButtonScreen.tsx';
 
 
-const CheckoutWithoutAccount = () => {
+const Checkout = ({navigation, route}: {navigation: any, route: any}) => {
 
   const addresses = [
       'Odessa',
@@ -17,21 +18,15 @@ const CheckoutWithoutAccount = () => {
       'fsdfsd',
   ];
 
-  //react native navigation modal
 
   return (
         <View>
+          <Header route={route} navigation={navigation}/>
+          <BackButtonScreen navigation={navigation}/>
           <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollView} showsVerticalScrollIndicator={false}>
               <Text style={styles.header}>Оформление заказа</Text>
-              <View>
-                <View style={styles.productWrapper}>
-                  <ProductCardInCheckout/>
-                </View>
-                <View style={styles.productWrapper}>
-                  <ProductCardInCheckout/>
-                </View>
-              </View>
+
               <View>
                 <Text style={[styles.greyText, {marginBottom: nh(10)}]}>Способ доставки</Text>
                 <Swiper/>
@@ -174,4 +169,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CheckoutWithoutAccount;
+export default Checkout;

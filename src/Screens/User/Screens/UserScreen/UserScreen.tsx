@@ -12,15 +12,17 @@ import Truck from '../../../../assets/Icons/Truck.svg';
 import Phone from '../../../../assets/Icons/Phone.svg';
 import CreditCard from '../../../../assets/Icons/CreditCard.svg';
 import Coins from '../../../../assets/Icons/Coins.svg';
+import Header from '../../../../components/Header/Header.tsx';
 
 
 
-const UserScreen = ({navigation}: {navigation: any} ) => {
+const UserScreen = ({navigation, route}: {navigation: any, route: any} ) => {
   const [logged, setLogged] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
 
   return (
       <View style={styles.container}>
+        <Header route={route} navigation={navigation}/>
         {logged ? (
             <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
               <View style={styles.profileContainer}>

@@ -3,11 +3,13 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 import InformationInput from '../../components/InformationInput/InformationInput.tsx';
 import PasswordInput from '../../components/PasswordInput/PasswordInput.tsx';
-import CheckBox from "../../../../components/CheckBox/CheckBox.tsx";
+import CheckBox from '../../../../components/CheckBox/CheckBox.tsx';
+import Header from '../../../../components/Header/Header.tsx';
 
-const SignUpScreen = ({navigation}: {navigation: any}) => {
+const SignUpScreen = ({navigation, route}: {navigation: any, route: any}) => {
   return (
       <View style={styles.container}>
+        <Header route={route}/>
         <Text style={styles.header}>Регистрация</Text>
         <View>
           <View style={styles.inputMargin}>

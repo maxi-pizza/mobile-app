@@ -5,44 +5,25 @@ import { NavigationContainer } from '@react-navigation/native';
 import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import Header from './src/components/Header/Header.tsx';
+
 import { Navigation } from './src/components/navigation/Navigation';
-import { NavigationProvider, useNavigationContext } from './src/context/NavigationContext.tsx';
+
 
 
 function App(): JSX.Element {
   return (
         <GestureHandlerRootView>
-            <NavigationProvider>
+            <NavigationContainer>
                 <BottomSheetModalProvider>
                   <View style={styles.container}>
-                      <NavigationContainerWrapper />
+                    <Navigation />
                   </View>
                 </BottomSheetModalProvider>
-            </NavigationProvider>
+            </NavigationContainer>
         </GestureHandlerRootView>
   );
 }
 
-
-
-const NavigationContainerWrapper = () => {
-  const { setRouteName } = useNavigationContext();
-
-  return (
-      <NavigationContainer
-          onStateChange={(state) => {
-            const route = state?.routes[state.index];
-            if (route) {
-              setRouteName(route.name);
-            }
-          }}
-      >
-        <Header />
-        <Navigation />
-      </NavigationContainer>
-  );
-};
 
 const styles = StyleSheet.create({
   container: {

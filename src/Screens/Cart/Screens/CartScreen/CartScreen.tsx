@@ -1,16 +1,14 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import EmptyCart from '../../../../assets/Icons/EmptyCart.svg';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 import ProductCartCard from '../../../../components/ProductCartCard/ProductCartCard.tsx';
-import Minus from '../../../../assets/Icons/Minus.svg';
-import Plus from '../../../../assets/Icons/Plus.svg';
 import ForkKnife from '../../../../assets/Icons/ForkKnife.svg';
-import CheckoutWithoutAccount from './modals/CheckoutWithoutAccount.tsx';
-import DropDown from '../../../../components/DropDown/DropDown.tsx';
+import Counter from '../../../../components/Counter/Counter.tsx';
+import Header from '../../../../components/Header/Header.tsx';
 
-const CartScreen = ({navigation}: {navigation: any}) => {
+const CartScreen = ({navigation, route}: {navigation: any, route: any}) => {
   const rds = [
       'fsdfsd',
       'fsdfsrd',
@@ -18,6 +16,7 @@ const CartScreen = ({navigation}: {navigation: any}) => {
 
   return (
       <View style={styles.container}>
+        <Header route={route} />
         {/*<View style={styles.emptyCart}>*/}
         {/*    <EmptyCart/>*/}
         {/*    <Text style={styles.emptyCartText}>Ваша корзина пуста :(</Text>*/}
@@ -33,19 +32,11 @@ const CartScreen = ({navigation}: {navigation: any}) => {
           <View style={styles.personCountWrapper}>
             <ForkKnife style={styles.forkKnife} color="white"/>
             <Text style={styles.personText}>Количество персон?</Text>
-            <View style={styles.buttonContainer}>
-              <TouchableOpacity style={styles.buttonMinus}>
-                <Minus color="white" width="16" height="16"/>
-              </TouchableOpacity>
-              <View style={styles.textWrapper}>
-                <Text style={styles.countText}>2</Text>
-              </View>
-              <TouchableOpacity style={styles.buttonPlus}>
-                <Plus color="white" width="16" height="16"/>
-              </TouchableOpacity>
+            <View style={styles.counterWrapper}>
+              <Counter/>
             </View>
           </View>
-          <TouchableOpacity onPress={() => navigation.navigate('CheckoutWithoutAccount')} style={styles.orderButton}>
+          <TouchableOpacity onPress={() => navigation.navigate('Checkout')} style={styles.orderButton}>
             <Text style={styles.checkoutText}>Оформить заказ | 15 906 ₴</Text>
           </TouchableOpacity>
         </View>
@@ -76,6 +67,9 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     height: '100%',
+  },
+  counterWrapper: {
+    marginLeft: nw(25),
   },
   emptyCartText: {
     fontFamily: 'MontserratRegular',
@@ -117,30 +111,16 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  buttonContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    width: nw(111),
-    justifyContent: 'space-between',
-    position: 'absolute',
-    right: 10,
-  },
-  countText: {
-    fontWeight: '600',
-    fontFamily: 'MontserratRegular',
-    fontSize: 18,
-    lineHeight: 22,
-  },
-  textWrapper: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
   forkKnife: {
     marginLeft: nw(15),
   },
   personText: {
     marginLeft: nw(15),
+    color: 'white',
+    fontSize: 14,
+    fontFamily: 'MontserratRegular',
+    lineHeight: 17,
+    fontWeight: '400',
   },
   orderButton: {
     backgroundColor: '#FFE600',

@@ -3,10 +3,12 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
 import SavedAddress from './components/SavedAddress.tsx';
+import Header from '../../../../components/Header/Header.tsx';
 
-const SavedAddressesScreen = () => {
+const SavedAddressesScreen = ({ route}: { route: any}) => {
   return (
       <View style={styles.container}>
+        <Header route={route}/>
         <Text style={styles.header}>Збережені адреси</Text>
         <SavedAddress address="Литвиненко-Вольгемут 1Г"/>
         <SavedAddress address="Литвиненко-Вольгемут 1Г"/>

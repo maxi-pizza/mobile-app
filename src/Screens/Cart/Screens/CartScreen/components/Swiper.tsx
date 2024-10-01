@@ -7,7 +7,7 @@ import Package from '../../../../../assets/Icons/Package.svg';
 
 const Swiper = () => {
   const [isActive, setIsActive] = useState(false);
-  const tabPosition = useRef(new Animated.Value(0)).current;
+  const tabPosition = useRef(new Animated.Value(5)).current;
 
   const handlePress = (active: boolean) => {
     setIsActive(active);
@@ -17,7 +17,6 @@ const Swiper = () => {
       useNativeDriver: false,
     }).start();
   };
-  //bug withh start position
 
   return (
       <View style={styles.container}>

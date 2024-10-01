@@ -3,11 +3,13 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
 import OrderCard from './components/OrderCard.tsx';
+import Header from '../../../../components/Header/Header.tsx';
 
-const OrderHistoryScreen = () => {
+const OrderHistoryScreen = ({ route}: { route: any}) => {
   return (
       <View style={styles.container}>
         <ScrollView showsVerticalScrollIndicator={false}>
+          <Header route={route}/>
           <Text style={styles.header}>Історія замовлень</Text>
           <OrderCard status={true}/>
           <OrderCard status={false}/>

@@ -28,7 +28,7 @@ const DropDown = ({placeholder, options}: {placeholder: string; options: string[
   return (
       <Pressable style={styles.container} onPress={openBottomSheet}>
         <View style={styles.inputContainer}>
-          <Text style={styles.selectOption}>{isActive ? isActive : placeholder}</Text>
+          <Text style={styles.selectOption}>{isActive ? <Text style={styles.whiteText}>{isActive}</Text> : placeholder}</Text>
           <Caret color="#727272" width="15"/>
         </View>
 
