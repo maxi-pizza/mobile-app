@@ -165,7 +165,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#FFE600',
     borderRadius: 10,
-    marginBottom: nh(40),
+    marginBottom: nh(180),
   },
 });
 

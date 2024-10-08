@@ -1,14 +1,21 @@
-import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {nw, nh} from '../../../normalize.helper.ts';
-import categorySrc from '../../assets/categories/sushi.png';
+import {ICategory} from '@layerok/emojisushi-js-sdk';
 
-export const CategoryCard = () => {
+
+
+
+export const CategoryCard = ({category}: { category: ICategory }) => {
+
+
+
+
   return (
-    <View style={cardStyles.container}>
-      <Image style={cardStyles.image} source={categorySrc} />
-      <Text style={cardStyles.text}>Роли</Text>
-    </View>
+    <TouchableOpacity  style={cardStyles.container}>
+      <Image style={cardStyles.image} source={{uri: category?.image?.path}}/>
+      <Text style={cardStyles.text}>{category?.name}</Text>
+    </TouchableOpacity>
   );
 };
 
@@ -34,5 +41,6 @@ const cardStyles = StyleSheet.create({
     paddingLeft: nw(15),
     fontSize: nh(13),
     fontWeight: '400',
+    width: nw(100),
   },
 });

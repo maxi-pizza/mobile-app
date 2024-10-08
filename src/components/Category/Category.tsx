@@ -2,24 +2,23 @@ import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {CategoryCard} from '../CategoryCard/CategoryCard.tsx';
 import {nh, nw} from '../../../normalize.helper.ts';
+import {useQuery} from '@tanstack/react-query';
+import {categoriesQuery} from '../../Screens/Category/categories.query.ts';
 
 const Category = () => {
+  const { data: categories, isLoading} = useQuery({
+    ...categoriesQuery(),
+  });
+
   return (
      <View style={styles.container}>
        <Text style={styles.title}>Категории</Text>
        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryCardsContainer}>
-         <View style={styles.categoryWrapper}>
-           <CategoryCard/>
-         </View>
-         <View style={styles.categoryWrapper}>
-           <CategoryCard/>
-         </View>
-         <View style={styles.categoryWrapper}>
-           <CategoryCard/>
-         </View>
-         <View style={styles.categoryWrapper}>
-           <CategoryCard/>
-         </View>
+         {categories?.data.map((category) => (
+             <View key={category.id} style={styles.categoryWrapper}>
+               <CategoryCard category={category}/>
+             </View>
+         ))}
        </ScrollView>
      </View>
   );

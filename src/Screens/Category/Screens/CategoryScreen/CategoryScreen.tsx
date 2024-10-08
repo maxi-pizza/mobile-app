@@ -4,43 +4,28 @@ import {nh, nw} from '../../../../../normalize.helper.ts';
 
 import {CategoryCard} from '../../../../components/CategoryCard/CategoryCard.tsx';
 import Header from '../../../../components/Header/Header.tsx';
+import {useQuery} from '@tanstack/react-query';
+import {categoriesQuery} from '../../categories.query.ts';
+
 
 const CategoryScreen = ({ route}: { route: any}) => {
+
+
+  const { data: categories, isLoading} = useQuery({
+    ...categoriesQuery(),
+  });
+
+
   return (
       <View style={styles.container}>
         <Header route={route}/>
         <Text style={styles.category}>Категории</Text>
         <ScrollView showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryContainer} >
-          <View style={styles.categoryWrapper}>
-            <CategoryCard/>
-          </View>
-          <View style={styles.categoryWrapper}>
-            <CategoryCard/>
-          </View>
-          <View style={styles.categoryWrapper}>
-            <CategoryCard/>
-          </View>
-          <View style={styles.categoryWrapper}>
-            <CategoryCard/>
-          </View>
-          <View style={styles.categoryWrapper}>
-            <CategoryCard/>
-          </View>
-          <View style={styles.categoryWrapper}>
-            <CategoryCard/>
-          </View>
-          <View style={styles.categoryWrapper}>
-            <CategoryCard/>
-          </View>
-          <View style={styles.categoryWrapper}>
-            <CategoryCard/>
-          </View>
-          <View style={styles.categoryWrapper}>
-            <CategoryCard/>
-          </View>
-          <View style={styles.categoryWrapper}>
-            <CategoryCard/>
-          </View>
+          {categories?.data.map((category) => (
+              <View key={category.id} style={styles.categoryWrapper}>
+                <CategoryCard category={category}/>
+              </View>
+          ))}
         </ScrollView>
       </View>
   );

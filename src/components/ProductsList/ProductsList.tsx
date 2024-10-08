@@ -1,20 +1,16 @@
 import React from 'react';
 import {StyleSheet, View} from 'react-native';
 import ProductCard from '../ProductCard/ProductCard.tsx';
+import {Product} from '../../models/Product.ts';
 
 
-const ProductsList = () => {
+const ProductsList = ({items}: {items: Product[]}) => {
+
   return (
       <View style={styles.grid}>
-        <ProductCard/>
-        <ProductCard/>
-        <ProductCard/>
-        <ProductCard/>
-        <ProductCard/>
-        <ProductCard/>
-        <ProductCard/>
-        <ProductCard/>
-        <ProductCard/>
+        {items.map((item) => (
+            <ProductCard key={item.id} product={item}/>
+        ))}
       </View>
   );
 };

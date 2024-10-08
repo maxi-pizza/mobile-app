@@ -25,6 +25,7 @@ const UserScreen = ({navigation, route}: {navigation: any, route: any} ) => {
         <Header route={route} navigation={navigation}/>
         {logged ? (
             <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
+              <View style={styles.horizontalLine}/>
               <View style={styles.profileContainer}>
                 <View style={styles.profileTextUserWrapper}>
                   <View style={styles.userCircle}><UserCircle color="#727272"/></View>
@@ -99,8 +100,6 @@ const styles = StyleSheet.create({
   profileContainer: {
     width: '100%',
     height: nh(102),
-    borderTopColor: '#202020',
-    borderTopWidth: 1,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -140,7 +139,7 @@ const styles = StyleSheet.create({
   },
   caret: {
     transform: [{rotate: '-90deg'}],
-    marginRight: nw(12),
+    marginRight: nw(25),
   },
   horizontalLine: {
     height: nh(1),

@@ -4,28 +4,44 @@ import {nh, nw} from '../../../normalize.helper.ts';
 
 import Counter from '../Counter/Counter.tsx';
 
-import productSrc from '../../assets/Product.png';
 import Heart from '../../assets/Icons/Heart.svg';
+import {Product} from '../../models/Product.ts';
 
-const ProductCard = () => {
+const ProductCard = ({product}: {product: Product}) => {
+
+  const descriptionThreeWords = (str: string | null) => {
+    if(str === null) return;
+    const words: string[] = str.split(',');
+    let result: string[] = [];
+    let i = 0;
+    for(i; i <= 3; i++) {
+      result.push(words[i]);
+    }
+    if(words.length > 3){
+      return result + '...';
+    }
+    return result.join(',');
+  };
+
+
 
   return (
       <View style={styles.wrapper}>
-        <Text style={styles.weight}>2285г</Text>
+        <Text style={styles.weight}>{product.weight} г</Text>
         <View style={styles.heartContainer}>
           <Heart width="14" height="12" color="white"/>
         </View>
 
         <View style={styles.imageDescriptionWrapper}>
-          <Image style={styles.image} source={productSrc}/>
+          <Image style={styles.image} source={{uri: product?.mainImage}}/>
           <View style={styles.textWrapper}>
-            <Text style={styles.title}>Ролл овощной</Text>
-            <Text style={styles.description}>Помідор, огурець, авокадо...</Text>
+            <Text style={styles.title}>{product.name}</Text>
+            <Text style={styles.description}>{descriptionThreeWords(product.descriptionShort)}</Text>
           </View>
         </View>
           <View style={styles.priceAndButtonContainer}>
             <View style={styles.priceContainer}>
-              <Text style={styles.discountPrice}>7935</Text>
+              <Text style={styles.discountPrice}></Text>
               <Text style={styles.regularPrice}>9556</Text>
             </View>
               <Counter/>
@@ -84,7 +100,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: nh(5),
-    left: 95,
+    left: nw(105),
   },
   title: {
     color: 'white',
@@ -100,7 +116,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     color: '#838383',
     width: nw(190),
-    height: nh(40),
+    height: nh(30),
   },
   button: {
     width: nw(35),

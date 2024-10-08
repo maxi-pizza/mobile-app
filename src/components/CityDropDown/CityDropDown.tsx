@@ -101,7 +101,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
   },
   indicator: {
-    backgroundColor: '#1C1C1C',
+    backgroundColor: 'transparent',
   },
 });
 
