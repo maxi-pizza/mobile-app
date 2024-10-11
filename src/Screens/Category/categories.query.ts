@@ -7,5 +7,8 @@ export const  categoriesQuery = (
     params: IGetCategoriesParams = {}
 ) : QueryOptions<IGetCategoriesRes> => ({
   queryKey: ['categories', 'list', params],
-  queryFn: () => agent.getCategories(params).then((res) => res.data),
+  queryFn: async () => {
+    const res = await agent.getCategories(params);
+    return res.data;
+  },
 });

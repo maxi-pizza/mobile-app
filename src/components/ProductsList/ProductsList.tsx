@@ -1,23 +1,41 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {FlatList, StyleSheet} from 'react-native';
 import ProductCard from '../ProductCard/ProductCard.tsx';
 import {Product} from '../../models/Product.ts';
+import {IGetWishlistRes} from '@layerok/emojisushi-js-sdk';
+import {nh, nw} from '../../../normalize.helper.ts';
 
 
-const ProductsList = ({items}: {items: Product[]}) => {
+type ProductsListProps = {
+  items?: Product[];
+  wishlists?: IGetWishlistRes;
+  layout?: React.ReactElement;
+}
+
+const ProductsList = (props: ProductsListProps) => {
+
+
 
   return (
-      <View style={styles.grid}>
-        {items.map((item) => (
-            <ProductCard key={item.id} product={item}/>
-        ))}
-      </View>
+      <FlatList ListHeaderComponent={props.layout}
+                data={props.items}
+                renderItem={({item}) =>
+                    <ProductCard wishlists={props.wishlists}
+                                 product={item}
+                    />}
+                contentContainerStyle={styles.grid}
+                showsVerticalScrollIndicator={false}
+
+      />
   );
 };
 
 const styles = StyleSheet.create({
   grid: {
     display: 'flex',
+    paddingBottom: nh(120),
+    width: nw(365),
+    alignItems: 'center',
   },
 });
 

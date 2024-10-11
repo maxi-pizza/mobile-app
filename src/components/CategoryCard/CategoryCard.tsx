@@ -6,13 +6,12 @@ import {ICategory} from '@layerok/emojisushi-js-sdk';
 
 
 
-export const CategoryCard = ({category}: { category: ICategory }) => {
-
+export const CategoryCard = ({category, setCategorySlug, selectedCategory}: { category: ICategory, setCategorySlug: (a: string) => void; selectedCategory?: ICategory | undefined}) => {
 
 
 
   return (
-    <TouchableOpacity  style={cardStyles.container}>
+    <TouchableOpacity style={[cardStyles.container, selectedCategory?.slug === category.slug ? cardStyles.active : '']} onPress={() => setCategorySlug(category.slug)}>
       <Image style={cardStyles.image} source={{uri: category?.image?.path}}/>
       <Text style={cardStyles.text}>{category?.name}</Text>
     </TouchableOpacity>
@@ -30,6 +29,9 @@ const cardStyles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     paddingHorizontal: nw(10),
+  },
+  active: {
+    backgroundColor: '#171717',
   },
   image: {
     width: nw(40),

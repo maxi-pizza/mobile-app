@@ -4,19 +4,21 @@ import {CategoryCard} from '../CategoryCard/CategoryCard.tsx';
 import {nh, nw} from '../../../normalize.helper.ts';
 import {useQuery} from '@tanstack/react-query';
 import {categoriesQuery} from '../../Screens/Category/categories.query.ts';
+import {ICategory} from "@layerok/emojisushi-js-sdk";
 
-const Category = () => {
+const Category = ({setCategorySlug,selectedCategory}: {setCategorySlug: (a: string) => void; selectedCategory: ICategory | undefined}) => {
   const { data: categories, isLoading} = useQuery({
     ...categoriesQuery(),
   });
 
+  // todo: yellow border for active category or '#181818'
   return (
      <View style={styles.container}>
        <Text style={styles.title}>Категории</Text>
        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryCardsContainer}>
          {categories?.data.map((category) => (
              <View key={category.id} style={styles.categoryWrapper}>
-               <CategoryCard category={category}/>
+               <CategoryCard selectedCategory={selectedCategory} setCategorySlug={setCategorySlug} category={category}/>
              </View>
          ))}
        </ScrollView>

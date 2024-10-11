@@ -1,8 +1,6 @@
-import React from 'react';
-import {ScrollView, StyleSheet, Text, View} from 'react-native';
+import React, {useState} from 'react';
+import { StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
-
-
 import Banner from '../../../../components/Banner/Banner.tsx';
 import Category from '../../../../components/Category/Category.tsx';
 import ProductsList from '../../../../components/ProductsList/ProductsList.tsx';
@@ -10,14 +8,16 @@ import Search from '../../../../components/Search/Search.tsx';
 import Header from '../../../../components/Header/Header.tsx';
 import {useQuery} from '@tanstack/react-query';
 import { productsQuery} from '../../products.query.ts';
-
 import {DEFAULT_PRODUCT_LIMIT} from '../../products.query.ts';
 import {Product} from '../../../../models/Product.ts';
 import {categoriesQuery} from '../../../Category/categories.query.ts';
 import {IProduct} from '@layerok/emojisushi-js-sdk';
+import {wishlistQuery} from '../../../Favourite/wishlist.query.ts';
 
 const HomeScreen = ({ route}: { route: any}) => {
-  const categorySlug = 'roli';
+  const [ categorySlug, setCategorySlug ] = useState('premium-roli');
+
+  const { data: wishlists, isLoading: isWishlistLoading} = useQuery(wishlistQuery);
 
   const {data: categoryQueryRes, isLoading: isCategoryLoading} = useQuery({
     ...categoriesQuery(),
@@ -27,7 +27,7 @@ const HomeScreen = ({ route}: { route: any}) => {
       productsQuery({
         category_slug: 'menu',
         limit: DEFAULT_PRODUCT_LIMIT,
-  })
+      })
   );
   const belongsToCategory = (product: IProduct) => {
     return !!product.categories.find((category) => category.slug === categorySlug);
@@ -40,21 +40,23 @@ const HomeScreen = ({ route}: { route: any}) => {
   const selectedCategory = (categoryQueryRes?.data || []).find((category) => {
     return category.slug === categorySlug;
   });
+  // todo: make a client-side cart without api
 
   return (
       <View style={styles.container}>
         <Header route={route}/>
-        <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scrollContent}>
-          <Banner/>
-          <Category/>
-          <View style={styles.searchWrapper}>
-            <Search/>
-          </View>
-          <View style={styles.productsWrapper}>
-            <Text style={styles.product}>{selectedCategory?.name}</Text>
-            <ProductsList items={items}/>
-          </View>
-        </ScrollView>
+        <View style={styles.productsWrapper}>
+          <ProductsList layout={
+            <View>
+              <Banner />
+              <Category selectedCategory={selectedCategory} setCategorySlug={setCategorySlug} />
+              <View style={styles.searchWrapper}>
+                <Search />
+              </View>
+              <Text style={styles.product}>{selectedCategory?.name}</Text>
+            </View>
+          } wishlists={wishlists} items={items}/>
+        </View>
       </View>
   );
 };
@@ -86,7 +88,6 @@ const styles = StyleSheet.create({
   productsWrapper: {
     display: 'flex',
     alignItems: 'center',
-    width: nw(365),
   },
 });
 

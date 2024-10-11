@@ -8,8 +8,7 @@ import {useQuery} from '@tanstack/react-query';
 import {categoriesQuery} from '../../categories.query.ts';
 
 
-const CategoryScreen = ({ route}: { route: any}) => {
-
+const CategoryScreen = ({ route, setCategorySlug}: { route: any; setCategorySlug: () => void}) => {
 
   const { data: categories, isLoading} = useQuery({
     ...categoriesQuery(),
@@ -23,7 +22,7 @@ const CategoryScreen = ({ route}: { route: any}) => {
         <ScrollView showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryContainer} >
           {categories?.data.map((category) => (
               <View key={category.id} style={styles.categoryWrapper}>
-                <CategoryCard category={category}/>
+                <CategoryCard setCategorySlug={setCategorySlug} category={category}/>
               </View>
           ))}
         </ScrollView>
