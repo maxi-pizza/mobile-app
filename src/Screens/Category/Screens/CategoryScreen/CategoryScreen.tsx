@@ -7,26 +7,33 @@ import Header from '../../../../components/Header/Header.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {categoriesQuery} from '../../categories.query.ts';
 
-
-const CategoryScreen = ({ route, setCategorySlug}: { route: any; setCategorySlug: () => void}) => {
-
-  const { data: categories, isLoading} = useQuery({
+const CategoryScreen = ({route, navigation}: {route: any; navigation: any}) => {
+  const {data: categories, isLoading} = useQuery({
     ...categoriesQuery(),
   });
-
+  // todo: make global storage(mobx)
+  // todo: make sticky category
+  const onHandleCategory = () => {
+    navigation.navigate('Home');
+  };
 
   return (
-      <View style={styles.container}>
-        <Header route={route}/>
-        <Text style={styles.category}>Категории</Text>
-        <ScrollView showsHorizontalScrollIndicator={false} contentContainerStyle={styles.categoryContainer} >
-          {categories?.data.map((category) => (
-              <View key={category.id} style={styles.categoryWrapper}>
-                <CategoryCard setCategorySlug={setCategorySlug} category={category}/>
-              </View>
-          ))}
-        </ScrollView>
-      </View>
+    <View style={styles.container}>
+      <Header route={route} />
+      <Text style={styles.category}>Категории</Text>
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.categoryContainer}>
+        {categories?.data.map(category => (
+          <View key={category.id} style={styles.categoryWrapper}>
+            <CategoryCard
+              setCategorySlug={onHandleCategory}
+              category={category}
+            />
+          </View>
+        ))}
+      </ScrollView>
+    </View>
   );
 };
 

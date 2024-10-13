@@ -113,7 +113,7 @@ export class Product {
 
   }
 
-  getOldPrice(variant: Variant) {
+  getOldPrice(variant: Variant | undefined) {
     if (variant) {
       return variant.oldPrice;
     }
@@ -122,7 +122,7 @@ export class Product {
         : undefined;
   }
 
-  getNewPrice(variant: Variant) {
+  getNewPrice(variant: Variant | undefined) {
     if (variant) {
       return variant.newPrice;
     }

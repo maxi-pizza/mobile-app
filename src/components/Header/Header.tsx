@@ -8,7 +8,6 @@ import Logo from '../../assets/Logo.svg';
 import LanguageChange from '../LanguageChange/LanguageChange.tsx';
 
 
-// todo: header for every screen!
 
 const Header = ({ route}: {navigation?: any; route?: any}) => {
 
@@ -19,7 +18,7 @@ const Header = ({ route}: {navigation?: any; route?: any}) => {
         ) : (
             <View style={styles.block}/>
         )}
-        <Logo/>
+        <Logo style={styles.logo}/>
         <CityDropDown/>
       </View>
   );
@@ -37,6 +36,7 @@ const styles = StyleSheet.create({
   },
   logo: {
     width: nw(73),
+    height: nh(31),
   },
   block: {
     width: nw(79),

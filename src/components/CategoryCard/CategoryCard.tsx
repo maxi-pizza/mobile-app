@@ -1,23 +1,29 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {nw, nh} from '../../../normalize.helper.ts';
 import {ICategory} from '@layerok/emojisushi-js-sdk';
 
-
-
-
-export const CategoryCard = ({category, setCategorySlug, selectedCategory}: { category: ICategory, setCategorySlug: (a: string) => void; selectedCategory?: ICategory | undefined}) => {
-
-
-
+export const CategoryCard = ({
+  category,
+  setCategorySlug,
+  selectedCategory,
+}: {
+  category: ICategory;
+  setCategorySlug: (a: string) => void;
+  selectedCategory?: ICategory | undefined;
+}) => {
   return (
-    <TouchableOpacity style={[cardStyles.container, selectedCategory?.slug === category.slug ? cardStyles.active : '']} onPress={() => setCategorySlug(category.slug)}>
-      <Image style={cardStyles.image} source={{uri: category?.image?.path}}/>
+    <TouchableOpacity
+      style={[
+        cardStyles.container,
+        selectedCategory?.slug === category.slug ? cardStyles.active : '',
+      ]}
+      onPress={() => setCategorySlug(category.slug)}>
+      <Image style={cardStyles.image} source={{uri: category?.image?.path}} />
       <Text style={cardStyles.text}>{category?.name}</Text>
     </TouchableOpacity>
   );
 };
-
 
 const cardStyles = StyleSheet.create({
   container: {

@@ -12,9 +12,6 @@ import {categoriesQuery} from '../../../Category/categories.query.ts';
 
 const FavouriteScreen = ({ route}: { route: any}) => {
   const { data: wishlists, isLoading: isWishlistLoading} = useQuery(wishlistQuery);
-  const {data: categoryQueryRes, isLoading: isCategoryLoading} = useQuery({
-    ...categoriesQuery(),
-  });
 
   const { data: productQueryRes, isLoading: isProductsLoading} = useQuery(
       productsQuery({
@@ -29,11 +26,14 @@ const FavouriteScreen = ({ route}: { route: any}) => {
 
    return (
       <View style={styles.container}>
-        <ScrollView contentContainerStyle={styles.containerScroll} showsVerticalScrollIndicator={false}>
+
           <Header route={route}/>
-          <Text style={styles.text}>Вибране</Text>
-          <ProductsList wishlists={wishlists} items={items}/>
-        </ScrollView>
+          <ProductsList
+              layout={<Text style={styles.text}>Вибране</Text>}
+              wishlists={wishlists}
+              items={items}
+          />
+
       </View>
   );
 };
@@ -42,10 +42,10 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: '#141414',
     height: '100%',
-  },
-  containerScroll: {
     display: 'flex',
     alignItems: 'center',
+  },
+  containerScroll: {
   },
   text: {
     color: 'white',

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import { nw} from '../../../normalize.helper.ts';
 
@@ -7,20 +7,11 @@ import Plus from '../../assets/Icons/Plus.svg';
 
 
 
-const Counter = () => {
-  const [count, setCount] = useState(0);
 
-  const onHandleAdd = () => {
-    setCount(count + 1);
-  };
+const Counter = ({onHandleMinus,onHandleAdd,count}: {onHandleMinus: () => void,onHandleAdd: () => void, count: number}) => {
 
-  const onHandleMinus = () => {
-    if(count < 1) {
-      setCount(0);
-    }else {
-      setCount(count - 1);
-    }
-  };
+
+
   return (
       <View style={styles.buttonContainer}>
         <TouchableOpacity onPress={onHandleMinus} style={styles.buttonMinus}>
