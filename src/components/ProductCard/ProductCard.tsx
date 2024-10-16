@@ -6,75 +6,66 @@ import Counter from '../Counter/Counter.tsx';
 
 import Heart from '../../assets/Icons/Heart.svg';
 import {Product} from '../../models/Product.ts';
-import {IGetWishlistRes} from '@layerok/emojisushi-js-sdk';
-import {useAddToWishlist} from '../../common/hooks/use-add-to-wishlist.ts';
 import Logo from '../../assets/Logo.svg';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import {
+  addItem,
+  CART_QUERY_KEY,
+  cartQuery,
+} from '../../Screens/Cart/cart.query.ts';
+import {
+  addToWishlist,
+  WISHLIST_QUERY_KEY,
+} from '../../Screens/Favourite/wishlist.query.ts';
 
-export const CART_STORAGE_KEY = 'cart';
-export const CART_QUERY_KEY = ['cart'];
-export const cartQuery = {
-  queryKey: CART_QUERY_KEY,
-  queryFn: () => getItems(),
-};
-export const getItems = async (): Promise<Record<string, any>> => {
-  const stored = await AsyncStorage.getItem(CART_STORAGE_KEY);
-  return stored ? JSON.parse(stored) : {};
-};
-
-export const addItem = async (id: number, count: number, price: number) => {
-  const currentCart = await getItems();
-  if (count === 0) {
-    const {[id]: _, ...remainingCart} = currentCart;
-    await AsyncStorage.setItem(CART_STORAGE_KEY, JSON.stringify(remainingCart));
-  } else {
-    const updatedCart = {...currentCart, [id]: {count: count, price: price}};
-    await AsyncStorage.setItem(CART_STORAGE_KEY, JSON.stringify(updatedCart));
-  }
-
-  return await getItems();
-};
 const ProductCard = ({
   product,
   wishlists,
 }: {
   product: Product;
-  wishlists?: IGetWishlistRes;
+  wishlists?: Record<string, number>;
 }) => {
   const queryClient = useQueryClient();
   const {data: cart} = useQuery(cartQuery);
-  const count = cart?.[product.id]?.['count'] || 0;
-  const {mutate} = useMutation({
+  const count = cart?.[product.id]?.count || 0;
+  const {mutate: cartMutation} = useMutation({
     mutationFn: ({count, price}: {count: number; price: number}) =>
       addItem(product.id, count, price),
     onSuccess: () => {
       queryClient.invalidateQueries({queryKey: CART_QUERY_KEY});
     },
   });
-  const favourite = product?.isInWishlists(wishlists || []);
-
+  const wishIds = Object.keys(wishlists || {});
+  const favourite = wishIds.includes(String(product.id));
   // todo: wishlist client-side
 
-  const {mutate: addToWishlist} = useAddToWishlist();
+  const {mutate: addWishlist} = useMutation({
+    mutationFn: ({id}: {id: number}) => addToWishlist(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({queryKey: WISHLIST_QUERY_KEY});
+    },
+  });
   const price = product?.getOldPrice(undefined)?.price_formatted;
   const discountPrice = product?.getNewPrice(undefined)?.price_formatted;
 
   const storagePrice = product?.getNewPrice(undefined)?.price;
   const onHandleAdd = () => {
-    mutate({count: count + 1, price: storagePrice ? storagePrice / 100 : 0});
+    cartMutation({
+      count: count + 1,
+      price: storagePrice ? storagePrice / 100 : 0,
+    });
   };
   const onHandleMinus = () => {
-    mutate({
+    cartMutation({
       count: Math.max(count - 1, 0),
       price: storagePrice ? storagePrice / 100 : 0,
     });
   };
 
   const handleFavouriteButton = () => {
-    addToWishlist({
-      product_id: product.id,
-      quantity: 1,
+    addWishlist({
+      id: product.id,
     });
   };
   const descriptionThreeWords = (str: string | null) => {

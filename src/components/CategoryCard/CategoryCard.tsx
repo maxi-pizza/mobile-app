@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {nw, nh} from '../../../normalize.helper.ts';
 import {ICategory} from '@layerok/emojisushi-js-sdk';
+import CategoryNullImage from '../../assets/Logo.svg';
 
 export const CategoryCard = ({
   category,
@@ -19,7 +20,11 @@ export const CategoryCard = ({
         selectedCategory?.slug === category.slug ? cardStyles.active : '',
       ]}
       onPress={() => setCategorySlug(category.slug)}>
-      <Image style={cardStyles.image} source={{uri: category?.image?.path}} />
+      {category.image?.path ? (
+        <Image style={cardStyles.image} source={{uri: category?.image?.path}} />
+      ) : (
+        <CategoryNullImage style={cardStyles.image} fillOpacity={0.2} />
+      )}
       <Text style={cardStyles.text}>{category?.name}</Text>
     </TouchableOpacity>
   );
