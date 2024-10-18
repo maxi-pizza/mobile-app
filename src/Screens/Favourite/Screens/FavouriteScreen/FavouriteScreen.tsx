@@ -1,6 +1,5 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import ProductsList from '../../../../components/ProductsList/ProductsList.tsx';
+import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 import Header from '../../../../components/Header/Header.tsx';
 import {useQuery} from '@tanstack/react-query';
@@ -10,6 +9,7 @@ import {
   DEFAULT_PRODUCT_LIMIT,
   productsQuery,
 } from '../../../Home/products.query.ts';
+import ProductCard from '../../../../components/ProductCard/ProductCard.tsx';
 
 const FavouriteScreen = ({route}: {route: any}) => {
   const {data: wishlists, isLoading: isWishlistLoading} =
@@ -30,10 +30,14 @@ const FavouriteScreen = ({route}: {route: any}) => {
   return (
     <View style={styles.container}>
       <Header route={route} />
-      <ProductsList
-        layout={<Text style={styles.text}>Вибране</Text>}
-        wishlists={wishlists}
-        items={wishlist}
+      <FlatList
+        ListHeaderComponent={<Text style={styles.text}>Вибране</Text>}
+        data={wishlist}
+        renderItem={({item}) => (
+          <ProductCard wishlists={wishlists} product={item} />
+        )}
+        contentContainerStyle={styles.grid}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
@@ -44,6 +48,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#141414',
     height: '100%',
     display: 'flex',
+    alignItems: 'center',
+  },
+  grid: {
+    display: 'flex',
+    paddingBottom: nh(120),
+    width: nw(365),
     alignItems: 'center',
   },
   containerScroll: {},

@@ -2,40 +2,43 @@ import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
-import {CategoryCard} from '../../../../components/CategoryCard/CategoryCard.tsx';
 import Header from '../../../../components/Header/Header.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {categoriesQuery} from '../../categories.query.ts';
+import {observer} from 'mobx-react-lite';
+import Category from '../components/Category.tsx';
+import categoryStore from '../../../../stores/store.ts';
 
-const CategoryScreen = ({route, navigation}: {route: any; navigation: any}) => {
-  const {data: categories, isLoading} = useQuery({
-    ...categoriesQuery(),
-  });
-  // todo: make global storage(mobx)
-  // todo: make sticky category
-  const onHandleCategory = () => {
-    navigation.navigate('Home');
-  };
+const CategoryScreen = observer(
+  ({route, navigation}: {route: any; navigation: any}) => {
+    const {data: categories, isLoading} = useQuery({
+      ...categoriesQuery(),
+    });
+    const onHandleCategory = (slug: string) => {
+      categoryStore.changeCategory(slug);
+      navigation.navigate('Home');
+    };
 
-  return (
-    <View style={styles.container}>
-      <Header route={route} />
-      <Text style={styles.category}>Категории</Text>
-      <ScrollView
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={styles.categoryContainer}>
-        {categories?.data.map(category => (
-          <View key={category.id} style={styles.categoryWrapper}>
-            <CategoryCard
-              setCategorySlug={onHandleCategory}
-              category={category}
-            />
-          </View>
-        ))}
-      </ScrollView>
-    </View>
-  );
-};
+    return (
+      <View style={styles.container}>
+        <Header route={route} />
+        <Text style={styles.category}>Категории</Text>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.categoryContainer}>
+          {categories?.data.map(category => (
+            <View key={category.id} style={styles.categoryWrapper}>
+              <Category
+                categoryHandle={() => onHandleCategory(category.slug)}
+                category={category}
+              />
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+    );
+  },
+);
 
 const styles = StyleSheet.create({
   container: {

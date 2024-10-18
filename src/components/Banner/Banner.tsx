@@ -5,9 +5,9 @@ import {nh, nw} from '../../../normalize.helper.ts';
 
 const Banner = () => {
   return (
-      <View style={styles.wrapper}>
-        <BGBanner style={styles.banner}/>
-      </View>
+    <View style={styles.wrapper}>
+      <BGBanner style={styles.banner} />
+    </View>
   );
 };
 
@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
   banner: {
     width: nw(365),
     height: nh(160),
+    backgroundColor: 'white',
   },
 });
 

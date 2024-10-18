@@ -1,5 +1,12 @@
 import React from 'react';
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {nh, nw} from '../../../normalize.helper.ts';
 
 import Counter from '../Counter/Counter.tsx';
@@ -38,7 +45,6 @@ const ProductCard = ({
   });
   const wishIds = Object.keys(wishlists || {});
   const favourite = wishIds.includes(String(product.id));
-  // todo: wishlist client-side
 
   const {mutate: addWishlist} = useMutation({
     mutationFn: ({id}: {id: number}) => addToWishlist(id),
@@ -106,11 +112,17 @@ const ProductCard = ({
             {discountPrice ? discountPrice : price}
           </Text>
         </View>
-        <Counter
-          onHandleMinus={onHandleMinus}
-          onHandleAdd={onHandleAdd}
-          count={count}
-        />
+        {count > 0 ? (
+          <Counter
+            onHandleMinus={onHandleMinus}
+            onHandleAdd={onHandleAdd}
+            count={count}
+          />
+        ) : (
+          <TouchableOpacity onPress={onHandleAdd} style={styles.addBtn}>
+            <Text style={styles.btnText}>Add to cart</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -225,6 +237,23 @@ const styles = StyleSheet.create({
     lineHeight: 15,
     marginLeft: nw(5),
     textDecorationLine: 'line-through',
+  },
+  addBtn: {
+    backgroundColor: 'transparent',
+    width: nw(111),
+    height: nh(35),
+    borderRadius: 7,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: 'yellow',
+    borderWidth: 1,
+  },
+  btnText: {
+    color: 'yellow',
+    fontFamily: 'MontserratRegular',
+    fontSize: 13,
+    fontWeight: '800',
   },
 });
 

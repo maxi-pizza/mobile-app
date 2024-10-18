@@ -1,55 +1,66 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useRef} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../normalize.helper.ts';
 
 import Caret from '../../assets/Icons/Caret.svg';
 import MapPin from '../../assets/Icons/MapPinMapPin.svg';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
+import {useQuery} from '@tanstack/react-query';
+import {agent} from '../../../APIClient.tsx';
+import store from '../../stores/store.ts';
+import {observer} from 'mobx-react-lite';
 
-const CityDropDown = () => {
-  const [isActive, setIsActive] = useState('Одесса');
+const query = {
+  queryKey: ['cities'],
+  queryFn: async () => {
+    const res = await agent.getCities({
+      includeSpots: false,
+      includeDistricts: false,
+    });
+    return res.data;
+  },
+};
+
+const CityDropDown = observer(() => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+  const {data: cities} = useQuery(query);
+  const city = (cities || []).find(c => c.slug === store.city);
+
+  const handleCityPress = (city: string) => {
+    store.changeCity(city);
+    bottomSheetModalRef.current?.dismiss();
+  };
 
   const openBottomSheet = useCallback(() => {
     bottomSheetModalRef.current?.present();
   }, []);
 
-  const handleCityPress = (city: string) => {
-    const cityName = city.split(',')[0];
-    setIsActive(cityName);
-    bottomSheetModalRef.current?.dismiss();
-  };
-
-
-  const cities = ['Одесса, Базарна, 69', 'Чорноморськ, Базарна, 69'];
-
   return (
-      <Pressable style={styles.cityContainer} onPress={openBottomSheet}>
-        <MapPin color="white"/>
-        <Text style={styles.whiteText}>{isActive}</Text>
-        <Caret color="white"/>
-          <BottomSheetModal
-              ref={bottomSheetModalRef}
-              snapPoints={['25%']}
-              backgroundStyle={styles.bottom}
-              handleIndicatorStyle={styles.indicator}
-              style={styles.modal}
-          >
-            <View style={styles.bottomSheetContent}>
-              <View style={styles.mapPinWrapper}>
-                <Text style={styles.chooseText}>Выберите город</Text>
-                <MapPin color="white"/>
-              </View>
-              {cities.map((city) => (
-                  <Pressable key={city} onPress={() => handleCityPress(city)}>
-                    <Text style={styles.cityText}>{city}</Text>
-                  </Pressable>
-              ))}
-            </View>
-          </BottomSheetModal>
-      </Pressable>
+    <Pressable style={styles.cityContainer} onPress={openBottomSheet}>
+      <MapPin color="white" />
+      <Text style={styles.whiteText}>{city?.name}</Text>
+      <Caret color="white" />
+      <BottomSheetModal
+        ref={bottomSheetModalRef}
+        snapPoints={['25%']}
+        backgroundStyle={styles.bottom}
+        handleIndicatorStyle={styles.indicator}
+        style={styles.modal}>
+        <View style={styles.bottomSheetContent}>
+          <View style={styles.mapPinWrapper}>
+            <Text style={styles.chooseText}>Выберите город</Text>
+            <MapPin color="white" />
+          </View>
+          {cities?.map(city => (
+            <Pressable key={city.id} onPress={() => handleCityPress(city.slug)}>
+              <Text style={styles.cityText}>{city.name}</Text>
+            </Pressable>
+          ))}
+        </View>
+      </BottomSheetModal>
+    </Pressable>
   );
-};
+});
 
 const styles = StyleSheet.create({
   cityContainer: {
@@ -58,9 +69,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: nw(12),
     fontSize: nw(15),
+    minWidth: nw(30),
   },
   whiteText: {
     color: 'white',
+    marginRight: nw(5),
   },
   bottomSheetContent: {
     backgroundColor: '#1C1C1C',

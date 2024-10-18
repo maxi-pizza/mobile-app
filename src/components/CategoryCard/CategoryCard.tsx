@@ -4,22 +4,20 @@ import {nw, nh} from '../../../normalize.helper.ts';
 import {ICategory} from '@layerok/emojisushi-js-sdk';
 import CategoryNullImage from '../../assets/Logo.svg';
 
-export const CategoryCard = ({
-  category,
-  setCategorySlug,
-  selectedCategory,
-}: {
-  category: ICategory;
-  setCategorySlug: (a: string) => void;
-  selectedCategory?: ICategory | undefined;
-}) => {
+import categoryStore from '../../stores/store.ts';
+
+export const CategoryCard = ({category}: {category: ICategory}) => {
+  // todo: in category make a function with navigation
+  // todo: in categoryScreen we dont need selectedCategory
+  // todo: fix bug with navigation
+
   return (
     <TouchableOpacity
       style={[
         cardStyles.container,
-        selectedCategory?.slug === category.slug ? cardStyles.active : '',
+        categoryStore.categorySlug === category.slug ? cardStyles.active : '',
       ]}
-      onPress={() => setCategorySlug(category.slug)}>
+      onPress={() => categoryStore.changeCategory(category.slug)}>
       {category.image?.path ? (
         <Image style={cardStyles.image} source={{uri: category?.image?.path}} />
       ) : (
@@ -33,7 +31,7 @@ export const CategoryCard = ({
 const cardStyles = StyleSheet.create({
   container: {
     backgroundColor: '#1C1C1C',
-    width: nw(175),
+    width: nw(165),
     height: nh(70),
     borderRadius: nw(10),
     display: 'flex',
@@ -43,6 +41,8 @@ const cardStyles = StyleSheet.create({
   },
   active: {
     backgroundColor: '#171717',
+    borderWidth: 1,
+    borderColor: '#FFE600',
   },
   image: {
     width: nw(40),
