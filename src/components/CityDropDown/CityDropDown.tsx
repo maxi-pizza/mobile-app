@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
   whiteText: {
     color: 'white',
     marginRight: nw(5),
+    marginLeft: nw(3),
   },
   bottomSheetContent: {
     backgroundColor: '#1C1C1C',
