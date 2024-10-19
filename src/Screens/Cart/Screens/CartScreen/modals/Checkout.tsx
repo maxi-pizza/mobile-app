@@ -1,5 +1,11 @@
-import React  from 'react';
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {nh, nw} from '../../../../../../normalize.helper.ts';
 
 import Swiper from '../components/Swiper.tsx';
@@ -7,77 +13,97 @@ import InformationInput from '../../../../User/components/InformationInput/Infor
 import DropDown from '../../../../../components/DropDown/DropDown.tsx';
 import Header from '../../../../../components/Header/Header.tsx';
 import BackButtonScreen from '../../../../../components/BackButtonScreen/BackButtonScreen.tsx';
+import {useQuery} from '@tanstack/react-query';
+import {spotsQuery} from '../../../spots.query.ts';
 
+const Checkout = ({navigation}: {navigation: any}) => {
+  const {data: spotsRes} = useQuery(spotsQuery);
 
-const Checkout = ({navigation, route}: {navigation: any, route: any}) => {
-
-  const addresses = [
-      'Odessa',
-      'fssffs',
-      'nerufsdb',
-      'fsdfsd',
-  ];
-
+  const addresses = (spotsRes || []).map(spot => spot);
 
   return (
-        <View>
-          <Header route={route} navigation={navigation}/>
-          <BackButtonScreen navigation={navigation}/>
-          <View style={styles.container}>
-            <ScrollView contentContainerStyle={styles.scrollView} showsVerticalScrollIndicator={false}>
-              <Text style={styles.header}>Оформление заказа</Text>
+    <View>
+      <Header />
+      <BackButtonScreen navigation={navigation} />
+      <View style={styles.container}>
+        <ScrollView
+          contentContainerStyle={styles.scrollView}
+          showsVerticalScrollIndicator={false}>
+          <Text style={styles.header}>Оформление заказа</Text>
 
-              <View>
-                <Text style={[styles.greyText, {marginBottom: nh(10)}]}>Способ доставки</Text>
-                <Swiper/>
-              </View>
-              <View style={styles.textWrapper}>
-                <View style={styles.circle}><Text style={{color: 'black'}}>1</Text></View>
-                <Text style={[styles.greyText, {marginLeft: nw(15)}]}>Введите данные для доставки</Text>
-              </View>
-
-              <View style={styles.inputWrapper}>
-                <InformationInput placeholder="Имя" inputMode="text"/>
-              </View>
-              <View style={styles.inputWrapper}>
-                <InformationInput placeholder="Имя" inputMode="text"/>
-              </View>
-              <View style={styles.inputWrapper}>
-                <InformationInput placeholder="Имя" inputMode="text"/>
-              </View>
-
-              <DropDown placeholder="Выберите район доставки" options={addresses}/>
-
-              <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
-                <InformationInput placeholder="Имя" inputMode="text"/>
-              </View>
-              <View style={styles.textWrapper}>
-                <View style={styles.circle}><Text style={{color: 'black'}}>2</Text></View>
-                <Text style={[styles.greyText, {marginLeft: nw(15)}]}>Способ оплаты</Text>
-              </View>
-              <Swiper/>
-              <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
-                <InformationInput placeholder="Приготовить сдачу с" inputMode="text"/>
-              </View>
-              <View style={styles.inputWrapper}>
-                <InformationInput placeholder="Комментарий к заказу" inputMode="text"/>
-              </View>
-              <Text style={[styles.whiteText, {fontSize: 16, fontWeight: '500', marginTop: nh(30)}]}>Сумма заказа</Text>
-              <View style={styles.priceWrapper}>
-                <Text style={styles.whiteText}>Доставка</Text>
-                <Text style={styles.whiteText}>50 ₴</Text>
-              </View>
-              <View style={styles.verticalBar}/>
-              <View style={styles.priceWrapper}>
-                <Text style={styles.whiteText}>К оплате</Text>
-                <Text style={styles.whiteText}>15 906 ₴</Text>
-              </View>
-              <TouchableOpacity style={styles.orderBtn}>
-                <Text style={styles.blackText}>Заказать</Text>
-              </TouchableOpacity>
-            </ScrollView>
+          <View>
+            <Text style={[styles.greyText, {marginBottom: nh(10)}]}>
+              Способ доставки
+            </Text>
+            <Swiper />
           </View>
-        </View>
+          <View style={styles.textWrapper}>
+            <View style={styles.circle}>
+              <Text style={{color: 'black'}}>1</Text>
+            </View>
+            <Text style={[styles.greyText, {marginLeft: nw(15)}]}>
+              Введите данные для доставки
+            </Text>
+          </View>
+
+          <View style={styles.inputWrapper}>
+            <InformationInput placeholder="Имя" inputMode="text" />
+          </View>
+          <View style={styles.inputWrapper}>
+            <InformationInput placeholder="Email" inputMode="email" />
+          </View>
+          <View style={styles.inputWrapper}>
+            <InformationInput placeholder="Телефон" inputMode="tel" />
+          </View>
+
+          <DropDown placeholder="Выберите район доставки" options={addresses} />
+
+          <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
+            <InformationInput placeholder="Имя" inputMode="text" />
+          </View>
+          <View style={styles.textWrapper}>
+            <View style={styles.circle}>
+              <Text style={{color: 'black'}}>2</Text>
+            </View>
+            <Text style={[styles.greyText, {marginLeft: nw(15)}]}>
+              Способ оплаты
+            </Text>
+          </View>
+          <Swiper />
+          <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
+            <InformationInput
+              placeholder="Приготовить сдачу с"
+              inputMode="text"
+            />
+          </View>
+          <View style={styles.inputWrapper}>
+            <InformationInput
+              placeholder="Комментарий к заказу"
+              inputMode="text"
+            />
+          </View>
+          <Text
+            style={[
+              styles.whiteText,
+              {fontSize: 16, fontWeight: '500', marginTop: nh(30)},
+            ]}>
+            Сумма заказа
+          </Text>
+          <View style={styles.priceWrapper}>
+            <Text style={styles.whiteText}>Доставка</Text>
+            <Text style={styles.whiteText}>50 ₴</Text>
+          </View>
+          <View style={styles.verticalBar} />
+          <View style={styles.priceWrapper}>
+            <Text style={styles.whiteText}>К оплате</Text>
+            <Text style={styles.whiteText}>15 906 ₴</Text>
+          </View>
+          <TouchableOpacity style={styles.orderBtn}>
+            <Text style={styles.blackText}>Заказать</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
+    </View>
   );
 };
 

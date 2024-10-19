@@ -1,60 +1,75 @@
-import React, {useCallback, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../normalize.helper.ts';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 import Caret from '../../assets/Icons/Caret.svg';
 import MapPin from '../../assets/Icons/MapPinMapPin.svg';
+import {ISpot} from '@layerok/emojisushi-js-sdk';
+import store from '../../stores/store.ts';
+import {observer} from 'mobx-react-lite';
 
+const DropDown = observer(
+  ({placeholder, options}: {placeholder: string; options: ISpot[]}) => {
+    const [isActive, setIsActive] = useState('');
 
+    const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
+    const openBottomSheet = useCallback(() => {
+      bottomSheetModalRef.current?.present();
+    }, []);
 
-const DropDown = ({placeholder, options}: {placeholder: string; options: string[]}) => {
-  const [isActive, setIsActive] = useState('');
+    const handleCityPress = (option: string) => {
+      setIsActive(option);
+      bottomSheetModalRef.current?.dismiss();
+    };
 
+    const filteredAddresses = options.filter(
+      spot => spot.city?.slug === store.city,
+    );
 
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+    useEffect(() => {
+      setIsActive('');
+      bottomSheetModalRef.current?.dismiss();
+    }, [store.city]);
 
-  const openBottomSheet = useCallback(() => {
-    bottomSheetModalRef.current?.present();
-  }, []);
-
-  const handleCityPress = (option: string) => {
-    setIsActive(option);
-    bottomSheetModalRef.current?.dismiss();
-  };
-
-
-  return (
+    return (
       <Pressable style={styles.container} onPress={openBottomSheet}>
         <View style={styles.inputContainer}>
-          <Text style={styles.selectOption}>{isActive ? <Text style={styles.whiteText}>{isActive}</Text> : placeholder}</Text>
-          <Caret color="#727272" width="15"/>
+          <Text style={styles.selectOption}>
+            {isActive ? (
+              <Text style={styles.whiteText}>{isActive}</Text>
+            ) : (
+              placeholder
+            )}
+          </Text>
+          <Caret color="#727272" width="15" />
         </View>
 
         <BottomSheetModal
-            ref={bottomSheetModalRef}
-            snapPoints={['30%']}
-            backgroundStyle={styles.bottom}
-            handleIndicatorStyle={styles.indicator}
-            style={styles.modal}
-        >
+          ref={bottomSheetModalRef}
+          snapPoints={['30%']}
+          backgroundStyle={styles.bottom}
+          handleIndicatorStyle={styles.indicator}
+          style={styles.modal}>
           <View style={styles.bottomSheetContent}>
             <View style={styles.mapPinWrapper}>
               <Text style={styles.chooseText}>Выберите город</Text>
-              <MapPin color="white"/>
+              <MapPin color="white" />
             </View>
-            {options.map((option) => (
-                <Pressable key={option} onPress={() => handleCityPress(option)}>
-                  <Text style={styles.cityText}>{option}</Text>
-                </Pressable>
+            {filteredAddresses.map(spot => (
+              <Pressable
+                key={spot.id}
+                onPress={() => handleCityPress(spot.name)}>
+                <Text style={styles.cityText}>{spot.name}</Text>
+              </Pressable>
             ))}
           </View>
         </BottomSheetModal>
-
       </Pressable>
-  );
-};
+    );
+  },
+);
 
 const styles = StyleSheet.create({
   container: {
