@@ -1,35 +1,57 @@
-import React, {useRef, useState} from 'react';
+import React, {useRef} from 'react';
 import {Animated, Pressable, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../../../../normalize.helper.ts';
+import {SvgProps} from 'react-native-svg';
 
-import Truck from '../../../../../assets/Icons/Truck.svg';
-import Package from '../../../../../assets/Icons/Package.svg';
+type shippingObj = {
+  id: number;
+  name: string;
+  icon: React.FC<SvgProps>;
+};
 
-const Swiper = () => {
-  const [isActive, setIsActive] = useState(false);
+const Swiper = ({
+  options,
+  isActive,
+  setIsActive,
+}: {
+  options: shippingObj[];
+  isActive: number;
+  setIsActive: (active: number) => void;
+}) => {
   const tabPosition = useRef(new Animated.Value(5)).current;
 
-  const handlePress = (active: boolean) => {
+  // todo: {id: , name: , icon: ,} make a new object in checkout
+  const handlePress = (active: number) => {
     setIsActive(active);
     Animated.timing(tabPosition, {
-      toValue: active ? nw(187) :  5,
+      toValue: active ? nw(187) : 5,
       duration: 200,
       useNativeDriver: false,
     }).start();
   };
 
   return (
-      <View style={styles.container}>
-        <Animated.View style={[styles.tab, {transform: [{translateX: tabPosition}]}]}/>
-        <Pressable onPress={() => handlePress(!isActive)} style={styles.textWrapper}>
-          <Package width="15" height="15"  color={isActive ? 'white' : 'black'}/>
-          <Text style={isActive ? styles.whiteText : styles.blackText}>Самовывоз</Text>
+    <View style={styles.container}>
+      <Animated.View
+        style={[styles.tab, {transform: [{translateX: tabPosition}]}]}
+      />
+      {options.map((item, index) => (
+        <Pressable
+          key={item.name}
+          onPress={() => handlePress((isActive = index))}
+          style={styles.textWrapper}>
+          <item.icon
+            width={nw(15)}
+            height={nh(15)}
+            color={isActive === index ? 'black' : 'white'}
+          />
+          <Text
+            style={isActive === index ? styles.blackText : styles.whiteText}>
+            {item.name}
+          </Text>
         </Pressable>
-        <Pressable onPress={() => handlePress(!isActive)} style={styles.textWrapper}>
-          <Truck width="15" height="15" color={isActive ? 'black' : 'white'}/>
-          <Text style={isActive ? styles.blackText : styles.whiteText}>Доставка</Text>
-        </Pressable>
-      </View>
+      ))}
+    </View>
   );
 };
 

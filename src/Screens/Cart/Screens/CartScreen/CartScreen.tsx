@@ -21,7 +21,7 @@ import {
 import {Product} from '../../../../models/Product.ts';
 import {cartQuery} from '../../cart.query.ts';
 
-const CartScreen = ({navigation, route}: {navigation: any; route: any}) => {
+const CartScreen = ({navigation}: {navigation: any}) => {
   const [personCount, setPersonCount] = useState(0);
 
   const {data: cartItems} = useQuery(cartQuery);
@@ -45,7 +45,7 @@ const CartScreen = ({navigation, route}: {navigation: any; route: any}) => {
 
   return (
     <View style={styles.container}>
-      <Header route={route} />
+      <Header />
       {ids.length > 0 ? (
         <View>
           <Text style={[styles.cartTitle, styles.titleMargin]}>Корзина</Text>

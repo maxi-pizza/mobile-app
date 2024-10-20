@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -16,8 +16,36 @@ import BackButtonScreen from '../../../../../components/BackButtonScreen/BackBut
 import {useQuery} from '@tanstack/react-query';
 import {spotsQuery} from '../../../spots.query.ts';
 
+import Truck from '../../../../../assets/Icons/Truck.svg';
+import Package from '../../../../../assets/Icons/Package.svg';
+import Card from '../../../../../assets/Icons/CreditCard.svg';
+import Cash from '../../../../../assets/Icons/Money.svg';
+
+import {shippingQuery} from '../../../shipping.query.ts';
+import {paymentQuery} from '../../../payment.query.ts';
+
 const Checkout = ({navigation}: {navigation: any}) => {
+  const [isCash, setIsCash] = useState(0);
+  const [isCourier, setIsCourier] = useState(0);
   const {data: spotsRes} = useQuery(spotsQuery);
+
+  const {data: shippingRes} = useQuery(shippingQuery);
+  const {data: paymentRes} = useQuery(paymentQuery);
+  const shipping = (shippingRes?.data || []).map(ship => ship);
+  const shippingIcons = [Package, Truck];
+  const shippingObj = shipping.map((item, index) => ({
+    id: item.id,
+    name: item.name,
+    icon: shippingIcons[index],
+  }));
+
+  const paymentIcons = [Cash, Card];
+  const payment = (paymentRes?.data || []).map(item => item);
+  const paymentObj = payment.map((item, index) => ({
+    id: item.id,
+    name: item.name,
+    icon: paymentIcons[index],
+  }));
 
   const addresses = (spotsRes || []).map(spot => spot);
 
@@ -35,18 +63,23 @@ const Checkout = ({navigation}: {navigation: any}) => {
             <Text style={[styles.greyText, {marginBottom: nh(10)}]}>
               Способ доставки
             </Text>
-            <Swiper />
+            <Swiper
+              options={shippingObj}
+              isActive={isCourier}
+              setIsActive={setIsCourier}
+            />
           </View>
           <View style={styles.textWrapper}>
             <View style={styles.circle}>
               <Text style={{color: 'black'}}>1</Text>
             </View>
             <Text style={[styles.greyText, {marginLeft: nw(15)}]}>
-              Введите данные для доставки
+              Введите данные
             </Text>
           </View>
 
-          <View style={styles.inputWrapper}>
+          <DropDown placeholder="Выберите район доставки" options={addresses} />
+          <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
             <InformationInput placeholder="Имя" inputMode="text" />
           </View>
           <View style={styles.inputWrapper}>
@@ -56,10 +89,15 @@ const Checkout = ({navigation}: {navigation: any}) => {
             <InformationInput placeholder="Телефон" inputMode="tel" />
           </View>
 
-          <DropDown placeholder="Выберите район доставки" options={addresses} />
-
-          <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
+          <View style={styles.inputWrapper}>
             <InformationInput placeholder="Имя" inputMode="text" />
+          </View>
+
+          <View style={styles.inputWrapper}>
+            <InformationInput
+              placeholder="Комментарий к заказу"
+              inputMode="text"
+            />
           </View>
           <View style={styles.textWrapper}>
             <View style={styles.circle}>
@@ -69,18 +107,19 @@ const Checkout = ({navigation}: {navigation: any}) => {
               Способ оплаты
             </Text>
           </View>
-          <Swiper />
+          <Swiper
+            isActive={isCash}
+            setIsActive={setIsCash}
+            options={paymentObj}
+          />
+
           <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
-            <InformationInput
-              placeholder="Приготовить сдачу с"
-              inputMode="text"
-            />
-          </View>
-          <View style={styles.inputWrapper}>
-            <InformationInput
-              placeholder="Комментарий к заказу"
-              inputMode="text"
-            />
+            {!isCash && (
+              <InformationInput
+                placeholder="Приготовить сдачу с"
+                inputMode="text"
+              />
+            )}
           </View>
           <Text
             style={[
