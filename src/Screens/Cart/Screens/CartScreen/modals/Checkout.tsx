@@ -3,6 +3,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -23,18 +24,32 @@ import Cash from '../../../../../assets/Icons/Money.svg';
 
 import {shippingQuery} from '../../../shipping.query.ts';
 import {paymentQuery} from '../../../payment.query.ts';
+import {cityQuery} from '../../../../../components/CityDropDown/CityDropDown.tsx';
+import store from '../../../../../stores/store.ts';
+import {observer} from 'mobx-react-lite';
+import {cartQuery} from '../../../cart.query.ts';
 
-const Checkout = ({navigation}: {navigation: any}) => {
-  const [isCash, setIsCash] = useState(0);
-  const [isCourier, setIsCourier] = useState(0);
+enum ApartmentMethod {
+  Apartment = 'apartment',
+  House = 'house',
+}
+
+const Checkout = observer(({navigation}: {navigation: any}) => {
+  const [paymentMethodValue, setPaymentMethodValue] = useState('cash');
+  const [deliveryMethodValue, setDeliveryMethodValue] = useState('courier');
+  const [apartmentMethodValue, setApartmentMethodValue] = useState<string>(
+    ApartmentMethod.House,
+  );
   const {data: spotsRes} = useQuery(spotsQuery);
+  const {data: cityRes} = useQuery(cityQuery);
+  const {data: cart} = useQuery(cartQuery);
 
   const {data: shippingRes} = useQuery(shippingQuery);
   const {data: paymentRes} = useQuery(paymentQuery);
   const shipping = (shippingRes?.data || []).map(ship => ship);
   const shippingIcons = [Package, Truck];
   const shippingObj = shipping.map((item, index) => ({
-    id: item.id,
+    value: item.code,
     name: item.name,
     icon: shippingIcons[index],
   }));
@@ -42,12 +57,36 @@ const Checkout = ({navigation}: {navigation: any}) => {
   const paymentIcons = [Cash, Card];
   const payment = (paymentRes?.data || []).map(item => item);
   const paymentObj = payment.map((item, index) => ({
-    id: item.id,
+    value: item.code,
     name: item.name,
     icon: paymentIcons[index],
   }));
 
   const addresses = (spotsRes || []).map(spot => spot);
+  const filteredAddresses = addresses.filter(
+    spot => spot.city?.slug === store.city,
+  );
+  const addressArray = filteredAddresses.map(address => ({
+    id: address.id,
+    name: address.name,
+  }));
+
+  const city = (cityRes || []).find(c => c.slug === store.city);
+  const districts = (city?.districts || []).map(district => ({
+    id: district.id,
+    name: district.name,
+  }));
+
+  const apart = [
+    {value: ApartmentMethod.House, name: 'Приватний будинок'},
+    {value: ApartmentMethod.Apartment, name: 'Апартаменти'},
+  ];
+
+  const ids = Object.keys(cart || []);
+
+  const total = ids.reduce((acc, id) => {
+    return acc + cart?.[id].count * cart?.[id].price;
+  }, 0);
 
   return (
     <View>
@@ -58,17 +97,6 @@ const Checkout = ({navigation}: {navigation: any}) => {
           contentContainerStyle={styles.scrollView}
           showsVerticalScrollIndicator={false}>
           <Text style={styles.header}>Оформление заказа</Text>
-
-          <View>
-            <Text style={[styles.greyText, {marginBottom: nh(10)}]}>
-              Способ доставки
-            </Text>
-            <Swiper
-              options={shippingObj}
-              isActive={isCourier}
-              setIsActive={setIsCourier}
-            />
-          </View>
           <View style={styles.textWrapper}>
             <View style={styles.circle}>
               <Text style={{color: 'black'}}>1</Text>
@@ -77,8 +105,74 @@ const Checkout = ({navigation}: {navigation: any}) => {
               Введите данные
             </Text>
           </View>
-
-          <DropDown placeholder="Выберите район доставки" options={addresses} />
+          <View style={{marginTop: nh(15)}}>
+            <Swiper
+              options={shippingObj}
+              value={deliveryMethodValue}
+              onValueChange={setDeliveryMethodValue}
+            />
+          </View>
+          {deliveryMethodValue === 'courier' ? (
+            <View>
+              <View style={{marginTop: nh(15)}}>
+                <DropDown
+                  placeholder="Выберите район доставки"
+                  options={districts}
+                />
+              </View>
+              <View style={{marginTop: nh(15), marginBottom: nh(15)}}>
+                <Swiper
+                  options={apart}
+                  value={apartmentMethodValue}
+                  onValueChange={setApartmentMethodValue}
+                />
+              </View>
+              <View style={styles.houseInputs}>
+                <View style={{width: nw(250)}}>
+                  <InformationInput placeholder={'Вулиця'} inputMode={'text'} />
+                </View>
+                <View
+                  style={{
+                    width: nw(105),
+                    marginLeft: nw(10),
+                  }}>
+                  <InformationInput
+                    placeholder={'Будинок'}
+                    inputMode={'text'}
+                  />
+                </View>
+              </View>
+              {apartmentMethodValue === ApartmentMethod.Apartment && (
+                <View style={styles.apartmentInputs}>
+                  <View style={{width: nw(114)}}>
+                    <InformationInput
+                      placeholder={'Квартира'}
+                      inputMode={'text'}
+                    />
+                  </View>
+                  <View style={{width: nw(115)}}>
+                    <InformationInput
+                      placeholder={"Під'їзд"}
+                      inputMode={'text'}
+                    />
+                  </View>
+                  <View style={{width: nw(115)}}>
+                    <InformationInput
+                      placeholder={'Поверх'}
+                      inputMode={'numeric'}
+                    />
+                  </View>
+                </View>
+              )}
+            </View>
+          ) : (
+            <View style={{marginTop: nh(15)}}>
+              <DropDown
+                placeholder={'Оберіть найближчий заклад'}
+                options={addressArray}
+              />
+            </View>
+          )}
           <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
             <InformationInput placeholder="Имя" inputMode="text" />
           </View>
@@ -87,10 +181,6 @@ const Checkout = ({navigation}: {navigation: any}) => {
           </View>
           <View style={styles.inputWrapper}>
             <InformationInput placeholder="Телефон" inputMode="tel" />
-          </View>
-
-          <View style={styles.inputWrapper}>
-            <InformationInput placeholder="Имя" inputMode="text" />
           </View>
 
           <View style={styles.inputWrapper}>
@@ -108,13 +198,13 @@ const Checkout = ({navigation}: {navigation: any}) => {
             </Text>
           </View>
           <Swiper
-            isActive={isCash}
-            setIsActive={setIsCash}
+            value={paymentMethodValue}
+            onValueChange={setPaymentMethodValue}
             options={paymentObj}
           />
 
           <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
-            {!isCash && (
+            {paymentMethodValue === 'cash' && (
               <InformationInput
                 placeholder="Приготовить сдачу с"
                 inputMode="text"
@@ -130,12 +220,12 @@ const Checkout = ({navigation}: {navigation: any}) => {
           </Text>
           <View style={styles.priceWrapper}>
             <Text style={styles.whiteText}>Доставка</Text>
-            <Text style={styles.whiteText}>50 ₴</Text>
+            <Text style={styles.whiteText}>0 ₴</Text>
           </View>
           <View style={styles.verticalBar} />
           <View style={styles.priceWrapper}>
             <Text style={styles.whiteText}>К оплате</Text>
-            <Text style={styles.whiteText}>15 906 ₴</Text>
+            <Text style={styles.whiteText}>{total} ₴</Text>
           </View>
           <TouchableOpacity style={styles.orderBtn}>
             <Text style={styles.blackText}>Заказать</Text>
@@ -144,7 +234,7 @@ const Checkout = ({navigation}: {navigation: any}) => {
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -154,6 +244,17 @@ const styles = StyleSheet.create({
   scrollView: {
     display: 'flex',
     alignItems: 'center',
+  },
+  houseInputs: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: nw(365),
+  },
+  apartmentInputs: {
+    display: 'flex',
+    flexDirection: 'row',
+    marginTop: nh(15),
+    gap: 10,
   },
   header: {
     fontFamily: 'MontserratRegular',
@@ -213,6 +314,7 @@ const styles = StyleSheet.create({
   },
   inputWrapper: {
     marginBottom: nh(15),
+    width: nw(365),
   },
   priceWrapper: {
     width: nw(365),

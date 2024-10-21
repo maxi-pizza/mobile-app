@@ -10,7 +10,7 @@ import {agent} from '../../../APIClient.tsx';
 import store from '../../stores/store.ts';
 import {observer} from 'mobx-react-lite';
 
-const query = {
+export const cityQuery = {
   queryKey: ['cities'],
   queryFn: async () => {
     const res = await agent.getCities({
@@ -23,7 +23,7 @@ const query = {
 
 const CityDropDown = observer(() => {
   const bottomSheetModalRef = useRef<BottomSheetModal>(null);
-  const {data: cities} = useQuery(query);
+  const {data: cities} = useQuery(cityQuery);
   const city = (cities || []).find(c => c.slug === store.city);
 
   const handleCityPress = (city: string) => {

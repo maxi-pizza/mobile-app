@@ -1,53 +1,49 @@
-import React, {useRef} from 'react';
-import {Animated, Pressable, StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../../../../normalize.helper.ts';
 import {SvgProps} from 'react-native-svg';
 
-type shippingObj = {
-  id: number;
+type Option = {
   name: string;
-  icon: React.FC<SvgProps>;
+  value: string;
+  icon?: React.FC<SvgProps>;
 };
 
 const Swiper = ({
   options,
-  isActive,
-  setIsActive,
+  value,
+  onValueChange,
 }: {
-  options: shippingObj[];
-  isActive: number;
-  setIsActive: (active: number) => void;
+  options: Option[];
+  value: string;
+  onValueChange: (value: string) => void;
 }) => {
-  const tabPosition = useRef(new Animated.Value(5)).current;
-
-  // todo: {id: , name: , icon: ,} make a new object in checkout
-  const handlePress = (active: number) => {
-    setIsActive(active);
-    Animated.timing(tabPosition, {
-      toValue: active ? nw(187) : 5,
-      duration: 200,
-      useNativeDriver: false,
-    }).start();
+  const handlePress = (option: Option) => {
+    onValueChange(option.value);
   };
 
   return (
     <View style={styles.container}>
-      <Animated.View
-        style={[styles.tab, {transform: [{translateX: tabPosition}]}]}
-      />
-      {options.map((item, index) => (
+      {options.map(option => (
         <Pressable
-          key={item.name}
-          onPress={() => handlePress((isActive = index))}
-          style={styles.textWrapper}>
-          <item.icon
-            width={nw(15)}
-            height={nh(15)}
-            color={isActive === index ? 'black' : 'white'}
-          />
+          key={option.name}
+          onPress={() => handlePress(option)}
+          style={[
+            styles.textWrapper,
+            option.value === value ? styles.active : '',
+          ]}>
+          {option.icon && (
+            <option.icon
+              width={nw(15)}
+              height={nh(15)}
+              color={value === option.value ? 'black' : 'white'}
+            />
+          )}
           <Text
-            style={isActive === index ? styles.blackText : styles.whiteText}>
-            {item.name}
+            style={
+              value === option.value ? styles.blackText : styles.whiteText
+            }>
+            {option.name}
           </Text>
         </Pressable>
       ))}
@@ -67,20 +63,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     position: 'relative',
   },
-  tab: {
-    position: 'absolute',
-    top: nh(5),
-    backgroundColor: '#FFE600',
-    width: nw(170),
-    height: nh(40),
-    borderRadius: 10,
+  active: {
+    backgroundColor: 'yellow',
   },
   textWrapper: {
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
     width: nw(170),
+    height: nh(40),
+    borderRadius: 10,
     justifyContent: 'center',
+    marginLeft: nw(5),
+    marginRight: nw(5),
   },
   whiteText: {
     color: 'white',

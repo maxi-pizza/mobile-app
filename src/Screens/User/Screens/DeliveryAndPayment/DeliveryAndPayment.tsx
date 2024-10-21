@@ -1,15 +1,33 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, Text, View} from 'react-native';
 import Header from '../../../../components/Header/Header.tsx';
+import WebView from 'react-native-webview';
+import {useQuery} from '@tanstack/react-query';
+import {cityQuery} from '../../../../components/CityDropDown/CityDropDown.tsx';
+import store from '../../../../stores/store.ts';
+import {nh, nw} from '../../../../../normalize.helper.ts';
+import {observer} from 'mobx-react-lite';
 
-const DeliveryAndPayment = () => {
+const DeliveryAndPayment = observer(() => {
+  const {data: cityRes} = useQuery(cityQuery);
+
+  const city = (cityRes || []).find(city => city.slug === store.city);
   return (
     <View style={styles.container}>
       <Header />
-      <View></View>
+      <View style={styles.map}>
+        <Text style={styles.text}>Доставка і оплата</Text>
+        {city !== undefined && (
+          <View style={{width: nw(365), height: nh(365)}}>
+            <WebView
+              source={{uri: city?.google_map_url ? city.google_map_url : ''}}
+            />
+          </View>
+        )}
+      </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -17,7 +35,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#141414',
   },
   map: {
-    ...StyleSheet.absoluteFillObject,
+    display: 'flex',
+    alignItems: 'center',
+    marginTop: nh(30),
+  },
+  text: {
+    color: 'white',
+    fontFamily: 'MontserratRegular',
+    fontSize: 20,
+    fontWeight: '600',
+    width: nw(365),
+    marginBottom: nh(15),
   },
 });
 

@@ -14,69 +14,95 @@ import CreditCard from '../../../../assets/Icons/CreditCard.svg';
 import Coins from '../../../../assets/Icons/Coins.svg';
 import Header from '../../../../components/Header/Header.tsx';
 
-
-
-const UserScreen = ({navigation, route}: {navigation: any, route: any} ) => {
-  const [logged, setLogged] = useState(true);
+const UserScreen = ({navigation}: {navigation: any}) => {
+  // const [logged, setLogged] = useState(true);
   const [isVisible, setIsVisible] = useState(false);
 
   return (
-      <View style={styles.container}>
-        <Header route={route} navigation={navigation}/>
-        {logged ? (
-            <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
-              <View style={styles.horizontalLine}/>
-              <View style={styles.profileContainer}>
-                <View style={styles.profileTextUserWrapper}>
-                  <View style={styles.userCircle}><UserCircle color="#727272"/></View>
-                  <View style={styles.profileTextWrapper}>
-                    <Text style={styles.profileText}>Ваш профіль</Text>
-                    <Text style={styles.gmail}>mymail@gmail.com</Text>
-                  </View>
-                </View>
-                <Caret style={styles.caret} width="15" height="15" color="#FFE600"/>
-              </View>
-            </TouchableOpacity>
-        ) : (
-            <View style={styles.withoutAccount}>
-              <View style={styles.withoutAccountWrapper}>
-                <View style={styles.userCircle}><UserCircle color="#727272"/></View>
-                <Text style={styles.signInText}>Увійдіть в акаунт</Text>
-                <Text style={styles.descriptionText}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</Text>
-                <View style={styles.btnWrapper}>
-                  <TouchableOpacity onPress={() => navigation.navigate('SignUp')} style={styles.signUpBtn}>
-                    <Text style={styles.signUpBtnText}>Реєстрація</Text>
-                  </TouchableOpacity>
+    <View style={styles.container}>
+      <Header />
+      {/*{logged ? (*/}
+      {/*  <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>*/}
+      {/*    <View style={styles.horizontalLine} />*/}
+      {/*    <View style={styles.profileContainer}>*/}
+      {/*      <View style={styles.profileTextUserWrapper}>*/}
+      {/*        <View style={styles.userCircle}>*/}
+      {/*          <UserCircle color="#727272" />*/}
+      {/*        </View>*/}
+      {/*        <View style={styles.profileTextWrapper}>*/}
+      {/*          <Text style={styles.profileText}>Ваш профіль</Text>*/}
+      {/*          <Text style={styles.gmail}>mymail@gmail.com</Text>*/}
+      {/*        </View>*/}
+      {/*      </View>*/}
+      {/*      <Caret*/}
+      {/*        style={styles.caret}*/}
+      {/*        width="15"*/}
+      {/*        height="15"*/}
+      {/*        color="#FFE600"*/}
+      {/*      />*/}
+      {/*    </View>*/}
+      {/*  </TouchableOpacity>*/}
+      {/*) : (*/}
+      {/*  <View style={styles.withoutAccount}>*/}
+      {/*    <View style={styles.withoutAccountWrapper}>*/}
+      {/*      <View style={styles.userCircle}>*/}
+      {/*        <UserCircle color="#727272" />*/}
+      {/*      </View>*/}
+      {/*      <Text style={styles.signInText}>Увійдіть в акаунт</Text>*/}
+      {/*      <Text style={styles.descriptionText}>*/}
+      {/*        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do*/}
+      {/*        eiusmod tempor incididunt.*/}
+      {/*      </Text>*/}
+      {/*      <View style={styles.btnWrapper}>*/}
+      {/*        <TouchableOpacity*/}
+      {/*          onPress={() => navigation.navigate('SignUp')}*/}
+      {/*          style={styles.signUpBtn}>*/}
+      {/*          <Text style={styles.signUpBtnText}>Реєстрація</Text>*/}
+      {/*        </TouchableOpacity>*/}
 
-                  <TouchableOpacity onPress={() => navigation.navigate('SignIn')} style={styles.signInBtn}>
-                    <Text style={styles.signInBtnText}>Увійти</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
+      {/*        <TouchableOpacity*/}
+      {/*          onPress={() => navigation.navigate('SignIn')}*/}
+      {/*          style={styles.signInBtn}>*/}
+      {/*          <Text style={styles.signInBtnText}>Увійти</Text>*/}
+      {/*        </TouchableOpacity>*/}
+      {/*      </View>*/}
+      {/*    </View>*/}
+      {/*  </View>*/}
+      {/*)}*/}
+      {/*<ProfileScreen visible={isVisible} setIsVisible={setIsVisible} />*/}
+      {/*<View style={styles.horizontalLine} />*/}
+      {/*<TouchableOpacity onPress={() => navigation.navigate('OrderHistory')}>*/}
+      {/*  <UserOption*/}
+      {/*    title="Історія замовлень"*/}
+      {/*    svgIcon={<ClockCounter color="#727272" />}*/}
+      {/*  />*/}
+      {/*</TouchableOpacity>*/}
+      {/*<TouchableOpacity onPress={() => navigation.navigate('SavedAddresses')}>*/}
+      {/*  <UserOption*/}
+      {/*    title="Збережені адреси"*/}
+      {/*    svgIcon={<Truck color="#727272" />}*/}
+      {/*  />*/}
+      {/*</TouchableOpacity>*/}
 
-            </View>
-        )}
-        <ProfileScreen visible={isVisible} setIsVisible={setIsVisible}/>
-        <View style={styles.horizontalLine} />
-        <TouchableOpacity onPress={() => navigation.navigate('OrderHistory')}>
-          <UserOption title="Історія замовлень" svgIcon={<ClockCounter color="#727272"/>}/>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('SavedAddresses')}>
-          <UserOption title="Збережені адреси" svgIcon={<Truck color="#727272"/>}/>
-        </TouchableOpacity>
+      <View style={styles.horizontalLine} />
 
-        <View style={styles.horizontalLine} />
-
-        <TouchableOpacity onPress={() => navigation.navigate('Contacts')}>
-          <UserOption title="Контакти" svgIcon={<Phone color="#727272"/>}/>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('DeliveryAndPayment')}>
-          <UserOption title="Доставка і оплата" svgIcon={<CreditCard color="#727272"/>}/>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('RefundRules')}>
-          <UserOption title="Правила повернення коштів" svgIcon={<Coins color="#727272"/>}/>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity onPress={() => navigation.navigate('Contacts')}>
+        <UserOption title="Контакти" svgIcon={<Phone color="#727272" />} />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('DeliveryAndPayment')}>
+        <UserOption
+          title="Доставка і оплата"
+          svgIcon={<CreditCard color="#727272" />}
+        />
+      </TouchableOpacity>
+      <TouchableOpacity onPress={() => navigation.navigate('RefundRules')}>
+        <UserOption
+          title="Правила повернення коштів"
+          svgIcon={<Coins color="#727272" />}
+        />
+      </TouchableOpacity>
+    </View>
   );
 };
 

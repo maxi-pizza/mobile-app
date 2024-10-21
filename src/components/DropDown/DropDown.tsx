@@ -5,12 +5,17 @@ import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 import Caret from '../../assets/Icons/Caret.svg';
 import MapPin from '../../assets/Icons/MapPinMapPin.svg';
-import {ISpot} from '@layerok/emojisushi-js-sdk';
 import store from '../../stores/store.ts';
 import {observer} from 'mobx-react-lite';
+import {ISpot} from '@layerok/emojisushi-js-sdk';
+
+type optionsProps = {
+  id: number;
+  name: string;
+};
 
 const DropDown = observer(
-  ({placeholder, options}: {placeholder: string; options: ISpot[]}) => {
+  ({placeholder, options}: {placeholder: string; options: optionsProps[]}) => {
     const [isActive, setIsActive] = useState('');
 
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
@@ -23,10 +28,6 @@ const DropDown = observer(
       setIsActive(option);
       bottomSheetModalRef.current?.dismiss();
     };
-
-    const filteredAddresses = options.filter(
-      spot => spot.city?.slug === store.city,
-    );
 
     useEffect(() => {
       setIsActive('');
@@ -57,7 +58,7 @@ const DropDown = observer(
               <Text style={styles.chooseText}>Выберите город</Text>
               <MapPin color="white" />
             </View>
-            {filteredAddresses.map(spot => (
+            {options.map(spot => (
               <Pressable
                 key={spot.id}
                 onPress={() => handleCityPress(spot.name)}>
