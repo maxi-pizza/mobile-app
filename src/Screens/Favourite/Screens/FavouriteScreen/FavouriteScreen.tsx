@@ -11,7 +11,9 @@ import {
 } from '../../../Home/products.query.ts';
 import ProductCard from '../../../../components/ProductCard/ProductCard.tsx';
 
-const FavouriteScreen = ({route}: {route: any}) => {
+import NoResult from '../../../../assets/Icons/NoResultSearch.svg';
+
+const FavouriteScreen = ({navigation}: {navigation: any}) => {
   const {data: wishlists, isLoading: isWishlistLoading} =
     useQuery(wishlistQuery);
 
@@ -29,16 +31,29 @@ const FavouriteScreen = ({route}: {route: any}) => {
 
   return (
     <View style={styles.container}>
-      <Header route={route} />
-      <FlatList
-        ListHeaderComponent={<Text style={styles.text}>Вибране</Text>}
-        data={wishlist}
-        renderItem={({item}) => (
-          <ProductCard wishlists={wishlists} product={item} />
-        )}
-        contentContainerStyle={styles.grid}
-        showsVerticalScrollIndicator={false}
-      />
+      <Header />
+      {wishlist.length === 0 ? (
+        <View style={styles.noResultContainer}>
+          <NoResult height={nh(200)} width={nw(200)} color={'#393939'} />
+          <Text style={[styles.noResultText, {marginTop: nh(15)}]}>
+            Выбранные товары не найдены
+          </Text>
+        </View>
+      ) : (
+        <FlatList
+          ListHeaderComponent={<Text style={styles.text}>Вибране</Text>}
+          data={wishlist}
+          renderItem={({item}) => (
+            <ProductCard
+              navigation={navigation}
+              wishlists={wishlists}
+              product={item}
+            />
+          )}
+          contentContainerStyle={styles.grid}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </View>
   );
 };
@@ -66,6 +81,20 @@ const styles = StyleSheet.create({
     marginBottom: nh(15),
     marginTop: nh(30),
     width: nw(365),
+  },
+  noResultContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: nh(170),
+  },
+  noResultText: {
+    color: '#727272',
+    fontSize: 14,
+    fontFamily: 'MontserratRegular',
+    fontWeight: '500',
+    width: nw(200),
+    textAlign: 'center',
   },
 });
 

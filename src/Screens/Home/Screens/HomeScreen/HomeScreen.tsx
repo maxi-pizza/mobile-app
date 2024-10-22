@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 import Banner from '../../../../components/Banner/Banner.tsx';
 import Category from '../../../../components/Category/Category.tsx';
@@ -15,6 +15,7 @@ import {wishlistQuery} from '../../../Favourite/wishlist.query.ts';
 import {observer} from 'mobx-react-lite';
 import categoryStore from '../../../../stores/store.ts';
 import ProductCard from '../../../../components/ProductCard/ProductCard.tsx';
+import store from '../../../../stores/store.ts';
 
 const HomeScreen = observer(({navigation}: {navigation: any}) => {
   const {data: wishlists, isLoading: isWishlistLoading} =
@@ -32,9 +33,11 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
   );
 
   const belongsToCategory = (product: IProduct) => {
-    return !!product.categories.find(
-      category => category.slug === categoryStore.categorySlug,
-    );
+    return !!product.categories
+      .filter(category =>
+        store.city === 'chorno' ? category.slug !== 'pitsa' : true,
+      )
+      .find(category => category.slug === categoryStore.categorySlug);
   };
 
   const categoryItems = (productQueryRes?.data || []).filter(belongsToCategory);
@@ -54,7 +57,9 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
             <View>
               <Banner />
               <View style={styles.searchWrapper}>
-                <Search />
+                <Pressable onPress={() => navigation.navigate('SearchModal')}>
+                  <Search editable={false} />
+                </Pressable>
               </View>
               <Category />
               <Text style={styles.product}>{selectedCategory?.name}</Text>

@@ -1,18 +1,38 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, TextInput, View} from 'react-native';
 import {nh, nw} from '../../../normalize.helper.ts';
 
 import MagnifyingGlass from '../../assets/Icons/MagnifyingGlass.svg';
 
-const Search = () => {
+const Search = ({
+  editable,
+  autoFocus,
+  onSearch,
+}: {
+  editable?: boolean;
+  autoFocus?: boolean;
+  onSearch: (value: string) => void;
+}) => {
+  const [isFocused, setIsFocused] = useState(false);
   return (
-      <View style={styles.container}>
-        <MagnifyingGlass style={styles.magnify}/>
-        <TextInput scrollEnabled={false} multiline={false} placeholderTextColor="#3F3F3F" style={styles.input} placeholder="Что-то ищете?" />
-      </View>
+    <View style={styles.container}>
+      <MagnifyingGlass style={styles.magnify} />
+      <TextInput
+        maxLength={30}
+        onChangeText={e => onSearch(e)}
+        onFocus={() => setIsFocused(!isFocused)}
+        onBlur={() => setIsFocused(false)}
+        editable={editable}
+        scrollEnabled={false}
+        multiline={false}
+        placeholderTextColor="#3F3F3F"
+        style={[styles.input, isFocused && styles.focused]}
+        placeholder="Что-то ищете?"
+        autoFocus={autoFocus}
+      />
+    </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -32,6 +52,12 @@ const styles = StyleSheet.create({
     lineHeight: 18,
     height: '100%',
     fontSize: 12,
+    borderWidth: 1,
+    borderColor: 'transparent',
+    borderRadius: 10,
+  },
+  focused: {
+    borderColor: 'yellow',
   },
 });
 export default Search;

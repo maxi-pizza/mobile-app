@@ -8,37 +8,41 @@ import {categoriesQuery} from '../../categories.query.ts';
 import {observer} from 'mobx-react-lite';
 import Category from '../components/Category.tsx';
 import categoryStore from '../../../../stores/store.ts';
+import store from '../../../../stores/store.ts';
 
-const CategoryScreen = observer(
-  ({route, navigation}: {route: any; navigation: any}) => {
-    const {data: categories, isLoading} = useQuery({
-      ...categoriesQuery(),
-    });
-    const onHandleCategory = (slug: string) => {
-      categoryStore.changeCategory(slug);
-      navigation.navigate('Home');
-    };
-
-    return (
-      <View style={styles.container}>
-        <Header route={route} />
-        <Text style={styles.category}>Категории</Text>
-        <ScrollView
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoryContainer}>
-          {categories?.data.map(category => (
-            <View key={category.id} style={styles.categoryWrapper}>
-              <Category
-                categoryHandle={() => onHandleCategory(category.slug)}
-                category={category}
-              />
-            </View>
-          ))}
-        </ScrollView>
-      </View>
+const CategoryScreen = observer(({navigation}: {navigation: any}) => {
+  const {data: categoriesRes, isLoading} = useQuery({
+    ...categoriesQuery(),
+  });
+  const categories = (categoriesRes?.data || [])
+    .map(category => category)
+    .filter(category =>
+      store.city === 'chorno' ? category.slug !== 'pitsa' : true,
     );
-  },
-);
+  const onHandleCategory = (slug: string) => {
+    categoryStore.changeCategory(slug);
+    navigation.navigate('Home');
+  };
+
+  return (
+    <View style={styles.container}>
+      <Header />
+      <Text style={styles.category}>Категории</Text>
+      <ScrollView
+        showsHorizontalScrollIndicator={false}
+        contentContainerStyle={styles.categoryContainer}>
+        {categories.map(category => (
+          <View key={category.id} style={styles.categoryWrapper}>
+            <Category
+              categoryHandle={() => onHandleCategory(category.slug)}
+              category={category}
+            />
+          </View>
+        ))}
+      </ScrollView>
+    </View>
+  );
+});
 
 const styles = StyleSheet.create({
   container: {

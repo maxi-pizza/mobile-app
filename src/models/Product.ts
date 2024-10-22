@@ -1,5 +1,5 @@
-import { IProduct, IWishlist } from '@layerok/emojisushi-js-sdk';
-import { Variant } from './Variant';
+import {IProduct, IWishlist} from '@layerok/emojisushi-js-sdk';
+import {Variant} from './Variant';
 
 export class Product {
   json: IProduct;
@@ -32,11 +32,11 @@ export class Product {
   }
 
   get variants() {
-    return this.json.variants.map((variant) => new Variant(variant));
+    return this.json.variants.map(variant => new Variant(variant));
   }
 
   get variantIds() {
-    return this.variants.map((v) => v.id);
+    return this.variants.map(v => v.id);
   }
 
   get inventoryManagementMethod() {
@@ -66,10 +66,10 @@ export class Product {
   get mainImage() {
     const imageSets = this.imageSets;
     return imageSets.length > 0 &&
-    imageSets[0] &&
-    imageSets[0].images.length > 0
-        ? imageSets[0].images[0].path
-        : undefined;
+      imageSets[0] &&
+      imageSets[0].images.length > 0
+      ? imageSets[0].images[0].path
+      : undefined;
   }
 
   get categories() {
@@ -81,7 +81,7 @@ export class Product {
   }
 
   isHiddenInSpot(spotSlug: string) {
-    return !!this.hideProductsInSpot.find((s) => s.slug === spotSlug);
+    return !!this.hideProductsInSpot.find(s => s.slug === spotSlug);
   }
 
   isInWishlists(wishlists: IWishlist[]): boolean {
@@ -98,8 +98,8 @@ export class Product {
     for (let j = 0; j < wishlist.items.length; j++) {
       const item = wishlist.items[j];
       if (
-          item.product_id === this.id &&
-          (!item.variant_id || this.variantIds.includes(item.variant_id))
+        item.product_id === this.id &&
+        (!item.variant_id || this.variantIds.includes(item.variant_id))
       ) {
         return true;
       }
@@ -109,8 +109,9 @@ export class Product {
   }
 
   get ingredients() {
-    return this.descriptionShort ? this.descriptionShort.split(",") : [];
-
+    return this.descriptionShort
+      ? this.descriptionShort.split(',').map(item => item.trim())
+      : [];
   }
 
   getOldPrice(variant: Variant | undefined) {
@@ -118,8 +119,8 @@ export class Product {
       return variant.oldPrice;
     }
     return this.additionalPrices.length > 0
-        ? this.additionalPrices[0]
-        : undefined;
+      ? this.additionalPrices[0]
+      : undefined;
   }
 
   getNewPrice(variant: Variant | undefined) {

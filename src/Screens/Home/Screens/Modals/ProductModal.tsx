@@ -28,7 +28,7 @@ const ProductModal = ({route, navigation}: {route: any; navigation: any}) => {
   const product: Product = route.params.product || [];
   const {data: wishlists, isLoading: isWishlistLoading} =
     useQuery(wishlistQuery);
-  console.log(wishlists);
+
   const {data: cart} = useQuery(cartQuery);
   const {mutate: cartMutation} = useMutation({
     mutationFn: ({count, price}: {count: number; price: number}) =>
@@ -68,8 +68,8 @@ const ProductModal = ({route, navigation}: {route: any; navigation: any}) => {
     addWishlist({
       id: product.id,
     });
-    console.log(product.id);
   };
+
   return (
     <View>
       <Header />
@@ -113,16 +113,21 @@ const ProductModal = ({route, navigation}: {route: any; navigation: any}) => {
             style={{marginTop: nh(10), height: nh(160)}}
             data={product.ingredients}
             renderItem={ingredient => (
-              <Text style={styles.ingredientsText}>{ingredient.item}</Text>
+              <View style={styles.dotWrapper}>
+                <View style={styles.dot} />
+                <Text style={styles.ingredientsText}>{ingredient.item}</Text>
+              </View>
             )}
             keyExtractor={ingredient => ingredient}
           />
           {count > 0 ? (
-            <Counter
-              onHandleMinus={onHandleMinus}
-              onHandleAdd={onHandleAdd}
-              count={count}
-            />
+            <View style={{marginTop: nh(30)}}>
+              <Counter
+                onHandleMinus={onHandleMinus}
+                onHandleAdd={onHandleAdd}
+                count={count}
+              />
+            </View>
           ) : (
             <TouchableOpacity
               style={styles.addBtn}
@@ -198,6 +203,18 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: nw(365),
   },
+  dotWrapper: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'row',
+    marginLeft: nw(15),
+  },
+  dot: {
+    backgroundColor: 'white',
+    width: nw(3),
+    height: nw(3),
+    borderRadius: 10,
+  },
   price: {
     fontSize: 18,
     fontWeight: '600',
@@ -223,7 +240,7 @@ const styles = StyleSheet.create({
     fontFamily: 'MontserratRegular',
     color: 'white',
     width: nw(365),
-    marginLeft: nw(15),
+    marginLeft: nw(5),
   },
   addBtn: {
     width: nw(365),

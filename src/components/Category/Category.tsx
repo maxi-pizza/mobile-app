@@ -4,11 +4,18 @@ import {CategoryCard} from '../CategoryCard/CategoryCard.tsx';
 import {nh, nw} from '../../../normalize.helper.ts';
 import {useQuery} from '@tanstack/react-query';
 import {categoriesQuery} from '../../Screens/Category/categories.query.ts';
+import store from '../../stores/store.ts';
+import {observer} from 'mobx-react-lite';
 
-const Category = () => {
-  const {data: categories, isLoading} = useQuery({
+const Category = observer(() => {
+  const {data: categoriesRes, isLoading} = useQuery({
     ...categoriesQuery(),
   });
+  const categories = (categoriesRes?.data || [])
+    .map(category => category)
+    .filter(category =>
+      store.city === 'chorno' ? category.slug !== 'pitsa' : category.slug,
+    );
 
   return (
     <View style={styles.container}>
@@ -17,7 +24,7 @@ const Category = () => {
         horizontal={true}
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.categoryCardsContainer}>
-        {categories?.data.map(category => (
+        {categories.map(category => (
           <View key={category.id} style={styles.categoryWrapper}>
             <CategoryCard category={category} />
           </View>
@@ -25,7 +32,7 @@ const Category = () => {
       </ScrollView>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

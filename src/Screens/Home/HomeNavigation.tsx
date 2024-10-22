@@ -1,10 +1,12 @@
 import HomeScreen from './Screens/HomeScreen/HomeScreen.tsx';
 import {createStackNavigator} from '@react-navigation/stack';
-import ProductModal from './Screens/ProductModal/ProductModal.tsx';
+import ProductModal from './Screens/Modals/ProductModal.tsx';
+import SearchModal from './Screens/Modals/SearchModal.tsx';
 
 type ScreenProps = {
   Home: undefined;
   ProductModal: undefined;
+  SearchModal: undefined;
 };
 const HomeNavigation = () => {
   const Stack = createStackNavigator<ScreenProps>();
@@ -25,6 +27,7 @@ const HomeNavigation = () => {
           animationTypeForReplace: 'push',
         }}>
         <Stack.Screen name="ProductModal" component={ProductModal} />
+        <Stack.Screen name="SearchModal" component={SearchModal} />
       </Stack.Group>
     </Stack.Navigator>
   );

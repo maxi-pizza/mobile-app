@@ -5,12 +5,9 @@ import {ICategory} from '@layerok/emojisushi-js-sdk';
 import CategoryNullImage from '../../assets/Logo.svg';
 
 import categoryStore from '../../stores/store.ts';
+import {observer} from 'mobx-react-lite';
 
-export const CategoryCard = ({category}: {category: ICategory}) => {
-  // todo: in category make a function with navigation
-  // todo: in categoryScreen we dont need selectedCategory
-  // todo: fix bug with navigation
-
+export const CategoryCard = observer(({category}: {category: ICategory}) => {
   return (
     <TouchableOpacity
       style={[
@@ -26,7 +23,7 @@ export const CategoryCard = ({category}: {category: ICategory}) => {
       <Text style={cardStyles.text}>{category?.name}</Text>
     </TouchableOpacity>
   );
-};
+});
 
 const cardStyles = StyleSheet.create({
   container: {
