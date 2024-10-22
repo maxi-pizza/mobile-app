@@ -3,7 +3,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -33,10 +32,22 @@ enum ApartmentMethod {
   Apartment = 'apartment',
   House = 'house',
 }
+enum PaymentMethod {
+  Cash = 'cash',
+  Card = 'card',
+}
+enum DeliveryMethod {
+  Courier = 'courier',
+  Takeaway = 'takeaway',
+}
 
 const Checkout = observer(({navigation}: {navigation: any}) => {
-  const [paymentMethodValue, setPaymentMethodValue] = useState('cash');
-  const [deliveryMethodValue, setDeliveryMethodValue] = useState('courier');
+  const [paymentMethodValue, setPaymentMethodValue] = useState<string>(
+    PaymentMethod.Cash,
+  );
+  const [deliveryMethodValue, setDeliveryMethodValue] = useState<string>(
+    DeliveryMethod.Takeaway,
+  );
   const [apartmentMethodValue, setApartmentMethodValue] = useState<string>(
     ApartmentMethod.House,
   );

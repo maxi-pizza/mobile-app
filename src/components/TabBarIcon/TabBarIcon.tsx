@@ -8,7 +8,7 @@ import {NavigationProp} from '@react-navigation/native';
 import CartBottomTab from '../CartBottomTab/CartBottomTab.tsx';
 
 type TabBarIconProps = {
-  routeName: 'Home' | 'Favourite' | 'Cart' | 'Category' | 'User';
+  routeName: 'HomeNavigation' | 'Favourite' | 'Cart' | 'Category' | 'User';
   focused: boolean;
   navigation: NavigationProp<any>;
 };
@@ -19,7 +19,7 @@ const TabBarIcon: React.FC<TabBarIconProps> = ({
   navigation,
 }) => {
   const icons = {
-    Home: HomeButton,
+    HomeNavigation: HomeButton,
     Favourite: Heart,
     Cart: () => <CartBottomTab focused={focused} />,
     Category: Category,

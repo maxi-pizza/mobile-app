@@ -16,7 +16,7 @@ import Header from '../../../../components/Header/Header.tsx';
 
 const UserScreen = ({navigation}: {navigation: any}) => {
   // const [logged, setLogged] = useState(true);
-  const [isVisible, setIsVisible] = useState(false);
+  // const [isVisible, setIsVisible] = useState(false);
 
   return (
     <View style={styles.container}>

@@ -40,9 +40,10 @@ const Swiper = ({
             />
           )}
           <Text
-            style={
-              value === option.value ? styles.blackText : styles.whiteText
-            }>
+            style={[
+              value === option.value ? styles.blackText : styles.whiteText,
+              option.icon ? {marginLeft: nw(15)} : {marginLeft: 0},
+            ]}>
             {option.name}
           </Text>
         </Pressable>

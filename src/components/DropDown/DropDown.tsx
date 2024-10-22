@@ -7,7 +7,6 @@ import Caret from '../../assets/Icons/Caret.svg';
 import MapPin from '../../assets/Icons/MapPinMapPin.svg';
 import store from '../../stores/store.ts';
 import {observer} from 'mobx-react-lite';
-import {ISpot} from '@layerok/emojisushi-js-sdk';
 
 type optionsProps = {
   id: number;
@@ -55,7 +54,9 @@ const DropDown = observer(
           style={styles.modal}>
           <View style={styles.bottomSheetContent}>
             <View style={styles.mapPinWrapper}>
-              <Text style={styles.chooseText}>Выберите город</Text>
+              <Text style={[styles.chooseText, {marginRight: nw(10)}]}>
+                Выберите адрес
+              </Text>
               <MapPin color="white" />
             </View>
             {options.map(spot => (

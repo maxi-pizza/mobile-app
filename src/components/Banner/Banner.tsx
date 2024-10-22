@@ -19,6 +19,8 @@ const bannerQuery: QueryOptions<IGetBannersRes> = {
   queryKey: bannerQueryKeys.all(),
   queryFn: () => agent.getBanners(),
 };
+
+// todo: make a new request for baners when city changed
 const Banner = () => {
   const flatRef = useAnimatedRef<Animated.FlatList<any>>();
   const [isAuto, setIsAuto] = useState(true);

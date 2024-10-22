@@ -16,7 +16,7 @@ import {observer} from 'mobx-react-lite';
 import categoryStore from '../../../../stores/store.ts';
 import ProductCard from '../../../../components/ProductCard/ProductCard.tsx';
 
-const HomeScreen = observer(() => {
+const HomeScreen = observer(({navigation}: {navigation: any}) => {
   const {data: wishlists, isLoading: isWishlistLoading} =
     useQuery(wishlistQuery);
 
@@ -63,7 +63,11 @@ const HomeScreen = observer(() => {
           data={items}
           keyExtractor={item => String(item.id)}
           renderItem={({item}) => (
-            <ProductCard wishlists={wishlists} product={item} />
+            <ProductCard
+              navigation={navigation}
+              wishlists={wishlists}
+              product={item}
+            />
           )}
           contentContainerStyle={styles.grid}
           showsVerticalScrollIndicator={false}

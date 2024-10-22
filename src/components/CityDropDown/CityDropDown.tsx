@@ -48,7 +48,9 @@ const CityDropDown = observer(() => {
         style={styles.modal}>
         <View style={styles.bottomSheetContent}>
           <View style={styles.mapPinWrapper}>
-            <Text style={styles.chooseText}>Выберите город</Text>
+            <Text style={[styles.chooseText, {marginRight: nw(10)}]}>
+              Выберите город
+            </Text>
             <MapPin color="white" />
           </View>
           {cities?.map(city => (

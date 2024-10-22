@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   Pressable,
@@ -29,9 +29,11 @@ import {
 const ProductCard = ({
   product,
   wishlists,
+  navigation,
 }: {
   product: Product;
   wishlists?: Record<string, number>;
+  navigation: any;
 }) => {
   const queryClient = useQueryClient();
   const {data: cart} = useQuery(cartQuery);
@@ -88,23 +90,36 @@ const ProductCard = ({
   return (
     <View style={styles.wrapper}>
       <Text style={styles.weight}>{product.weight} г</Text>
-      <Pressable onPress={handleFavouriteButton} style={styles.heartContainer}>
-        <Heart width="14" height="12" color={favourite ? 'yellow' : 'white'} />
-      </Pressable>
+      <Pressable
+        onPress={() =>
+          navigation.navigate('ProductModal', {
+            product: product,
+          })
+        }>
+        <Pressable
+          onPress={handleFavouriteButton}
+          style={styles.heartContainer}>
+          <Heart
+            width="14"
+            height="12"
+            color={favourite ? 'yellow' : 'white'}
+          />
+        </Pressable>
 
-      <View style={styles.imageDescriptionWrapper}>
-        {product.mainImage !== undefined ? (
-          <Image style={styles.image} source={{uri: product?.mainImage}} />
-        ) : (
-          <Logo style={styles.svg} fillOpacity={0.1} />
-        )}
-        <View style={styles.textWrapper}>
-          <Text style={styles.title}>{product.name}</Text>
-          <Text style={styles.description}>
-            {descriptionThreeWords(product.descriptionShort)}
-          </Text>
+        <View style={styles.imageDescriptionWrapper}>
+          {product.mainImage !== undefined ? (
+            <Image style={styles.image} source={{uri: product?.mainImage}} />
+          ) : (
+            <Logo style={styles.svg} fillOpacity={0.1} />
+          )}
+          <View style={styles.textWrapper}>
+            <Text style={styles.title}>{product.name}</Text>
+            <Text style={styles.description}>
+              {descriptionThreeWords(product.descriptionShort)}
+            </Text>
+          </View>
         </View>
-      </View>
+      </Pressable>
       <View style={styles.priceAndButtonContainer}>
         <View style={styles.priceContainer}>
           <Text style={styles.discountPrice}>{discountPrice ? price : ''}</Text>

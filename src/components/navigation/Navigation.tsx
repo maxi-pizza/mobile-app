@@ -4,15 +4,15 @@ import {RouteProp} from '@react-navigation/core/src/types.tsx';
 import {nh} from '../../../normalize.helper.ts';
 
 import TabBarIcon from '../TabBarIcon/TabBarIcon.tsx';
-import HomeScreen from '../../Screens/Home/Screens/HomeScreen/HomeScreen.tsx';
 import FavouriteScreen from '../../Screens/Favourite/Screens/FavouriteScreen/FavouriteScreen.tsx';
 import CategoryScreen from '../../Screens/Category/Screens/CategoryScreen/CategoryScreen.tsx';
 
 import StackNavigation from '../../Screens/User/StackNavigation.tsx';
 import CartNavigation from '../../Screens/Cart/CartNavigation.tsx';
+import HomeNavigation from '../../Screens/Home/HomeNavigation.tsx';
 
 type RootTabParams = {
-  Home: undefined;
+  HomeNavigation: undefined;
   Favourite: undefined;
   Cart: undefined;
   Category: undefined;
@@ -29,7 +29,7 @@ export const Navigation = () => {
     }: {
       route: RouteProp<{
         Favourite: any;
-        Home: any;
+        HomeNavigation: any;
         Cart: any;
         Category: any;
         User: any;
@@ -58,10 +58,10 @@ export const Navigation = () => {
     [],
   );
   return (
-    <Tab.Navigator screenOptions={getOptions} initialRouteName="Home">
+    <Tab.Navigator screenOptions={getOptions} initialRouteName="HomeNavigation">
       <Tab.Screen name="Favourite" component={FavouriteScreen} />
       <Tab.Screen name="Cart" component={CartNavigation} />
-      <Tab.Screen name="Home" component={HomeScreen} />
+      <Tab.Screen name="HomeNavigation" component={HomeNavigation} />
       <Tab.Screen name="Category" component={CategoryScreen} />
       <Tab.Screen name="User" component={StackNavigation} />
     </Tab.Navigator>
