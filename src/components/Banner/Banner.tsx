@@ -10,17 +10,8 @@ import Animated, {
   useDerivedValue,
   useSharedValue,
 } from 'react-native-reanimated';
+import {bannerQuery} from './banner.query.ts';
 
-const bannerQueryKeys = {
-  _def: ['banner'],
-  all: () => [...bannerQueryKeys._def, 'all'],
-};
-const bannerQuery: QueryOptions<IGetBannersRes> = {
-  queryKey: bannerQueryKeys.all(),
-  queryFn: () => agent.getBanners(),
-};
-
-// todo: make a new request for baners when city changed
 const Banner = () => {
   const flatRef = useAnimatedRef<Animated.FlatList<any>>();
   const [isAuto, setIsAuto] = useState(true);

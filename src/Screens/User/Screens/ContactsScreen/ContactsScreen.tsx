@@ -67,8 +67,9 @@ const ContactsScreen = observer(({navigation}: {navigation: any}) => {
           </TouchableOpacity>
         </View>
 
-        {phonesArray.map(phones => (
+        {phonesArray.map((phones, index) => (
           <View
+            key={index}
             style={[
               phones.length > 1 ? styles.phonesWrapper : styles.phoneWrapper,
             ]}>

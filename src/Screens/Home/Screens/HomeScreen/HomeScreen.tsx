@@ -16,6 +16,7 @@ import {observer} from 'mobx-react-lite';
 import categoryStore from '../../../../stores/store.ts';
 import ProductCard from '../../../../components/ProductCard/ProductCard.tsx';
 import store from '../../../../stores/store.ts';
+import {cartQuery} from '../../../Cart/cart.query.ts';
 
 const HomeScreen = observer(({navigation}: {navigation: any}) => {
   const {data: wishlists, isLoading: isWishlistLoading} =
@@ -24,6 +25,8 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
   const {data: categoryQueryRes, isLoading: isCategoryLoading} = useQuery({
     ...categoriesQuery(),
   });
+
+  const {data: cartRes, isLoading: isCartLoading} = useQuery(cartQuery);
 
   const {data: productQueryRes, isLoading: isProductsLoading} = useQuery(
     productsQuery({
