@@ -3,9 +3,11 @@ import {Pressable, StyleSheet} from 'react-native';
 import {nw} from '../../../normalize.helper.ts';
 import Caret from '../../assets/Icons/Caret.svg';
 
-const BackButtonScreen = ({navigation}: {navigation: any}) => {
+const BackButton = ({navigation}: {navigation: any}) => {
   return (
-      <Pressable style={styles.hideBtn} onPress={() => navigation.goBack()}><Caret style={styles.caret} width="21" height="21" color="black"/></Pressable>
+    <Pressable style={styles.hideBtn} onPress={() => navigation.goBack()}>
+      <Caret style={styles.caret} width="21" height="21" color="black" />
+    </Pressable>
   );
 };
 
@@ -27,4 +29,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BackButtonScreen;
+export default BackButton;

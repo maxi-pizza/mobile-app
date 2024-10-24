@@ -7,14 +7,16 @@ import {cityQuery} from '../../../../components/CityDropDown/CityDropDown.tsx';
 import store from '../../../../stores/store.ts';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 import {observer} from 'mobx-react-lite';
+import BackButton from '../../../../components/BackButton/BackButton.tsx';
 
-const DeliveryAndPayment = observer(() => {
+const DeliveryAndPayment = observer(({navigation}: {navigation: any}) => {
   const {data: cityRes} = useQuery(cityQuery);
 
   const city = (cityRes || []).find(city => city.slug === store.city);
   return (
     <View style={styles.container}>
       <Header />
+      <BackButton navigation={navigation} />
       <View style={styles.map}>
         <Text style={styles.text}>Доставка і оплата</Text>
         {city !== undefined && (

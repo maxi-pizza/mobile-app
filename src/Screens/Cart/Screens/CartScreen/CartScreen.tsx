@@ -119,11 +119,10 @@ const styles = StyleSheet.create({
     marginLeft: nw(25),
   },
   emptyCartText: {
+    color: '#727272',
+    fontSize: 16,
     fontFamily: 'MontserratRegular',
     fontWeight: '500',
-    fontSize: 16,
-    lineHeight: 19,
-    color: 'white',
   },
   productsWrapper: {
     marginLeft: nw(13),

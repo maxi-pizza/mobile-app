@@ -55,6 +55,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'transparent',
     borderRadius: 10,
+    color: 'white',
   },
   focused: {
     borderColor: 'yellow',

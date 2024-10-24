@@ -9,8 +9,11 @@ import {DEFAULT_PRODUCT_LIMIT, productsQuery} from '../../products.query.ts';
 import {Product} from '../../../../models/Product.ts';
 import ProductCard from '../../../../components/ProductCard/ProductCard.tsx';
 import {fuzzySearch} from '../../../../common/utils/fuzzySearch.ts';
+import store from '../../../../stores/store.ts';
+import {observer} from 'mobx-react-lite';
+import BackButton from '../../../../components/BackButton/BackButton.tsx';
 
-const SearchModal = ({navigation}: {navigation: any}) => {
+const SearchModal = observer(({navigation}: {navigation: any}) => {
   const [search, setSearch] = useState('');
   const {data: productsRes} = useQuery(
     productsQuery({
@@ -22,10 +25,20 @@ const SearchModal = ({navigation}: {navigation: any}) => {
   const onSearchHandle = (e: string) => {
     setSearch(e);
   };
+  const filtered =
+    store.city === 'chorno'
+      ? (productsRes?.data || []).filter(item => {
+          return !item.categories.find(c => {
+            return c.slug === 'pitsa';
+          });
+        })
+      : productsRes?.data || [];
 
   const searched =
     search.length > 2
-      ? fuzzySearch(productsRes?.data || [], search, product => product.name)
+      ? fuzzySearch(filtered, search, product => product.name, {
+          maxAllowedModifications: 1,
+        })
       : [];
 
   const items = searched.map(item => new Product(item));
@@ -46,7 +59,7 @@ const SearchModal = ({navigation}: {navigation: any}) => {
       return `Введіть на ${getLetters(3 - search.length)} більше`;
     }
     if (searched.length === 0) {
-      return `Нічого не знайдено`;
+      return 'Нічого не знайдено';
     }
     return `Результати пошуку (${searched.length}):`;
   };
@@ -54,6 +67,7 @@ const SearchModal = ({navigation}: {navigation: any}) => {
   return (
     <View style={styles.container}>
       <Header />
+      <BackButton navigation={navigation} />
       <View style={styles.searchContainer}>
         <Search onSearch={onSearchHandle} autoFocus={true} />
         <Text style={styles.feedbackText}>{searchFeedback()}</Text>
@@ -65,6 +79,7 @@ const SearchModal = ({navigation}: {navigation: any}) => {
           renderItem={({item}) => (
             <ProductCard product={item} navigation={navigation} />
           )}
+          keyExtractor={item => String(item.id)}
         />
       ) : (
         <View style={styles.noResultSearch}>
@@ -80,7 +95,7 @@ const SearchModal = ({navigation}: {navigation: any}) => {
       )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

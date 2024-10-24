@@ -12,7 +12,7 @@ import Swiper from '../components/Swiper.tsx';
 import InformationInput from '../../../../User/components/InformationInput/InformationInput.tsx';
 import DropDown from '../../../../../components/DropDown/DropDown.tsx';
 import Header from '../../../../../components/Header/Header.tsx';
-import BackButtonScreen from '../../../../../components/BackButtonScreen/BackButtonScreen.tsx';
+import BackButtonScreen from '../../../../../components/BackButton/BackButton.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {spotsQuery} from '../../../spots.query.ts';
 

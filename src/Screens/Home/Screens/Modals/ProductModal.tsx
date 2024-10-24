@@ -21,7 +21,7 @@ import {
   WISHLIST_QUERY_KEY,
   wishlistQuery,
 } from '../../../Favourite/wishlist.query.ts';
-import BackButtonScreen from '../../../../components/BackButtonScreen/BackButtonScreen.tsx';
+import BackButtonScreen from '../../../../components/BackButton/BackButton.tsx';
 
 const ProductModal = ({route, navigation}: {route: any; navigation: any}) => {
   const queryClient = useQueryClient();

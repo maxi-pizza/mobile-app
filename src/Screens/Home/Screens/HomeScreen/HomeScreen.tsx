@@ -58,7 +58,7 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
               <Banner />
               <View style={styles.searchWrapper}>
                 <Pressable onPress={() => navigation.navigate('SearchModal')}>
-                  <Search editable={false} />
+                  <Search onSearch={() => ''} editable={false} />
                 </Pressable>
               </View>
               <Category />

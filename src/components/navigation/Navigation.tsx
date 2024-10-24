@@ -49,6 +49,7 @@ export const Navigation = () => {
       header: () => {
         return false;
       },
+      tabBarHideOnKeyboard: true,
       tabBarShowLabel: false,
       tabBarStyle: {
         height: nh(80),

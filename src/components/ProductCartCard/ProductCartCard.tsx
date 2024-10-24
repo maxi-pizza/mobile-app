@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../normalize.helper.ts';
 
 import Trash from '../../assets/Icons/Trash.svg';
@@ -31,9 +31,15 @@ const ProductCartCard = ({item}: {item: Product}) => {
   const handleAdd = () => {
     mutate({count: count + 1, price: storagePrice ? storagePrice / 100 : 0});
   };
-  const handleRemove = () => {
+  const handleMinus = () => {
     mutate({
       count: Math.max(count - 1, 0),
+      price: storagePrice ? storagePrice / 100 : 0,
+    });
+  };
+  const handleRemove = () => {
+    mutate({
+      count: 0,
       price: storagePrice ? storagePrice / 100 : 0,
     });
   };
@@ -50,11 +56,13 @@ const ProductCartCard = ({item}: {item: Product}) => {
           <Text style={styles.description}>{item.descriptionShort}</Text>
         </View>
       </View>
-      <Trash color="#CD3838" style={styles.trash} />
+      <Pressable onPress={handleRemove} style={styles.trash}>
+        <Trash color="#CD3838" />
+      </Pressable>
       <View style={styles.counterWrapper}>
         <Counter
           count={count}
-          onHandleMinus={handleRemove}
+          onHandleMinus={handleMinus}
           onHandleAdd={handleAdd}
         />
       </View>
