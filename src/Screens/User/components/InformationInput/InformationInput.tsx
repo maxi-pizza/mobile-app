@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {StyleSheet, TextInput} from 'react-native';
+import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
 const InformationInput = ({
@@ -7,25 +7,35 @@ const InformationInput = ({
   inputMode,
   onChangeText,
   value,
+  error,
 }: {
   placeholder: string;
   inputMode: 'email' | 'text' | 'tel' | 'numeric';
   onChangeText: (text: string) => void;
   value: string;
+  error?: string;
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <TextInput
-      style={[styles.input, isFocused ? styles.focused : null]}
-      onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
-      placeholder={placeholder}
-      placeholderTextColor="#616161"
-      inputMode={inputMode}
-      onChangeText={onChangeText}
-      value={value}
-    />
+    <View>
+      <TextInput
+        style={[styles.input, isFocused ? styles.focused : null]}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        placeholder={placeholder}
+        placeholderTextColor="#616161"
+        inputMode={inputMode}
+        onChangeText={onChangeText}
+        value={value}
+      />
+
+      {error && (
+        <View style={styles.errorContainer}>
+          <Text style={styles.errorText}>{error}</Text>
+        </View>
+      )}
+    </View>
   );
 };
 
@@ -40,6 +50,20 @@ const styles = StyleSheet.create({
   focused: {
     borderWidth: 1,
     borderColor: '#FFE600',
+  },
+  errorContainer: {
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    backgroundColor: 'rgb(205, 56, 56)',
+    position: 'absolute',
+    right: 0,
+    top: 45,
+  },
+  errorText: {
+    fontFamily: 'MontserratRegular',
+    fontSize: 12,
+    color: 'white',
+    fontWeight: '500',
   },
 });
 

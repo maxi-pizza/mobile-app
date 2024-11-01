@@ -18,6 +18,8 @@ import {
 } from '../../../Home/products.query.ts';
 import {Product} from '../../../../models/Product.ts';
 import {cartQuery} from '../../cart.query.ts';
+import {appConfig} from '../../../../config/app.ts';
+import {isClosed} from '../../../../components/ClosedRestaurantModal/ClosedRestaurant.tsx';
 
 const CartScreen = ({navigation}: {navigation: any}) => {
   const {data: cartItems} = useQuery(cartQuery);
@@ -28,6 +30,11 @@ const CartScreen = ({navigation}: {navigation: any}) => {
       limit: DEFAULT_PRODUCT_LIMIT,
     }),
   );
+
+  const closed = isClosed({
+    start: appConfig.workingHours[0],
+    end: appConfig.workingHours[1],
+  });
 
   const ids = Object.keys(cartItems || {});
   const cart = (productQueryRes?.data || []).filter(item =>
@@ -60,8 +67,12 @@ const CartScreen = ({navigation}: {navigation: any}) => {
           </View>
 
           <TouchableOpacity
+            disabled={closed}
             onPress={() => navigation.navigate('Checkout')}
-            style={styles.orderButton}>
+            style={[
+              styles.orderButton,
+              closed ? {backgroundColor: 'grey'} : '',
+            ]}>
             <Text style={styles.checkoutText}>Оформить заказ | {sum} ₴</Text>
           </TouchableOpacity>
         </View>

@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -79,8 +78,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
   const {data: cityRes} = useQuery(cityQuery);
   const {data: cartRes} = useQuery(cartQuery);
 
-  const {data: shippingRes, isLoading: isShippingMethodsLoading} =
-    useQuery(shippingQuery);
+  const {data: shippingRes} = useQuery(shippingQuery);
   const {data: paymentRes} = useQuery(paymentQuery);
   const shipping = (shippingRes?.data || []).map(ship => ship);
   const shippingIcons = [Package, Truck];
@@ -161,7 +159,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     house: yup.string().required(validationRequired),
     apartment: yup.string().required(validationRequired),
     entrance: yup.string().required(validationRequired),
-    floor: yup.number().required(validationRequired),
+    floor: yup.string().required(validationRequired),
     districtId: yup.number().required(validationRequired),
   });
   const InitialValue: FormValues = {
@@ -318,7 +316,11 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
       });
       console.log(res.data);
     } catch (e) {
-      throw new Error(e.response.data);
+      if (e instanceof Error) {
+        throw new Error(e.message);
+      } else {
+        throw new Error(`Unknown error ${e}`);
+      }
     }
   };
 
@@ -362,16 +364,14 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                 name="districtId"
                 control={control}
                 render={({field: {onChange, value}}) => (
-                  <View style={{marginTop: nh(15)}}>
+                  <View style={{marginTop: nh(15), zIndex: 5}}>
                     <DropDown
                       placeholder="Выберите район доставки"
                       options={districts}
                       value={value}
                       onChange={d => onChange(d)}
+                      error={errors.districtId?.message}
                     />
-                    {errors.districtId?.message && (
-                      <Text>{errors.districtId.message}</Text>
-                    )}
                   </View>
                 )}
               />
@@ -397,12 +397,13 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                   name="street"
                   control={control}
                   render={({field: {onChange, value}}) => (
-                    <View style={{width: nw(250)}}>
+                    <View style={{width: nw(250), zIndex: 6}}>
                       <InformationInput
                         placeholder={'Вулиця'}
                         inputMode={'text'}
                         onChangeText={v => onChange(v)}
                         value={value}
+                        error={errors.street?.message}
                       />
                     </View>
                   )}
@@ -416,12 +417,14 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                       style={{
                         width: nw(105),
                         marginLeft: nw(10),
+                        zIndex: 6,
                       }}>
                       <InformationInput
                         placeholder={'Будинок'}
                         inputMode={'text'}
                         onChangeText={v => onChange(v)}
                         value={value}
+                        error={errors.house?.message}
                       />
                     </View>
                   )}
@@ -433,12 +436,13 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                     name="apartment"
                     control={control}
                     render={({field: {onChange, value}}) => (
-                      <View style={{width: nw(114)}}>
+                      <View style={{width: nw(114), zIndex: 5}}>
                         <InformationInput
                           placeholder={'Квартира'}
                           inputMode={'text'}
                           onChangeText={v => onChange(v)}
                           value={value}
+                          error={errors.apartment?.message}
                         />
                       </View>
                     )}
@@ -447,12 +451,13 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                     name="entrance"
                     control={control}
                     render={({field: {onChange, value}}) => (
-                      <View style={{width: nw(115)}}>
+                      <View style={{width: nw(115), zIndex: 5}}>
                         <InformationInput
                           placeholder={"Під'їзд"}
                           inputMode={'text'}
                           value={value}
                           onChangeText={v => onChange(v)}
+                          error={errors.entrance?.message}
                         />
                       </View>
                     )}
@@ -461,12 +466,13 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                     name="floor"
                     control={control}
                     render={({field: {onChange, value}}) => (
-                      <View style={{width: nw(115)}}>
+                      <View style={{width: nw(115), zIndex: 5}}>
                         <InformationInput
                           placeholder={'Поверх'}
                           inputMode={'numeric'}
                           value={value}
                           onChangeText={v => onChange(v)}
+                          error={errors.floor?.message}
                         />
                       </View>
                     )}
@@ -479,16 +485,14 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
               name="spotId"
               control={control}
               render={({field: {onChange, value}}) => (
-                <View style={{marginTop: nh(15)}}>
+                <View style={{marginTop: nh(15), zIndex: 5}}>
                   <DropDown
                     placeholder={'Оберіть найближчий заклад'}
                     options={spots}
                     value={value}
                     onChange={s => onChange(s)}
+                    error={errors.spotId?.message}
                   />
-                  {errors.spotId?.message && (
-                    <Text>{errors.spotId.message}</Text>
-                  )}
                 </View>
               )}
             />
@@ -526,16 +530,14 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
             name="phone"
             control={control}
             render={({field: {onChange, value}}) => (
-              <View style={styles.inputWrapper}>
+              <View style={[styles.inputWrapper, {zIndex: 5}]}>
                 <InformationInput
                   placeholder="Телефон"
                   inputMode="tel"
                   value={value}
                   onChangeText={v => onChange(v)}
+                  error={errors.phone?.message}
                 />
-                {errors.phone && (
-                  <Text style={{color: 'red'}}>{errors.phone.message}</Text>
-                )}
               </View>
             )}
           />

@@ -1,4 +1,4 @@
-import React, {useEffect, useRef} from 'react';
+import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../../../../normalize.helper.ts';
 import {SvgProps} from 'react-native-svg';
@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     position: 'relative',
+    zIndex: 2,
   },
   active: {
     backgroundColor: 'yellow',

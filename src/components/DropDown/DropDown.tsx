@@ -1,11 +1,10 @@
-import React, {useCallback, useEffect, useRef} from 'react';
+import React, {useCallback, useRef} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../normalize.helper.ts';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 
 import Caret from '../../assets/Icons/Caret.svg';
 import MapPin from '../../assets/Icons/MapPinMapPin.svg';
-import store from '../../stores/store.ts';
 import {observer} from 'mobx-react-lite';
 
 type OptionProps = {
@@ -19,11 +18,13 @@ const DropDown = observer(
     options,
     value,
     onChange,
+    error,
   }: {
     placeholder: string;
     options: OptionProps[];
     value: string | number | undefined;
     onChange: (value: string | number | undefined) => void;
+    error?: string;
   }) => {
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -72,6 +73,11 @@ const DropDown = observer(
             ))}
           </View>
         </BottomSheetModal>
+        {error && (
+          <View style={styles.errorContainer}>
+            <Text style={styles.errorText}>{error}</Text>
+          </View>
+        )}
       </Pressable>
     );
   },
@@ -148,6 +154,20 @@ const styles = StyleSheet.create({
   },
   indicator: {
     backgroundColor: 'transparent',
+  },
+  errorContainer: {
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    backgroundColor: 'rgb(205, 56, 56)',
+    position: 'absolute',
+    right: 0,
+    top: 45,
+  },
+  errorText: {
+    fontFamily: 'MontserratRegular',
+    fontSize: 12,
+    color: 'white',
+    fontWeight: '500',
   },
 });
 

@@ -11,6 +11,7 @@ import {
   configureReanimatedLogger,
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
+import ClosedRestaurant from './src/components/ClosedRestaurantModal/ClosedRestaurant.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -33,6 +34,7 @@ function App(): JSX.Element {
           <BottomSheetModalProvider>
             <View style={styles.container}>
               <Navigation />
+              <ClosedRestaurant />
             </View>
           </BottomSheetModalProvider>
         </NavigationContainer>
