@@ -16,7 +16,7 @@ import {observer} from 'mobx-react-lite';
 import categoryStore from '../../../../stores/store.ts';
 import ProductCard from '../../../../components/ProductCard/ProductCard.tsx';
 import store from '../../../../stores/store.ts';
-import {cartQuery} from '../../../Cart/cart.query.ts';
+import {bannerQuery} from '../../../../components/Banner/banner.query.ts';
 
 const HomeScreen = observer(({navigation}: {navigation: any}) => {
   const {data: wishlists, isLoading: isWishlistLoading} =
@@ -25,8 +25,8 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
   const {data: categoryQueryRes, isLoading: isCategoryLoading} = useQuery({
     ...categoriesQuery(),
   });
-
-  const {data: cartRes, isLoading: isCartLoading} = useQuery(cartQuery);
+  const {data: bannerRes} = useQuery(bannerQuery);
+  const banners = (bannerRes?.data || []).map(banner => banner);
 
   const {data: productQueryRes, isLoading: isProductsLoading} = useQuery(
     productsQuery({
@@ -58,7 +58,7 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
         <FlatList
           ListHeaderComponent={
             <View>
-              <Banner />
+              {banners.length > 0 && <Banner />}
               <View style={styles.searchWrapper}>
                 <Pressable onPress={() => navigation.navigate('SearchModal')}>
                   <Search onSearch={() => ''} editable={false} />

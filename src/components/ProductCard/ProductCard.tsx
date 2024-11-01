@@ -25,18 +25,15 @@ import {
   addToWishlist,
   WISHLIST_QUERY_KEY,
 } from '../../Screens/Favourite/wishlist.query.ts';
-import Skeleton from 'react-native-reanimated-skeleton';
 
 const ProductCard = ({
   product,
   wishlists,
   navigation,
-  loading = false,
 }: {
   product: Product;
   wishlists?: Record<string, number>;
   navigation: any;
-  loading?: boolean;
 }) => {
   const queryClient = useQueryClient();
   const {data: cart} = useQuery(cartQuery);

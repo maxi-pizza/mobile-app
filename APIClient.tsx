@@ -1,5 +1,6 @@
 import {createEmojisushiAgent} from '@layerok/emojisushi-js-sdk';
 
+//https://api.emojisushi.com.ua/api
 export const agent = createEmojisushiAgent({
-  service: 'https://api.emojisushi.com.ua/api',
+  service: 'https://stage-api.emojisushi.com.ua/api',
 });

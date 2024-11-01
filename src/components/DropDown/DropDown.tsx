@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, {useCallback, useEffect, useRef} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../normalize.helper.ts';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
@@ -8,37 +8,41 @@ import MapPin from '../../assets/Icons/MapPinMapPin.svg';
 import store from '../../stores/store.ts';
 import {observer} from 'mobx-react-lite';
 
-type optionsProps = {
+type OptionProps = {
   id: number;
   name: string;
 };
 
 const DropDown = observer(
-  ({placeholder, options}: {placeholder: string; options: optionsProps[]}) => {
-    const [isActive, setIsActive] = useState('');
-
+  ({
+    placeholder,
+    options,
+    value,
+    onChange,
+  }: {
+    placeholder: string;
+    options: OptionProps[];
+    value: string | number | undefined;
+    onChange: (value: string | number | undefined) => void;
+  }) => {
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
     const openBottomSheet = useCallback(() => {
       bottomSheetModalRef.current?.present();
     }, []);
-
-    const handleCityPress = (option: string) => {
-      setIsActive(option);
+    const handleOptionPress = (option: OptionProps) => {
+      onChange(option.id);
       bottomSheetModalRef.current?.dismiss();
     };
 
-    useEffect(() => {
-      setIsActive('');
-      bottomSheetModalRef.current?.dismiss();
-    }, [store.city]);
+    const selected = options.find(option => option.id === value);
 
     return (
       <Pressable style={styles.container} onPress={openBottomSheet}>
         <View style={styles.inputContainer}>
           <Text style={styles.selectOption}>
-            {isActive ? (
-              <Text style={styles.whiteText}>{isActive}</Text>
+            {selected ? (
+              <Text style={styles.whiteText}>{selected.name}</Text>
             ) : (
               placeholder
             )}
@@ -59,11 +63,11 @@ const DropDown = observer(
               </Text>
               <MapPin color="white" />
             </View>
-            {options.map(spot => (
+            {options.map(option => (
               <Pressable
-                key={spot.id}
-                onPress={() => handleCityPress(spot.name)}>
-                <Text style={styles.cityText}>{spot.name}</Text>
+                key={option.id}
+                onPress={() => handleOptionPress(option)}>
+                <Text style={styles.cityText}>{option.name}</Text>
               </Pressable>
             ))}
           </View>

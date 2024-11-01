@@ -10,8 +10,6 @@ import {
 import EmptyCart from '../../../../assets/Icons/EmptyCart.svg';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 import ProductCartCard from '../../../../components/ProductCartCard/ProductCartCard.tsx';
-import ForkKnife from '../../../../assets/Icons/ForkKnife.svg';
-import Counter from '../../../../components/Counter/Counter.tsx';
 import Header from '../../../../components/Header/Header.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {
@@ -22,8 +20,6 @@ import {Product} from '../../../../models/Product.ts';
 import {cartQuery} from '../../cart.query.ts';
 
 const CartScreen = ({navigation}: {navigation: any}) => {
-  const [personCount, setPersonCount] = useState(0);
-
   const {data: cartItems} = useQuery(cartQuery);
 
   const {data: productQueryRes, isLoading: isProductsLoading} = useQuery(
@@ -63,19 +59,6 @@ const CartScreen = ({navigation}: {navigation: any}) => {
             </ScrollView>
           </View>
 
-          <View style={styles.personCountWrapper}>
-            <ForkKnife style={styles.forkKnife} color="white" />
-            <Text style={styles.personText}>Количество персон?</Text>
-            <View style={styles.counterWrapper}>
-              <Counter
-                count={personCount}
-                onHandleAdd={() => setPersonCount(personCount + 1)}
-                onHandleMinus={() =>
-                  setPersonCount(Math.max(personCount - 1, 0))
-                }
-              />
-            </View>
-          </View>
           <TouchableOpacity
             onPress={() => navigation.navigate('Checkout')}
             style={styles.orderButton}>
@@ -115,9 +98,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     height: '100%',
   },
-  counterWrapper: {
-    marginLeft: nw(25),
-  },
   emptyCartText: {
     color: '#727272',
     fontSize: 16,
@@ -126,47 +106,6 @@ const styles = StyleSheet.create({
   },
   productsWrapper: {
     marginLeft: nw(13),
-  },
-
-  personCountWrapper: {
-    backgroundColor: '#1C1C1C',
-    width: nw(365),
-    height: nh(65),
-    borderRadius: 10,
-    display: 'flex',
-    flexDirection: 'row',
-    alignItems: 'center',
-    position: 'relative',
-    marginLeft: nw(13),
-  },
-  buttonMinus: {
-    width: nw(35),
-    height: nw(35),
-    borderRadius: 20,
-    backgroundColor: '#2A2A2A',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  buttonPlus: {
-    width: nw(35),
-    height: nw(35),
-    borderRadius: 35,
-    backgroundColor: '#2A2A2A',
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  forkKnife: {
-    marginLeft: nw(15),
-  },
-  personText: {
-    marginLeft: nw(15),
-    color: 'white',
-    fontSize: 14,
-    fontFamily: 'MontserratRegular',
-    lineHeight: 17,
-    fontWeight: '400',
   },
   orderButton: {
     backgroundColor: '#FFE600',

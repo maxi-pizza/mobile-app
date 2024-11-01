@@ -5,9 +5,13 @@ import {nh, nw} from '../../../../../normalize.helper.ts';
 const InformationInput = ({
   placeholder,
   inputMode,
+  onChangeText,
+  value,
 }: {
   placeholder: string;
   inputMode: 'email' | 'text' | 'tel' | 'numeric';
+  onChangeText: (text: string) => void;
+  value: string;
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -19,6 +23,8 @@ const InformationInput = ({
       placeholder={placeholder}
       placeholderTextColor="#616161"
       inputMode={inputMode}
+      onChangeText={onChangeText}
+      value={value}
     />
   );
 };

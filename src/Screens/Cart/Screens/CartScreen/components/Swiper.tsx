@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useRef} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../../../../normalize.helper.ts';
 import {SvgProps} from 'react-native-svg';
@@ -15,7 +15,7 @@ const Swiper = ({
   onValueChange,
 }: {
   options: Option[];
-  value: string;
+  value: string | number;
   onValueChange: (value: string) => void;
 }) => {
   const handlePress = (option: Option) => {
