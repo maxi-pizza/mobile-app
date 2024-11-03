@@ -17,6 +17,7 @@ import categoryStore from '../../../../stores/store.ts';
 import ProductCard from '../../../../components/ProductCard/ProductCard.tsx';
 import store from '../../../../stores/store.ts';
 import {bannerQuery} from '../../../../components/Banner/banner.query.ts';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const HomeScreen = observer(({navigation}: {navigation: any}) => {
   const {data: wishlists, isLoading: isWishlistLoading} =
@@ -50,9 +51,15 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
   const selectedCategory = (categoryQueryRes?.data || []).find(category => {
     return category.slug === categoryStore.categorySlug;
   });
-
+  const isLoading = isWishlistLoading || isCategoryLoading || isProductsLoading;
   return (
     <View style={styles.container}>
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={{color: 'yellow'}}
+        overlayColor="rgba(0, 0, 0, 0.75)"
+      />
       <Header />
       <View style={styles.productsWrapper}>
         <FlatList
@@ -106,7 +113,7 @@ const styles = StyleSheet.create({
     fontFamily: 'MontserratRegular',
     color: 'white',
     fontWeight: '600',
-    fontSize: 20,
+    fontSize: nh(20),
     lineHeight: 24,
     marginBottom: nh(15),
     width: nw(365),

@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontFamily: 'MontserratRegular',
     fontWeight: '600',
-    fontSize: nw(20),
+    fontSize: nh(20),
     lineHeight: nw(24),
     marginBottom: nh(15),
     marginTop: nh(30),
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
   },
   noResultText: {
     color: '#727272',
-    fontSize: 14,
+    fontSize: nh(14),
     fontFamily: 'MontserratRegular',
     fontWeight: '500',
     width: nw(200),

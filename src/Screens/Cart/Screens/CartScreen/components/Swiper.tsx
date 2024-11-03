@@ -82,14 +82,14 @@ const styles = StyleSheet.create({
   whiteText: {
     color: 'white',
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '500',
     marginLeft: nw(15),
   },
   blackText: {
     color: 'black',
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '500',
     marginLeft: nw(15),
   },

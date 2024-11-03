@@ -1,51 +1,58 @@
 import React from 'react';
-import {Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
 import Header from '../../../../components/Header/Header.tsx';
 import InformationInput from '../../components/InformationInput/InformationInput.tsx';
 import BackButtonModal from '../../../../components/BackButtonModal/BackButtonModal.tsx';
 
-
-const ProfileScreen = ({visible, setIsVisible,route}: {visible: boolean, setIsVisible: (a: boolean) => void,route?: any}) => {
-
-
-
+const ProfileScreen = ({
+  visible,
+  setIsVisible,
+}: {
+  visible: boolean;
+  setIsVisible: (a: boolean) => void;
+}) => {
   return (
-       <Modal
-           visible={visible}
-           onRequestClose={() => setIsVisible(!visible)}
-       >
-         <View style={styles.container}>
-           <Header route={route}/>
-          <BackButtonModal setIsVisible={setIsVisible} visible={visible}/>
-           <ScrollView>
-             <Text style={styles.header}>Профиль</Text>
-             <View style={styles.inputsWrapper}>
-               <View style={styles.inputTextWrapper}>
-                 <Text style={styles.inputLabel}>Имя</Text>
-                 <InformationInput placeholder="Введите Имя" inputMode="text"/>
-               </View>
-               <View style={styles.inputTextWrapper}>
-                 <Text style={styles.inputLabel}>Email</Text>
-                 <InformationInput placeholder="Введите Email" inputMode="email"/>
-               </View>
-               <View style={styles.inputTextWrapper}>
-                 <Text style={styles.inputLabel}>Телефон</Text>
-                 <InformationInput placeholder="Введите телефон" inputMode="tel"/>
-               </View>
-               <TouchableOpacity style={styles.btnChangePass}>
-                 <Text style={styles.changePassText}>Изменить пароль</Text>
-               </TouchableOpacity>
-             </View>
-           </ScrollView>
+    <Modal visible={visible} onRequestClose={() => setIsVisible(!visible)}>
+      {/*<View style={styles.container}>*/}
+      {/*  <Header />*/}
+      {/*  <BackButtonModal setIsVisible={setIsVisible} visible={visible} />*/}
+      {/*  <ScrollView>*/}
+      {/*    <Text style={styles.header}>Профиль</Text>*/}
+      {/*    <View style={styles.inputsWrapper}>*/}
+      {/*      <View style={styles.inputTextWrapper}>*/}
+      {/*        <Text style={styles.inputLabel}>Имя</Text>*/}
+      {/*        <InformationInput placeholder="Введите Имя" inputMode="text" />*/}
+      {/*      </View>*/}
+      {/*      <View style={styles.inputTextWrapper}>*/}
+      {/*        <Text style={styles.inputLabel}>Email</Text>*/}
+      {/*        <InformationInput placeholder="Введите Email" inputMode="email" />*/}
+      {/*      </View>*/}
+      {/*      <View style={styles.inputTextWrapper}>*/}
+      {/*        <Text style={styles.inputLabel}>Телефон</Text>*/}
+      {/*        <InformationInput placeholder="Введите телефон" inputMode="tel" />*/}
+      {/*      </View>*/}
+      {/*      <TouchableOpacity style={styles.btnChangePass}>*/}
+      {/*        <Text style={styles.changePassText}>Изменить пароль</Text>*/}
+      {/*      </TouchableOpacity>*/}
+      {/*    </View>*/}
+      {/*  </ScrollView>*/}
 
-           <View style={styles.footer}>
-             <TouchableOpacity style={styles.saveBtn}><Text style={styles.btnText}>Сохранить</Text></TouchableOpacity>
-           </View>
-         </View>
-
-       </Modal>
+      {/*  <View style={styles.footer}>*/}
+      {/*    <TouchableOpacity style={styles.saveBtn}>*/}
+      {/*      <Text style={styles.btnText}>Сохранить</Text>*/}
+      {/*    </TouchableOpacity>*/}
+      {/*  </View>*/}
+      {/*</View>*/}
+    </Modal>
   );
 };
 
@@ -56,7 +63,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: 'MontserratRegular',
-    fontSize: 20,
+    fontSize: nh(20),
     lineHeight: 24,
     fontWeight: '600',
     color: 'white',
@@ -89,7 +96,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     lineHeight: 17,
     fontWeight: '500',
     color: 'black',
@@ -99,7 +106,7 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '400',
     lineHeight: 17,
     color: '#616161',
@@ -116,7 +123,7 @@ const styles = StyleSheet.create({
   },
   changePassText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '500',
     color: 'black',
   },

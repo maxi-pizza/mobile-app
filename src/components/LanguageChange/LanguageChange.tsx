@@ -1,15 +1,29 @@
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text} from 'react-native';
-import {nw} from '../../../normalize.helper.ts';
+import {nh, nw} from '../../../normalize.helper.ts';
 
 const LanguageChange = () => {
-  const [ isActive, setIsActive] = useState(true);
+  const [isActive, setIsActive] = useState(true);
   return (
-      <Pressable onPress={() => setIsActive(!isActive)} style={styles.languageContainer}>
-        <Text  style={[styles.languageText, isActive ? styles.whiteText : styles.notSelectedText]}>UA</Text>
-        <Text style={[styles.languageText, styles.whiteText]}> | </Text>
-        <Text style={[styles.languageText, !isActive ? styles.whiteText : styles.notSelectedText]}>RU</Text>
-      </Pressable>
+    <Pressable
+      onPress={() => setIsActive(!isActive)}
+      style={styles.languageContainer}>
+      <Text
+        style={[
+          styles.languageText,
+          isActive ? styles.whiteText : styles.notSelectedText,
+        ]}>
+        UA
+      </Text>
+      <Text style={[styles.languageText, styles.whiteText]}> | </Text>
+      <Text
+        style={[
+          styles.languageText,
+          !isActive ? styles.whiteText : styles.notSelectedText,
+        ]}>
+        RU
+      </Text>
+    </Pressable>
   );
 };
 
@@ -22,7 +36,7 @@ const styles = StyleSheet.create({
   languageText: {
     fontFamily: 'MontserratRegular',
     fontWeight: '400',
-    fontSize: 15,
+    fontSize: nh(15),
     lineHeight: 18,
   },
   notSelectedText: {

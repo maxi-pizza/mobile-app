@@ -2,13 +2,18 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../normalize.helper.ts';
 
-
-const UserOption = ({svgIcon, title}: {svgIcon: React.ReactNode, title: string}) => {
+const UserOption = ({
+  svgIcon,
+  title,
+}: {
+  svgIcon: React.ReactNode;
+  title: string;
+}) => {
   return (
-      <View style={styles.settingWrapper}>
-        <View style={styles.svgCircle}>{svgIcon}</View>
-        <Text style={styles.screenName}>{title}</Text>
-      </View>
+    <View style={styles.settingWrapper}>
+      <View style={styles.svgCircle}>{svgIcon}</View>
+      <Text style={styles.screenName}>{title}</Text>
+    </View>
   );
 };
 
@@ -25,7 +30,7 @@ const styles = StyleSheet.create({
   },
   screenName: {
     fontFamily: 'MontserratRegular',
-    fontSize: 13,
+    fontSize: nh(13),
     fontWeight: '400',
     lineHeight: 16,
     marginLeft: nw(15),

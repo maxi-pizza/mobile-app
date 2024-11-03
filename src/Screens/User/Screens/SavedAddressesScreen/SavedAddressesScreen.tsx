@@ -5,17 +5,17 @@ import {nh, nw} from '../../../../../normalize.helper.ts';
 import SavedAddress from './components/SavedAddress.tsx';
 import Header from '../../../../components/Header/Header.tsx';
 
-const SavedAddressesScreen = ({ route}: { route: any}) => {
+const SavedAddressesScreen = () => {
   return (
-      <View style={styles.container}>
-        <Header route={route}/>
-        <Text style={styles.header}>Збережені адреси</Text>
-        <SavedAddress address="Литвиненко-Вольгемут 1Г"/>
-        <SavedAddress address="Литвиненко-Вольгемут 1Г"/>
-        <TouchableOpacity style={styles.btn}>
-          <Text style={styles.btnText}>Добавить адрес</Text>
-        </TouchableOpacity>
-      </View>
+    <View style={styles.container}>
+      {/*<Header/>*/}
+      {/*<Text style={styles.header}>Збережені адреси</Text>*/}
+      {/*<SavedAddress address="Литвиненко-Вольгемут 1Г" />*/}
+      {/*<SavedAddress address="Литвиненко-Вольгемут 1Г" />*/}
+      {/*<TouchableOpacity style={styles.btn}>*/}
+      {/*  <Text style={styles.btnText}>Добавить адрес</Text>*/}
+      {/*</TouchableOpacity>*/}
+    </View>
   );
 };
 
@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: 'MontserratRegular',
-    fontSize: 20,
+    fontSize: nh(20),
     fontWeight: '600',
     lineHeight: 24,
     marginTop: nh(30),
@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '500',
     color: 'black',
   },

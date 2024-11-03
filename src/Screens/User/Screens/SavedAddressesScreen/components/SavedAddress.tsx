@@ -9,11 +9,18 @@ const SavedAddress = ({address}: {address: string}) => {
   const [isFavourite, setIsFavourite] = useState(false);
 
   return (
-      <View style={styles.container}>
-        <Text style={styles.address}>{address}</Text>
-        <Heart color="yellow" width="20" fill={isFavourite ? 'yellow' : 'transparent'} onPress={() => setIsFavourite(!isFavourite)} height="20" style={styles.heart} />
-        <Trash color="red" width="20" height="20"  style={styles.trash}/>
-      </View>
+    <View style={styles.container}>
+      <Text style={styles.address}>{address}</Text>
+      <Heart
+        color="yellow"
+        width="20"
+        fill={isFavourite ? 'yellow' : 'transparent'}
+        onPress={() => setIsFavourite(!isFavourite)}
+        height="20"
+        style={styles.heart}
+      />
+      <Trash color="red" width="20" height="20" style={styles.trash} />
+    </View>
   );
 };
 
@@ -31,7 +38,7 @@ const styles = StyleSheet.create({
   },
   address: {
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '400',
     lineHeight: 17,
   },

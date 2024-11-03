@@ -159,13 +159,13 @@ const styles = StyleSheet.create({
   },
   productTitle: {
     fontFamily: 'MontserratRegular',
-    fontSize: 16,
+    fontSize: nh(16),
     color: 'white',
     fontWeight: '500',
   },
   weightText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     color: '#727272',
     fontWeight: '400',
     marginLeft: nw(10),
@@ -216,13 +216,13 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   price: {
-    fontSize: 18,
+    fontSize: nh(18),
     fontWeight: '600',
     lineHeight: 18,
     color: 'white',
   },
   discountPrice: {
-    fontSize: 14,
+    fontSize: nh(14),
     color: '#727272',
     fontWeight: '600',
     lineHeight: 15,
@@ -230,13 +230,13 @@ const styles = StyleSheet.create({
     textDecorationLine: 'line-through',
   },
   whiteText: {
-    fontSize: 15,
+    fontSize: nh(15),
     fontFamily: 'MontserratRegular',
     color: 'white',
     width: nw(365),
   },
   ingredientsText: {
-    fontSize: 14,
+    fontSize: nh(14),
     fontFamily: 'MontserratRegular',
     color: 'white',
     width: nw(365),
@@ -255,7 +255,7 @@ const styles = StyleSheet.create({
   blackText: {
     color: 'black',
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '600',
   },
 });

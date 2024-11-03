@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     marginLeft: nw(5),
     marginTop: nh(5),
     height: nh(25),
-    fontSize: 12,
+    fontSize: nh(12),
     color: 'white',
   },
   heartContainer: {
@@ -206,11 +206,11 @@ const styles = StyleSheet.create({
     fontFamily: 'MontserratRegular',
     fontWeight: '400',
     lineHeight: 17,
-    fontSize: 14,
+    fontSize: nh(14),
     width: nw(200),
   },
   description: {
-    fontSize: 12,
+    fontSize: nh(12),
     fontFamily: 'MontserratRegular',
     fontWeight: '300',
     overflow: 'hidden',
@@ -240,13 +240,13 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   price: {
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '600',
     lineHeight: 18,
     color: 'white',
   },
   discountPrice: {
-    fontSize: 12,
+    fontSize: nh(12),
     color: '#727272',
     fontWeight: '600',
     lineHeight: 15,
@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
   btnText: {
     color: 'yellow',
     fontFamily: 'MontserratRegular',
-    fontSize: 13,
+    fontSize: nh(13),
     fontWeight: '800',
   },
 });

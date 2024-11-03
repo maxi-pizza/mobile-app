@@ -3,11 +3,11 @@ import {StyleSheet, Text, View} from 'react-native';
 import Header from '../../../../components/Header/Header.tsx';
 import WebView from 'react-native-webview';
 import {useQuery} from '@tanstack/react-query';
-import {cityQuery} from '../../../../components/CityDropDown/CityDropDown.tsx';
 import store from '../../../../stores/store.ts';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 import {observer} from 'mobx-react-lite';
 import BackButton from '../../../../components/BackButton/BackButton.tsx';
+import {cityQuery} from '../../../../components/Header/city.query.ts';
 
 const DeliveryAndPayment = observer(({navigation}: {navigation: any}) => {
   const {data: cityRes} = useQuery(cityQuery);
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
   text: {
     color: 'white',
     fontFamily: 'MontserratRegular',
-    fontSize: 20,
+    fontSize: nh(20),
     fontWeight: '600',
     width: nw(365),
     marginBottom: nh(15),

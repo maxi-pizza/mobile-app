@@ -6,19 +6,19 @@ import ProductSrc from '../../../../../assets/Product.png';
 
 const ProductCardInCheckout = () => {
   return (
-      <View style={styles.container}>
-        <View style={styles.wrapper}>
-          <Image style={styles.image} source={ProductSrc}/>
-          <View style={styles.textWrapper}>
-            <Text style={styles.whiteText}>Ролл овощной</Text>
-            <Text style={styles.greyText}>Помідор, огурець, авокадо...</Text>
-          </View>
-          <View style={styles.priceWrapper}>
-            <Text style={styles.regularPrice}>9556 ₴</Text>
-            <Text style={styles.discountPrice}>7953 ₴</Text>
-          </View>
+    <View style={styles.container}>
+      <View style={styles.wrapper}>
+        <Image style={styles.image} source={ProductSrc} />
+        <View style={styles.textWrapper}>
+          <Text style={styles.whiteText}>Ролл овощной</Text>
+          <Text style={styles.greyText}>Помідор, огурець, авокадо...</Text>
+        </View>
+        <View style={styles.priceWrapper}>
+          <Text style={styles.regularPrice}>9556 ₴</Text>
+          <Text style={styles.discountPrice}>7953 ₴</Text>
         </View>
       </View>
+    </View>
   );
 };
 
@@ -47,28 +47,28 @@ const styles = StyleSheet.create({
   },
   whiteText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '400',
     lineHeight: 17,
     color: 'white',
   },
-  greyText:{
+  greyText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 12,
+    fontSize: nh(12),
     fontWeight: '400',
     lineHeight: 14,
     color: '#838383',
   },
   regularPrice: {
     fontFamily: 'MontserratRegular',
-    fontSize: 10,
+    fontSize: nh(10),
     fontWeight: '600',
     lineHeight: 12,
     color: '#727272',
   },
   discountPrice: {
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '600',
     lineHeight: 17,
     color: 'white',

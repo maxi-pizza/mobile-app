@@ -53,7 +53,7 @@ const ClosedRestaurant = () => {
         <Text
           style={[
             styles.whiteText,
-            {fontWeight: '400', fontSize: 14, marginBottom: nh(15)},
+            {fontWeight: '400', fontSize: nh(14), marginBottom: nh(15)},
           ]}>
           Working time {appConfig.workingHours[0][0]}:
           {addLeadingZero(appConfig.workingHours[0][1])} -{' '}
@@ -97,14 +97,14 @@ const styles = StyleSheet.create({
   },
   btnText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '700',
     color: 'black',
   },
   whiteText: {
     fontFamily: 'MontserratRegular',
     color: 'white',
-    fontSize: 16,
+    fontSize: nh(16),
     fontWeight: '500',
     marginTop: nh(5),
   },

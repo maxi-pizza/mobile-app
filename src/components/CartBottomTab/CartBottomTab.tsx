@@ -4,7 +4,7 @@ import CartIcon from '../../assets/Icons/Cart.svg';
 import {StyleSheet, Text, View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
 import {cartQuery} from '../../Screens/Cart/cart.query.ts';
-import {nw} from '../../../normalize.helper.ts';
+import {nh, nw} from '../../../normalize.helper.ts';
 
 const CartBottomTab = ({focused}: {focused: any}) => {
   const {data: cart} = useQuery(cartQuery);
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontFamily: 'MontserratRegular',
     fontWeight: '700',
-    fontSize: 12,
+    fontSize: nh(12),
     lineHeight: 14,
   },
 });

@@ -5,28 +5,28 @@ import {nh, nw} from '../../../../../normalize.helper.ts';
 import OrderCard from './components/OrderCard.tsx';
 import Header from '../../../../components/Header/Header.tsx';
 
-const OrderHistoryScreen = ({ route}: { route: any}) => {
+const OrderHistoryScreen = () => {
   return (
-      <View style={styles.container}>
-        <ScrollView showsVerticalScrollIndicator={false}>
-          <Header route={route}/>
-          <Text style={styles.header}>Історія замовлень</Text>
-          <OrderCard status={true}/>
-          <OrderCard status={false}/>
-          <OrderCard status={true}/>
-          <OrderCard status={true}/>
-          <OrderCard status={false}/>
-          <OrderCard status={true}/>
-          <OrderCard status={false}/>
-          <OrderCard status={true}/>
-          <OrderCard status={true}/>
-          <OrderCard status={false}/>
-          <OrderCard status={false}/>
-          <OrderCard status={true}/>
-          <OrderCard status={false}/>
-          <OrderCard status={false}/>
-        </ScrollView>
-      </View>
+    <View style={styles.container}>
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <Header />
+        <Text style={styles.header}>Історія замовлень</Text>
+        <OrderCard status={true} />
+        <OrderCard status={false} />
+        <OrderCard status={true} />
+        <OrderCard status={true} />
+        <OrderCard status={false} />
+        <OrderCard status={true} />
+        <OrderCard status={false} />
+        <OrderCard status={true} />
+        <OrderCard status={true} />
+        <OrderCard status={false} />
+        <OrderCard status={false} />
+        <OrderCard status={true} />
+        <OrderCard status={false} />
+        <OrderCard status={false} />
+      </ScrollView>
+    </View>
   );
 };
 
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
   header: {
     fontFamily: 'MontserratRegular',
     fontWeight: '600',
-    fontSize: 20,
+    fontSize: nh(20),
     color: 'white',
     marginTop: nh(30),
     marginBottom: nh(30),

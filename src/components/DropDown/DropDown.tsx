@@ -1,30 +1,32 @@
-import React, {useCallback, useRef} from 'react';
+import React, {ReactNode, useCallback, useRef} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../normalize.helper.ts';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-
-import Caret from '../../assets/Icons/Caret.svg';
-import MapPin from '../../assets/Icons/MapPinMapPin.svg';
 import {observer} from 'mobx-react-lite';
 
 type OptionProps = {
   id: number;
   name: string;
+  slug?: string;
 };
 
 const DropDown = observer(
   ({
+    value,
     placeholder,
     options,
-    value,
     onChange,
     error,
+    children,
+    snapPoints,
   }: {
-    placeholder: string;
+    value?: string | number;
+    placeholder: ReactNode;
     options: OptionProps[];
-    value: string | number | undefined;
     onChange: (value: string | number | undefined) => void;
     error?: string;
+    children: ReactNode;
+    snapPoints: string;
   }) => {
     const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
@@ -36,39 +38,28 @@ const DropDown = observer(
       bottomSheetModalRef.current?.dismiss();
     };
 
-    const selected = options.find(option => option.id === value);
-
     return (
-      <Pressable style={styles.container} onPress={openBottomSheet}>
-        <View style={styles.inputContainer}>
-          <Text style={styles.selectOption}>
-            {selected ? (
-              <Text style={styles.whiteText}>{selected.name}</Text>
-            ) : (
-              placeholder
-            )}
-          </Text>
-          <Caret color="#727272" width="15" />
-        </View>
-
+      <Pressable onPress={openBottomSheet}>
+        {children}
         <BottomSheetModal
           ref={bottomSheetModalRef}
-          snapPoints={['30%']}
+          snapPoints={[snapPoints]}
           backgroundStyle={styles.bottom}
           handleIndicatorStyle={styles.indicator}
           style={styles.modal}>
           <View style={styles.bottomSheetContent}>
-            <View style={styles.mapPinWrapper}>
-              <Text style={[styles.chooseText, {marginRight: nw(10)}]}>
-                Выберите адрес
-              </Text>
-              <MapPin color="white" />
-            </View>
+            <View style={styles.placeholder}>{placeholder}</View>
             {options.map(option => (
               <Pressable
                 key={option.id}
                 onPress={() => handleOptionPress(option)}>
-                <Text style={styles.cityText}>{option.name}</Text>
+                <Text
+                  style={[
+                    styles.cityText,
+                    value === option.id && styles.selectedOption,
+                  ]}>
+                  {option.name}
+                </Text>
               </Pressable>
             ))}
           </View>
@@ -84,32 +75,9 @@ const DropDown = observer(
 );
 
 const styles = StyleSheet.create({
-  container: {
-    width: nw(365),
-    height: nh(47),
-    borderRadius: 10,
-    backgroundColor: '#272727',
-    paddingLeft: nw(10),
-    paddingRight: nw(10),
-  },
-  selectOption: {
-    color: '#616161',
-    fontFamily: 'MontserratRegular',
-    fontSize: 14,
-    lineHeight: 17,
-    fontWeight: '400',
-  },
   dropDownContent: {
     width: nw(365),
     backgroundColor: 'transparent',
-  },
-  inputContainer: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    height: '100%',
   },
   whiteText: {
     color: 'white',
@@ -123,7 +91,7 @@ const styles = StyleSheet.create({
   },
   cityText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 15,
+    fontSize: nh(15),
     fontWeight: '400',
     lineHeight: 18,
     color: 'white',
@@ -134,19 +102,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
   },
-  mapPinWrapper: {
+  placeholder: {
     display: 'flex',
     flexDirection: 'row',
     marginBottom: nh(20),
     marginTop: nh(15),
-  },
-  chooseText: {
-    fontFamily: 'MontserratRegular',
-    fontSize: 16,
-    fontWeight: '500',
-    lineHeight: 19,
-    color: 'white',
-    paddingBottom: nh(10),
   },
   bottom: {
     backgroundColor: 'transparent',
@@ -165,9 +125,12 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 12,
+    fontSize: nh(12),
     color: 'white',
     fontWeight: '500',
+  },
+  selectedOption: {
+    color: 'yellow',
   },
 });
 

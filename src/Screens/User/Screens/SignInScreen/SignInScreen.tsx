@@ -6,27 +6,38 @@ import InformationInput from '../../components/InformationInput/InformationInput
 import PasswordInput from '../../components/PasswordInput/PasswordInput.tsx';
 import Header from '../../../../components/Header/Header.tsx';
 
-const SignInScreen = ({navigation, route}: {navigation: any, route: any}) => {
+const SignInScreen = ({navigation}: {navigation: any}) => {
   return (
     <View style={styles.container}>
-      <Header route={route}/>
-      <Text style={styles.header}>Вход в аккаунт</Text>
-      <View>
-        <InformationInput placeholder={'Email'} inputMode={'email'}/>
-        <View style={styles.password}>
-          <PasswordInput/>
-        </View>
-      </View>
-      <View style={styles.textRight}>
-        <Text onPress={() => navigation.navigate('ResetPassword')} style={styles.forgotPass}>Забыли пароль?</Text>
-      </View>
+      {/*<Header />*/}
+      {/*<Text style={styles.header}>Вход в аккаунт</Text>*/}
+      {/*<View>*/}
+      {/*  <InformationInput placeholder={'Email'} inputMode={'email'} />*/}
+      {/*  <View style={styles.password}>*/}
+      {/*    <PasswordInput />*/}
+      {/*  </View>*/}
+      {/*</View>*/}
+      {/*<View style={styles.textRight}>*/}
+      {/*  <Text*/}
+      {/*    onPress={() => navigation.navigate('ResetPassword')}*/}
+      {/*    style={styles.forgotPass}>*/}
+      {/*    Забыли пароль?*/}
+      {/*  </Text>*/}
+      {/*</View>*/}
 
-      <TouchableOpacity style={styles.signInBtn}>
-        <Text style={styles.btnText}>Войти</Text>
-      </TouchableOpacity>
-      <View style={styles.textRight}>
-        <Text style={styles.yellowText}>Нет аккаунта? <Text style={styles.forgotPass} onPress={() => navigation.navigate('SignUp')}>Регистрация</Text></Text>
-      </View>
+      {/*<TouchableOpacity style={styles.signInBtn}>*/}
+      {/*  <Text style={styles.btnText}>Войти</Text>*/}
+      {/*</TouchableOpacity>*/}
+      {/*<View style={styles.textRight}>*/}
+      {/*  <Text style={styles.yellowText}>*/}
+      {/*    Нет аккаунта?{' '}*/}
+      {/*    <Text*/}
+      {/*      style={styles.forgotPass}*/}
+      {/*      onPress={() => navigation.navigate('SignUp')}>*/}
+      {/*      Регистрация*/}
+      {/*    </Text>*/}
+      {/*  </Text>*/}
+      {/*</View>*/}
     </View>
   );
 };
@@ -40,7 +51,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: 'MontserratRegular',
-    fontSize: 20,
+    fontSize: nh(20),
     lineHeight: 24,
     fontWeight: '600',
     color: 'white',
@@ -51,7 +62,7 @@ const styles = StyleSheet.create({
     marginTop: nh(15),
   },
   forgotPass: {
-    fontSize: 12,
+    fontSize: nh(12),
     fontWeight: '400',
     lineHeight: 14,
     fontFamily: 'MontserratRegular',
@@ -77,11 +88,11 @@ const styles = StyleSheet.create({
   btnText: {
     color: 'black',
     fontFamily: 'MontserratRegular',
-    fontSize: 15,
+    fontSize: nh(15),
     fontWeight: '500',
   },
   yellowText: {
-    fontSize: 12,
+    fontSize: nh(12),
     fontWeight: '400',
     lineHeight: 14,
     fontFamily: 'MontserratRegular',

@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'MontserratRegular',
     fontWeight: '400',
-    fontSize: 13,
+    fontSize: nh(13),
     lineHeight: 16,
     color: 'white',
     marginLeft: nw(15),

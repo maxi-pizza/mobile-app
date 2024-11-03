@@ -94,7 +94,7 @@ const styles = StyleSheet.create({
   cartTitle: {
     fontFamily: 'MontserratRegular',
     fontWeight: '600',
-    fontSize: 20,
+    fontSize: nh(20),
     lineHeight: 24,
     color: 'white',
   },
@@ -111,7 +111,7 @@ const styles = StyleSheet.create({
   },
   emptyCartText: {
     color: '#727272',
-    fontSize: 16,
+    fontSize: nh(16),
     fontFamily: 'MontserratRegular',
     fontWeight: '500',
   },
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   checkoutText: {
     fontFamily: 'Montserrat',
     fontWeight: '600',
-    fontSize: 14,
+    fontSize: nh(14),
     lineHeight: 17,
     color: 'black',
   },

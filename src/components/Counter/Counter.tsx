@@ -1,32 +1,33 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import { nw} from '../../../normalize.helper.ts';
+import {nh, nw} from '../../../normalize.helper.ts';
 
 import Minus from '../../assets/Icons/Minus.svg';
 import Plus from '../../assets/Icons/Plus.svg';
 
-
-
-
-const Counter = ({onHandleMinus,onHandleAdd,count}: {onHandleMinus: () => void,onHandleAdd: () => void, count: number}) => {
-
-
-
+const Counter = ({
+  onHandleMinus,
+  onHandleAdd,
+  count,
+}: {
+  onHandleMinus: () => void;
+  onHandleAdd: () => void;
+  count: number;
+}) => {
   return (
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity onPress={onHandleMinus} style={styles.buttonMinus}>
-          <Minus color="white" width="16" height="16"/>
-        </TouchableOpacity>
-        <View style={styles.textWrapper}>
-          <Text style={styles.countText}>{count}</Text>
-        </View>
-        <TouchableOpacity onPress={onHandleAdd} style={styles.buttonPlus}>
-          <Plus color="white" width="16" height="16"/>
-        </TouchableOpacity>
+    <View style={styles.buttonContainer}>
+      <TouchableOpacity onPress={onHandleMinus} style={styles.buttonMinus}>
+        <Minus color="white" width="16" height="16" />
+      </TouchableOpacity>
+      <View style={styles.textWrapper}>
+        <Text style={styles.countText}>{count}</Text>
       </View>
+      <TouchableOpacity onPress={onHandleAdd} style={styles.buttonPlus}>
+        <Plus color="white" width="16" height="16" />
+      </TouchableOpacity>
+    </View>
   );
 };
-
 
 const styles = StyleSheet.create({
   buttonMinus: {
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
   countText: {
     fontWeight: '600',
     fontFamily: 'MontserratRegular',
-    fontSize: 18,
+    fontSize: nh(18),
     lineHeight: 22,
     color: 'white',
   },

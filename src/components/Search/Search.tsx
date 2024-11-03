@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     paddingLeft: nw(35),
     lineHeight: 18,
     height: '100%',
-    fontSize: 12,
+    fontSize: nh(12),
     borderWidth: 1,
     borderColor: 'transparent',
     borderRadius: 10,

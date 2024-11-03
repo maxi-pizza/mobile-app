@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
   title: {
     color: 'white',
     fontFamily: 'MontserratRegular',
-    fontSize: 20,
+    fontSize: nh(20),
     marginBottom: nw(15),
   },
   categoryCardsContainer: {

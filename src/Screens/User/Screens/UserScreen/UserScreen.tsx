@@ -144,13 +144,13 @@ const styles = StyleSheet.create({
   gmail: {
     fontFamily: 'MontserratRegular',
     fontWeight: '400',
-    fontSize: 13,
+    fontSize: nh(13),
     lineHeight: 16,
     color: '#757575',
   },
   profileText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 15,
+    fontSize: nh(15),
     fontWeight: '400',
     lineHeight: 18,
     color: 'white',
@@ -174,7 +174,7 @@ const styles = StyleSheet.create({
   },
   signInText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 15,
+    fontSize: nh(15),
     lineHeight: 18,
     fontWeight: '500',
     color: 'white',
@@ -182,7 +182,7 @@ const styles = StyleSheet.create({
   },
   descriptionText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 12,
+    fontSize: nh(12),
     lineHeight: 14,
     fontWeight: '400',
     color: 'white',
@@ -212,14 +212,14 @@ const styles = StyleSheet.create({
   },
   signUpBtnText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '500',
     lineHeight: 17,
     color: 'white',
   },
   signInBtnText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '500',
     lineHeight: 17,
     color: 'black',

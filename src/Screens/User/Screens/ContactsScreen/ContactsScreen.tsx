@@ -15,9 +15,10 @@ import Telegram from '../../../../assets/Icons/Telegram.svg';
 import Header from '../../../../components/Header/Header.tsx';
 import BackButton from '../../../../components/BackButton/BackButton.tsx';
 import {useQuery} from '@tanstack/react-query';
-import {cityQuery} from '../../../../components/CityDropDown/CityDropDown.tsx';
+
 import store from '../../../../stores/store.ts';
 import {observer} from 'mobx-react-lite';
+import {cityQuery} from '../../../../components/Header/city.query.ts';
 
 const ContactsScreen = observer(({navigation}: {navigation: any}) => {
   const {data: cityRes} = useQuery(cityQuery);
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
   header: {
     fontFamily: 'MontserratRegular',
     fontWeight: '600',
-    fontSize: 20,
+    fontSize: nh(20),
     lineHeight: 24,
     color: 'white',
     marginTop: nh(30),
@@ -128,7 +129,7 @@ const styles = StyleSheet.create({
   btnText: {
     fontFamily: 'MontserratRegular',
     fontWeight: '500',
-    fontSize: 14,
+    fontSize: nh(14),
     lineHeight: 17,
     color: 'black',
   },

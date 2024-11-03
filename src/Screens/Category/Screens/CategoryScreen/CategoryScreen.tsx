@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     marginTop: nh(30),
     width: nw(365),
     marginBottom: nh(15),
-    fontSize: 20,
+    fontSize: nh(20),
     fontWeight: '600',
     color: 'white',
     lineHeight: 24,

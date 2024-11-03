@@ -22,9 +22,9 @@ import Package from '../../../../../assets/Icons/Package.svg';
 import Card from '../../../../../assets/Icons/CreditCard.svg';
 import Cash from '../../../../../assets/Icons/Money.svg';
 
+import Caret from '../../../../../assets/Icons/Caret.svg';
 import {shippingQuery} from '../../../shipping.query.ts';
 import {paymentQuery} from '../../../payment.query.ts';
-import {cityQuery} from '../../../../../components/CityDropDown/CityDropDown.tsx';
 import store from '../../../../../stores/store.ts';
 import {observer} from 'mobx-react-lite';
 import {cartQuery} from '../../../cart.query.ts';
@@ -35,6 +35,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {isValidUkrainianPhone} from '../../../utils.ts';
 import {agent} from '../../../../../../APIClient.tsx';
 import {IDistrict} from '@layerok/emojisushi-js-sdk';
+import {cityQuery} from '../../../../../components/Header/city.query.ts';
 
 enum HouseTypeEnum {
   Apartment = 'high_rise_building',
@@ -231,7 +232,11 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     formState: {errors},
   } = useForm({
     defaultValues: InitialValue,
-    resolver: yupResolver<FormValues>(validationSchema),
+
+    resolver: yupResolver<FormValues>(
+      // @ts-ignore
+      validationSchema,
+    ),
   });
   const shippingMethod = useWatch({control, name: 'shippingMethod'});
   const paymentMethod = useWatch({control, name: 'paymentMethod'});
@@ -245,6 +250,20 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     variant_id: undefined,
     quantity: +cartRes[id].count,
   }));
+  const getSelectedDistrict = (id: number | undefined) => {
+    const selected = districts.find(d => d.id === id);
+    if (!selected) {
+      return null;
+    }
+    return selected?.name;
+  };
+  const getSelectedSpot = (id: number | undefined) => {
+    const selected = spots.find(d => d.id === id);
+    if (!selected) {
+      return null;
+    }
+    return selected?.name;
+  };
 
   const onSubmit = async (data: FormValues) => {
     const {
@@ -264,7 +283,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
       email,
       apartment,
     } = data;
-    console.log(data);
+
     const [firstname, lastname] = name.split(' ');
     const address = [
       ['Вулиця', street],
@@ -273,7 +292,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
       ["Під'їзд", entrance],
       ['Поверх', floor],
     ]
-      .filter(([label, value]) => !!value)
+      .filter(([_, value]) => !!value)
       .map(([label, value]) => `${label}: ${value}`)
       .join(', ');
 
@@ -296,7 +315,6 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     if (!resultantSpotId) {
       throw new Error('Invalid spot ID');
     }
-    console.log(sticks);
     try {
       const res = await agent.placeOrderV2({
         phone,
@@ -314,7 +332,6 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
         cart: {items},
         sticks: +sticks,
       });
-      console.log(res.data);
     } catch (e) {
       if (e instanceof Error) {
         throw new Error(e.message);
@@ -323,6 +340,9 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
       }
     }
   };
+
+  const spotError = errors.spotId?.message;
+  const districtError = errors.districtId?.message;
 
   return (
     <View>
@@ -364,14 +384,32 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                 name="districtId"
                 control={control}
                 render={({field: {onChange, value}}) => (
-                  <View style={{marginTop: nh(15), zIndex: 5}}>
+                  <View
+                    style={[
+                      styles.dropDownContainer,
+                      districtError ? styles.errorFocus : null,
+                      {marginTop: nh(15), zIndex: 5},
+                    ]}>
                     <DropDown
-                      placeholder="Выберите район доставки"
-                      options={districts}
                       value={value}
+                      placeholder={<Text>Выберите район доставки</Text>}
+                      options={districts}
                       onChange={d => onChange(d)}
                       error={errors.districtId?.message}
-                    />
+                      snapPoints={'30'}>
+                      <View style={styles.inputContainer}>
+                        <Text style={styles.selectOption}>
+                          {getSelectedDistrict(value) ? (
+                            <Text style={styles.whiteText}>
+                              {getSelectedDistrict(value)}
+                            </Text>
+                          ) : (
+                            'Выберите район доставки'
+                          )}
+                        </Text>
+                        <Caret color="#727272" width="15" />
+                      </View>
+                    </DropDown>
                   </View>
                 )}
               />
@@ -383,9 +421,9 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                     <Swiper
                       options={apart}
                       value={value}
-                      onValueChange={value => {
-                        onChangeSwiperApartmentShippingSchema(value);
-                        onChange(value);
+                      onValueChange={v => {
+                        onChangeSwiperApartmentShippingSchema(v);
+                        onChange(v);
                       }}
                     />
                   </View>
@@ -485,14 +523,32 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
               name="spotId"
               control={control}
               render={({field: {onChange, value}}) => (
-                <View style={{marginTop: nh(15), zIndex: 5}}>
+                <View
+                  style={[
+                    styles.dropDownContainer,
+                    spotError ? styles.errorFocus : null,
+                    {marginTop: nh(15), zIndex: 5},
+                  ]}>
                   <DropDown
-                    placeholder={'Оберіть найближчий заклад'}
-                    options={spots}
                     value={value}
+                    placeholder={<Text>Оберіть найближчий заклад</Text>}
+                    options={spots}
                     onChange={s => onChange(s)}
-                    error={errors.spotId?.message}
-                  />
+                    snapPoints={'30'}
+                    error={errors.spotId?.message}>
+                    <View style={styles.inputContainer}>
+                      <Text style={styles.selectOption}>
+                        {getSelectedSpot(value) ? (
+                          <Text style={styles.whiteText}>
+                            {getSelectedSpot(value)}
+                          </Text>
+                        ) : (
+                          'Оберіть найближчий заклад'
+                        )}
+                      </Text>
+                      <Caret color="#727272" width="15" />
+                    </View>
+                  </DropDown>
                 </View>
               )}
             />
@@ -596,7 +652,12 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
             control={control}
             render={({field: {onChange, value}}) => (
               <View style={styles.personCountWrapper}>
-                <ForkKnife style={styles.forkKnife} color="white" />
+                <ForkKnife
+                  width={nw(32)}
+                  height={nw(32)}
+                  style={styles.forkKnife}
+                  color="white"
+                />
                 <Text style={styles.personText}>Количество персон?</Text>
                 <View style={{marginLeft: nw(45)}}>
                   <Counter
@@ -613,7 +674,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
           <Text
             style={[
               styles.whiteText,
-              {fontSize: 16, fontWeight: '500', marginTop: nh(30)},
+              {fontSize: nh(16), fontWeight: '500', marginTop: nh(30)},
             ]}>
             Сумма заказа
           </Text>
@@ -651,6 +712,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: nw(365),
   },
+  errorFocus: {
+    borderWidth: 1,
+    borderColor: 'red',
+  },
   apartmentInputs: {
     display: 'flex',
     flexDirection: 'row',
@@ -659,7 +724,7 @@ const styles = StyleSheet.create({
   },
   header: {
     fontFamily: 'MontserratRegular',
-    fontSize: 20,
+    fontSize: nh(20),
     fontWeight: '600',
     lineHeight: 23,
     color: 'white',
@@ -677,7 +742,7 @@ const styles = StyleSheet.create({
   },
   whiteText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '400',
     lineHeight: 17,
     color: 'white',
@@ -716,21 +781,21 @@ const styles = StyleSheet.create({
   personText: {
     marginLeft: nw(15),
     color: 'white',
-    fontSize: 14,
+    fontSize: nh(14),
     fontFamily: 'MontserratRegular',
     lineHeight: 17,
     fontWeight: '400',
   },
   blackText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '700',
     lineHeight: 17,
     color: 'black',
   },
   greyText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 14,
+    fontSize: nh(14),
     fontWeight: '400',
     lineHeight: 17,
     color: '#616161',
@@ -773,6 +838,29 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFE600',
     borderRadius: 10,
     marginBottom: nh(180),
+  },
+  inputContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  selectOption: {
+    color: '#616161',
+    fontFamily: 'MontserratRegular',
+    fontSize: nh(14),
+    lineHeight: 17,
+    fontWeight: '400',
+  },
+  dropDownContainer: {
+    width: nw(365),
+    height: nh(47),
+    borderRadius: 10,
+    backgroundColor: '#272727',
+    paddingLeft: nw(10),
+    paddingRight: nw(10),
   },
 });
 

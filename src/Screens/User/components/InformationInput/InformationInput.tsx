@@ -20,7 +20,11 @@ const InformationInput = ({
   return (
     <View>
       <TextInput
-        style={[styles.input, isFocused ? styles.focused : null]}
+        style={[
+          styles.input,
+          isFocused ? styles.focused : null,
+          error && styles.errorFocus,
+        ]}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
@@ -51,6 +55,10 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#FFE600',
   },
+  errorFocus: {
+    borderWidth: 1,
+    borderColor: 'red',
+  },
   errorContainer: {
     paddingHorizontal: 5,
     paddingVertical: 2,
@@ -61,7 +69,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontFamily: 'MontserratRegular',
-    fontSize: 12,
+    fontSize: nh(12),
     color: 'white',
     fontWeight: '500',
   },
