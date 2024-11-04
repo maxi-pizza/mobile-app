@@ -1,7 +1,7 @@
 import {makeAutoObservable} from 'mobx';
 
 class store {
-  categorySlug = 'premium-roli';
+  categorySlug = '';
   city: string = 'odesa';
 
   constructor() {

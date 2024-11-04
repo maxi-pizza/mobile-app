@@ -50,6 +50,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#272727',
     color: 'white',
     paddingLeft: nw(10),
+    fontSize: nh(14),
+    fontFamily: 'MontserratRegular',
   },
   focused: {
     borderWidth: 1,

@@ -355,7 +355,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
           <Text style={styles.header}>Оформление заказа</Text>
           <View style={styles.textWrapper}>
             <View style={styles.circle}>
-              <Text style={{color: 'black'}}>1</Text>
+              <Text style={{color: 'black', lineHeight: nh(17)}}>1</Text>
             </View>
             <Text style={[styles.greyText, {marginLeft: nw(15)}]}>
               Введите данные
@@ -380,39 +380,42 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
 
           {shippingMethod === ShippingMethodEnum.Courier ? (
             <View>
-              <Controller
-                name="districtId"
-                control={control}
-                render={({field: {onChange, value}}) => (
-                  <View
-                    style={[
-                      styles.dropDownContainer,
-                      districtError ? styles.errorFocus : null,
-                      {marginTop: nh(15), zIndex: 5},
-                    ]}>
-                    <DropDown
-                      value={value}
-                      placeholder={<Text>Выберите район доставки</Text>}
-                      options={districts}
-                      onChange={d => onChange(d)}
-                      error={errors.districtId?.message}
-                      snapPoints={'30'}>
-                      <View style={styles.inputContainer}>
-                        <Text style={styles.selectOption}>
-                          {getSelectedDistrict(value) ? (
-                            <Text style={styles.whiteText}>
-                              {getSelectedDistrict(value)}
-                            </Text>
-                          ) : (
-                            'Выберите район доставки'
-                          )}
-                        </Text>
-                        <Caret color="#727272" width="15" />
-                      </View>
-                    </DropDown>
-                  </View>
-                )}
-              />
+              {districts.length > 1 && (
+                <Controller
+                  name="districtId"
+                  control={control}
+                  render={({field: {onChange, value}}) => (
+                    <View
+                      style={[
+                        styles.dropDownContainer,
+                        districtError ? styles.errorFocus : null,
+                        {marginTop: nh(15), zIndex: 5},
+                      ]}>
+                      <DropDown
+                        value={value}
+                        placeholder={<Text>Выберите район доставки</Text>}
+                        options={districts}
+                        onChange={d => onChange(d)}
+                        error={errors.districtId?.message}
+                        snapPoints={'30'}>
+                        <View style={styles.inputContainer}>
+                          <Text style={styles.selectOption}>
+                            {getSelectedDistrict(value) ? (
+                              <Text style={styles.whiteText}>
+                                {getSelectedDistrict(value)}
+                              </Text>
+                            ) : (
+                              'Выберите район доставки'
+                            )}
+                          </Text>
+                          <Caret color="#727272" width="15" />
+                        </View>
+                      </DropDown>
+                    </View>
+                  )}
+                />
+              )}
+
               <Controller
                 name="houseType"
                 control={control}
@@ -519,39 +522,41 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
               )}
             </View>
           ) : (
-            <Controller
-              name="spotId"
-              control={control}
-              render={({field: {onChange, value}}) => (
-                <View
-                  style={[
-                    styles.dropDownContainer,
-                    spotError ? styles.errorFocus : null,
-                    {marginTop: nh(15), zIndex: 5},
-                  ]}>
-                  <DropDown
-                    value={value}
-                    placeholder={<Text>Оберіть найближчий заклад</Text>}
-                    options={spots}
-                    onChange={s => onChange(s)}
-                    snapPoints={'30'}
-                    error={errors.spotId?.message}>
-                    <View style={styles.inputContainer}>
-                      <Text style={styles.selectOption}>
-                        {getSelectedSpot(value) ? (
-                          <Text style={styles.whiteText}>
-                            {getSelectedSpot(value)}
-                          </Text>
-                        ) : (
-                          'Оберіть найближчий заклад'
-                        )}
-                      </Text>
-                      <Caret color="#727272" width="15" />
-                    </View>
-                  </DropDown>
-                </View>
-              )}
-            />
+            spots.length > 1 && (
+              <Controller
+                name="spotId"
+                control={control}
+                render={({field: {onChange, value}}) => (
+                  <View
+                    style={[
+                      styles.dropDownContainer,
+                      spotError ? styles.errorFocus : null,
+                      {marginTop: nh(15), zIndex: 5},
+                    ]}>
+                    <DropDown
+                      value={value}
+                      placeholder={<Text>Оберіть найближчий заклад</Text>}
+                      options={spots}
+                      onChange={s => onChange(s)}
+                      snapPoints={'30'}
+                      error={errors.spotId?.message}>
+                      <View style={styles.inputContainer}>
+                        <Text style={styles.selectOption}>
+                          {getSelectedSpot(value) ? (
+                            <Text style={styles.whiteText}>
+                              {getSelectedSpot(value)}
+                            </Text>
+                          ) : (
+                            'Оберіть найближчий заклад'
+                          )}
+                        </Text>
+                        <Caret color="#727272" width="15" />
+                      </View>
+                    </DropDown>
+                  </View>
+                )}
+              />
+            )
           )}
           <Controller
             name="name"
@@ -613,7 +618,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
           />
           <View style={styles.textWrapper}>
             <View style={styles.circle}>
-              <Text style={{color: 'black'}}>2</Text>
+              <Text style={{color: 'black', lineHeight: nh(17)}}>2</Text>
             </View>
             <Text style={[styles.greyText, {marginLeft: nw(15)}]}>
               Способ оплаты
@@ -674,14 +679,15 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
           <Text
             style={[
               styles.whiteText,
-              {fontSize: nh(16), fontWeight: '500', marginTop: nh(30)},
+              {
+                fontSize: nh(16),
+                fontWeight: '500',
+                marginTop: nh(30),
+                marginBottom: nh(10),
+              },
             ]}>
             Сумма заказа
           </Text>
-          <View style={styles.priceWrapper}>
-            <Text style={styles.whiteText}>Доставка</Text>
-            <Text style={styles.whiteText}>0 ₴</Text>
-          </View>
           <View style={styles.verticalBar} />
           <View style={styles.priceWrapper}>
             <Text style={styles.whiteText}>К оплате</Text>
@@ -808,6 +814,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    fontSize: nh(14),
   },
   textWrapper: {
     width: nw(365),

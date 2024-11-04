@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {CategoryCard} from '../CategoryCard/CategoryCard.tsx';
 import {nh, nw} from '../../../normalize.helper.ts';
@@ -16,6 +16,11 @@ const Category = observer(() => {
     .filter(category =>
       store.city === 'chorno' ? category.slug !== 'pitsa' : category.slug,
     );
+  useEffect(() => {
+    if (categories.length > 0) {
+      store.changeCategory(String(categories[0].slug));
+    }
+  }, [categories]);
 
   return (
     <View style={styles.container}>

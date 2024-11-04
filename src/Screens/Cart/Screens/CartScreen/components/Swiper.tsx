@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   active: {
-    backgroundColor: 'yellow',
+    backgroundColor: '#FFE600',
   },
   textWrapper: {
     display: 'flex',

@@ -80,7 +80,7 @@ const ProductModal = ({route, navigation}: {route: any; navigation: any}) => {
           <View style={styles.heartTitleWrapper}>
             <View style={styles.titleWrapper}>
               <Text style={styles.productTitle}>{product.name}</Text>
-              <Text style={styles.weightText}>{product.weight}</Text>
+              <Text style={styles.weightText}>{product.weight}г</Text>
             </View>
             <Pressable style={styles.heartBtn} onPress={handleFavouriteButton}>
               <Heart width={nw(20)} color={favourite ? 'yellow' : 'white'} />
