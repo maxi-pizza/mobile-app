@@ -22,6 +22,7 @@ import {
   wishlistQuery,
 } from '../../../Favourite/wishlist.query.ts';
 import BackButtonScreen from '../../../../components/BackButton/BackButton.tsx';
+import NullImage from '../../../../assets/Logo.svg';
 
 const ProductModal = ({route, navigation}: {route: any; navigation: any}) => {
   const queryClient = useQueryClient();
@@ -76,7 +77,11 @@ const ProductModal = ({route, navigation}: {route: any; navigation: any}) => {
       <BackButtonScreen navigation={navigation} />
       <View style={styles.container}>
         <View style={styles.productContainer}>
-          <Image source={{uri: product.mainImage}} style={styles.image} />
+          {product.mainImage ? (
+            <Image source={{uri: product.mainImage}} style={styles.image} />
+          ) : (
+            <NullImage width={nw(265)} height={nh(171)} opacity={0.2} />
+          )}
           <View style={styles.heartTitleWrapper}>
             <View style={styles.titleWrapper}>
               <Text style={styles.productTitle}>{product.name}</Text>

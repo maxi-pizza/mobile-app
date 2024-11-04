@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -36,6 +36,7 @@ import {isValidUkrainianPhone} from '../../../utils.ts';
 import {agent} from '../../../../../../APIClient.tsx';
 import {IDistrict} from '@layerok/emojisushi-js-sdk';
 import {cityQuery} from '../../../../../components/Header/city.query.ts';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 enum HouseTypeEnum {
   Apartment = 'high_rise_building',
@@ -118,6 +119,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
   ];
 
   const ids = Object.keys(cartRes || []);
+  console.log(ids);
 
   const total = ids.reduce((acc, id) => {
     return acc + cartRes?.[id].count * cartRes?.[id].price;
@@ -695,7 +697,10 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
           </View>
           <TouchableOpacity
             style={styles.orderBtn}
-            onPress={handleSubmit(onSubmit)}>
+            onPress={() => {
+              handleSubmit(onSubmit);
+              navigation.navigate('Thank');
+            }}>
             <Text style={styles.blackText}>Заказать</Text>
           </TouchableOpacity>
         </ScrollView>
