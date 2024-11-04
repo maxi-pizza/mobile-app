@@ -4,8 +4,8 @@ export const cityQuery = {
   queryKey: ['cities'],
   queryFn: async () => {
     const res = await agent.getCities({
-      includeSpots: false,
-      includeDistricts: false,
+      includeSpots: true,
+      includeDistricts: true,
     });
     return res.data;
   },

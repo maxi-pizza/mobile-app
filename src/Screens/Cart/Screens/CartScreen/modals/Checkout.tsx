@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -37,6 +37,7 @@ import {agent} from '../../../../../../APIClient.tsx';
 import {IDistrict} from '@layerok/emojisushi-js-sdk';
 import {cityQuery} from '../../../../../components/Header/city.query.ts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 enum HouseTypeEnum {
   Apartment = 'high_rise_building',
@@ -76,6 +77,7 @@ const getDistrictDefaultSpot = (district: IDistrict) => {
 };
 
 const Checkout = observer(({navigation}: {navigation: any}) => {
+  const [requestLoading, setRequestLoading] = useState(false);
   const {data: spotsRes} = useQuery(spotsQuery);
   const {data: cityRes} = useQuery(cityQuery);
   const {data: cartRes} = useQuery(cartQuery);
@@ -119,7 +121,6 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
   ];
 
   const ids = Object.keys(cartRes || []);
-  console.log(ids);
 
   const total = ids.reduce((acc, id) => {
     return acc + cartRes?.[id].count * cartRes?.[id].price;
@@ -234,11 +235,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     formState: {errors},
   } = useForm({
     defaultValues: InitialValue,
-
-    resolver: yupResolver<FormValues>(
-      // @ts-ignore
-      validationSchema,
-    ),
+    resolver: yupResolver<FormValues>(validationSchema),
   });
   const shippingMethod = useWatch({control, name: 'shippingMethod'});
   const paymentMethod = useWatch({control, name: 'paymentMethod'});
@@ -247,13 +244,16 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     throw new Error('Your cart is empty');
   }
 
+  console.log(validationSchema._nodes);
   const items = ids.map(id => ({
     id: id,
     variant_id: undefined,
     quantity: +cartRes[id].count,
   }));
   const getSelectedDistrict = (id: number | undefined) => {
+    console.log(id);
     const selected = districts.find(d => d.id === id);
+
     if (!selected) {
       return null;
     }
@@ -268,6 +268,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
   };
 
   const onSubmit = async (data: FormValues) => {
+    setRequestLoading(true);
     const {
       phone,
       floor,
@@ -285,7 +286,6 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
       email,
       apartment,
     } = data;
-
     const [firstname, lastname] = name.split(' ');
     const address = [
       ['Вулиця', street],
@@ -301,20 +301,26 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     const paymentId = payment.find(p => p.code === paymentMethod);
     const shippingId = shipping.find(s => s.code === shippingMethod);
     if (!paymentId) {
+      setRequestLoading(false);
       throw new Error('Payment method not found');
     }
     if (!shippingId) {
+      setRequestLoading(false);
       throw new Error('Shiping method not found');
     }
     const district = city?.districts.find(d => d.id === districtId);
-    if (!district) {
-      throw new Error('District not found');
+    if (shippingMethod === ShippingMethodEnum.Courier) {
+      if (!district) {
+        setRequestLoading(false);
+        throw new Error('District not found');
+      }
     }
     const resultantSpotId =
       shippingMethod === ShippingMethodEnum.Takeaway
         ? spotId
         : getDistrictDefaultSpot(district).id;
     if (!resultantSpotId) {
+      setRequestLoading(false);
       throw new Error('Invalid spot ID');
     }
     try {
@@ -334,10 +340,16 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
         cart: {items},
         sticks: +sticks,
       });
+      AsyncStorage.removeItem('cart');
+      setRequestLoading(false);
+      navigation.goBack();
+      navigation.navigate('ThankYou');
     } catch (e) {
       if (e instanceof Error) {
+        setRequestLoading(false);
         throw new Error(e.message);
       } else {
+        setRequestLoading(false);
         throw new Error(`Unknown error ${e}`);
       }
     }
@@ -345,9 +357,16 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
 
   const spotError = errors.spotId?.message;
   const districtError = errors.districtId?.message;
+  console.log();
 
   return (
     <View>
+      <Spinner
+        visible={requestLoading}
+        textContent={'Loading...'}
+        textStyle={{color: 'yellow'}}
+        overlayColor="rgba(0, 0, 0, 0.75)"
+      />
       <Header />
       <BackButtonScreen navigation={navigation} />
       <View style={styles.container}>
@@ -697,10 +716,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
           </View>
           <TouchableOpacity
             style={styles.orderBtn}
-            onPress={() => {
-              handleSubmit(onSubmit);
-              navigation.navigate('Thank');
-            }}>
+            onPress={handleSubmit(onSubmit)}>
             <Text style={styles.blackText}>Заказать</Text>
           </TouchableOpacity>
         </ScrollView>

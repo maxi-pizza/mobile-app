@@ -2,11 +2,13 @@ import HomeScreen from './Screens/HomeScreen/HomeScreen.tsx';
 import {createStackNavigator} from '@react-navigation/stack';
 import ProductModal from './Screens/Modals/ProductModal.tsx';
 import SearchModal from './Screens/Modals/SearchModal.tsx';
+import ThankYou from '../Cart/Screens/CartScreen/ThankYou.tsx';
 
 type ScreenProps = {
   Home: undefined;
   ProductModal: undefined;
   SearchModal: undefined;
+  ThankYou: undefined;
 };
 const HomeNavigation = () => {
   const Stack = createStackNavigator<ScreenProps>();
@@ -19,7 +21,9 @@ const HomeNavigation = () => {
     <Stack.Navigator initialRouteName="Home">
       <Stack.Group screenOptions={stackOptions}>
         <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="ThankYou" component={ThankYou} />
       </Stack.Group>
+
       <Stack.Group
         screenOptions={{
           presentation: 'modal',
