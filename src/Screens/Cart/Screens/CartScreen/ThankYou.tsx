@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Pressable,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import Header from '../../../../components/Header/Header.tsx';
 import Success from '../../../../assets/Icons/Success.svg';
 import {nh, nw} from '../../../../../normalize.helper.ts';

@@ -2,7 +2,7 @@ import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
-import InformationInput from '../../components/InformationInput/InformationInput.tsx';
+import Input from '../../../../components/Input/Input.tsx';
 import Header from '../../../../components/Header/Header.tsx';
 
 const ResetPasswordScreen = () => {
@@ -10,7 +10,7 @@ const ResetPasswordScreen = () => {
     <View style={styles.container}>
       {/*<Header />*/}
       {/*<Text style={styles.header}>Восстановление пароля</Text>*/}
-      {/*<InformationInput placeholder="Email" inputMode="email" />*/}
+      {/*<Input placeholder="Email" inputMode="email" />*/}
       {/*<Text style={styles.emailText}>*/}
       {/*  Введите Ваш E-mail адрес для которого необходимо скинуть пароль*/}
       {/*</Text>*/}

@@ -10,12 +10,13 @@ import {nh, nw} from '../../../../../../normalize.helper.ts';
 import * as yup from 'yup';
 
 import Swiper from '../components/Swiper.tsx';
-import InformationInput from '../../../../User/components/InformationInput/InformationInput.tsx';
+import Input from '../../../../../components/Input/Input.tsx';
 import DropDown from '../../../../../components/DropDown/DropDown.tsx';
 import Header from '../../../../../components/Header/Header.tsx';
 import BackButtonScreen from '../../../../../components/BackButton/BackButton.tsx';
 import {useQuery} from '@tanstack/react-query';
 import {spotsQuery} from '../../../spots.query.ts';
+import * as Sentry from '@sentry/react-native';
 
 import Truck from '../../../../../assets/Icons/Truck.svg';
 import Package from '../../../../../assets/Icons/Package.svg';
@@ -84,37 +85,29 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
 
   const {data: shippingRes} = useQuery(shippingQuery);
   const {data: paymentRes} = useQuery(paymentQuery);
-  const shipping = (shippingRes?.data || []).map(ship => ship);
+  const shippings = (shippingRes?.data || []).map(ship => ship);
   const shippingIcons = [Package, Truck];
-  const shippingObj = shipping.map((item, index) => ({
+  const shippingObj = shippings.map((item, index) => ({
     value: item.code,
     name: item.name,
     icon: shippingIcons[index],
   }));
 
   const paymentIcons = [Cash, Card];
-  const payment = (paymentRes?.data || []).map(item => item);
-  const paymentObj = payment.map((item, index) => ({
+  const payments = (paymentRes?.data || []).map(item => item);
+  const paymentObj = payments.map((item, index) => ({
     value: item.code,
     name: item.name,
     icon: paymentIcons[index],
   }));
 
   const addresses = (spotsRes || []).map(spot => spot);
-  const filteredAddresses = addresses.filter(
-    spot => spot.city?.slug === store.city,
-  );
-  const spots = filteredAddresses.map(address => ({
-    id: address.id,
-    name: address.name,
-  }));
+  const spots = addresses.filter(spot => spot.city?.slug === store.city);
+
   const cities = (cityRes || []).map(city => city);
 
   const city = cities.find(c => c.slug === store.city);
-  const districts = (city?.districts || []).map(district => ({
-    id: district.id,
-    name: district.name,
-  }));
+  const districts = city?.districts || [];
   const apart = [
     {value: HouseTypeEnum.House, name: 'Приватний будинок'},
     {value: HouseTypeEnum.Apartment, name: 'Апартаменти'},
@@ -235,7 +228,10 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     formState: {errors},
   } = useForm({
     defaultValues: InitialValue,
-    resolver: yupResolver<FormValues>(validationSchema),
+    resolver: yupResolver<FormValues>(
+      // @ts-ignore
+      validationSchema,
+    ),
   });
   const shippingMethod = useWatch({control, name: 'shippingMethod'});
   const paymentMethod = useWatch({control, name: 'paymentMethod'});
@@ -244,14 +240,12 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     throw new Error('Your cart is empty');
   }
 
-  console.log(validationSchema._nodes);
   const items = ids.map(id => ({
     id: id,
     variant_id: undefined,
     quantity: +cartRes[id].count,
   }));
   const getSelectedDistrict = (id: number | undefined) => {
-    console.log(id);
     const selected = districts.find(d => d.id === id);
 
     if (!selected) {
@@ -298,41 +292,29 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
       .map(([label, value]) => `${label}: ${value}`)
       .join(', ');
 
-    const paymentId = payment.find(p => p.code === paymentMethod);
-    const shippingId = shipping.find(s => s.code === shippingMethod);
-    if (!paymentId) {
-      setRequestLoading(false);
-      throw new Error('Payment method not found');
-    }
-    if (!shippingId) {
-      setRequestLoading(false);
-      throw new Error('Shiping method not found');
-    }
+    const paymentId = payments?.find(p => p.code === paymentMethod);
+    const shippingId = shippings.find(s => s.code === shippingMethod);
+
     const district = city?.districts.find(d => d.id === districtId);
-    if (shippingMethod === ShippingMethodEnum.Courier) {
-      if (!district) {
-        setRequestLoading(false);
-        throw new Error('District not found');
-      }
-    }
+
     const resultantSpotId =
       shippingMethod === ShippingMethodEnum.Takeaway
         ? spotId
-        : getDistrictDefaultSpot(district).id;
+        : getDistrictDefaultSpot(district!).id;
     if (!resultantSpotId) {
       setRequestLoading(false);
       throw new Error('Invalid spot ID');
     }
     try {
-      const res = await agent.placeOrderV2({
+      await agent.placeOrderV2({
         phone,
         email,
         firstname,
         lastname,
 
         address,
-        payment_method_id: paymentId.id,
-        shipping_method_id: shippingId.id,
+        payment_method_id: paymentId!.id,
+        shipping_method_id: shippingId!.id,
         spot_id: resultantSpotId,
 
         change,
@@ -357,76 +339,218 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
 
   const spotError = errors.spotId?.message;
   const districtError = errors.districtId?.message;
-  console.log();
 
   return (
-    <View>
-      <Spinner
-        visible={requestLoading}
-        textContent={'Loading...'}
-        textStyle={{color: 'yellow'}}
-        overlayColor="rgba(0, 0, 0, 0.75)"
-      />
-      <Header />
-      <BackButtonScreen navigation={navigation} />
-      <View style={styles.container}>
-        <ScrollView
-          contentContainerStyle={styles.scrollView}
-          showsVerticalScrollIndicator={false}>
-          <Text style={styles.header}>Оформление заказа</Text>
-          <View style={styles.textWrapper}>
-            <View style={styles.circle}>
-              <Text style={{color: 'black', lineHeight: nh(17)}}>1</Text>
-            </View>
-            <Text style={[styles.greyText, {marginLeft: nw(15)}]}>
-              Введите данные
-            </Text>
-          </View>
-          <Controller
-            name="shippingMethod"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <View style={{marginTop: nh(15)}}>
-                <Swiper
-                  options={shippingObj}
-                  value={value}
-                  onValueChange={value => {
-                    onChangeSwiperShippingSchema(value);
-                    onChange(value);
-                  }}
-                />
+    <Sentry.ErrorBoundary fallback={<Text>ggg</Text>}>
+      <View>
+        <Spinner
+          visible={requestLoading}
+          textContent={'Loading...'}
+          textStyle={{color: 'yellow'}}
+          overlayColor="rgba(0, 0, 0, 0.75)"
+        />
+        <Header />
+        <BackButtonScreen navigation={navigation} />
+        <View style={styles.container}>
+          <ScrollView
+            contentContainerStyle={styles.scrollView}
+            showsVerticalScrollIndicator={false}>
+            <Text style={styles.header}>Оформление заказа</Text>
+            <View style={styles.textWrapper}>
+              <View style={styles.circle}>
+                <Text style={{color: 'black', lineHeight: nh(17)}}>1</Text>
               </View>
-            )}
-          />
+              <Text style={[styles.greyText, {marginLeft: nw(15)}]}>
+                Введите данные
+              </Text>
+            </View>
+            <Controller
+              name="shippingMethod"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <View style={{marginTop: nh(15)}}>
+                  <Swiper
+                    options={shippingObj}
+                    value={value}
+                    onValueChange={value => {
+                      onChangeSwiperShippingSchema(value);
+                      onChange(value);
+                    }}
+                  />
+                </View>
+              )}
+            />
 
-          {shippingMethod === ShippingMethodEnum.Courier ? (
-            <View>
-              {districts.length > 1 && (
+            {shippingMethod === ShippingMethodEnum.Courier ? (
+              <View>
+                {districts.length > 1 && (
+                  <Controller
+                    name="districtId"
+                    control={control}
+                    render={({field: {onChange, value}}) => (
+                      <View
+                        style={[
+                          styles.dropDownContainer,
+                          districtError ? styles.errorFocus : null,
+                          {marginTop: nh(15), zIndex: 5},
+                        ]}>
+                        <DropDown
+                          value={value}
+                          placeholder={<Text>Выберите район доставки</Text>}
+                          options={districts}
+                          onChange={d => onChange(d)}
+                          error={errors.districtId?.message}
+                          snapPoints={'30'}>
+                          <View style={styles.inputContainer}>
+                            <Text style={styles.selectOption}>
+                              {getSelectedDistrict(value) ? (
+                                <Text style={styles.whiteText}>
+                                  {getSelectedDistrict(value)}
+                                </Text>
+                              ) : (
+                                'Выберите район доставки'
+                              )}
+                            </Text>
+                            <Caret color="#727272" width="15" />
+                          </View>
+                        </DropDown>
+                      </View>
+                    )}
+                  />
+                )}
+
                 <Controller
-                  name="districtId"
+                  name="houseType"
+                  control={control}
+                  render={({field: {onChange, value}}) => (
+                    <View style={{marginTop: nh(15), marginBottom: nh(15)}}>
+                      <Swiper
+                        options={apart}
+                        value={value}
+                        onValueChange={v => {
+                          onChangeSwiperApartmentShippingSchema(v);
+                          onChange(v);
+                        }}
+                      />
+                    </View>
+                  )}
+                />
+
+                <View style={styles.houseInputs}>
+                  <Controller
+                    name="street"
+                    control={control}
+                    render={({field: {onChange, value}}) => (
+                      <View style={{width: nw(250), zIndex: 6}}>
+                        <Input
+                          placeholder={'Вулиця'}
+                          inputMode={'text'}
+                          onChangeText={v => onChange(v)}
+                          value={value}
+                          error={errors.street?.message}
+                        />
+                      </View>
+                    )}
+                  />
+
+                  <Controller
+                    name="house"
+                    control={control}
+                    render={({field: {onChange, value}}) => (
+                      <View
+                        style={{
+                          width: nw(105),
+                          marginLeft: nw(10),
+                          zIndex: 6,
+                        }}>
+                        <Input
+                          placeholder={'Будинок'}
+                          inputMode={'text'}
+                          onChangeText={v => onChange(v)}
+                          value={value}
+                          error={errors.house?.message}
+                        />
+                      </View>
+                    )}
+                  />
+                </View>
+                {houseType === HouseTypeEnum.Apartment && (
+                  <View style={styles.apartmentInputs}>
+                    <Controller
+                      name="apartment"
+                      control={control}
+                      render={({field: {onChange, value}}) => (
+                        <View style={{width: nw(114), zIndex: 5}}>
+                          <Input
+                            placeholder={'Квартира'}
+                            inputMode={'text'}
+                            onChangeText={v => onChange(v)}
+                            value={value}
+                            error={errors.apartment?.message}
+                          />
+                        </View>
+                      )}
+                    />
+                    <Controller
+                      name="entrance"
+                      control={control}
+                      render={({field: {onChange, value}}) => (
+                        <View style={{width: nw(115), zIndex: 5}}>
+                          <Input
+                            placeholder={"Під'їзд"}
+                            inputMode={'text'}
+                            value={value}
+                            onChangeText={v => onChange(v)}
+                            error={errors.entrance?.message}
+                          />
+                        </View>
+                      )}
+                    />
+                    <Controller
+                      name="floor"
+                      control={control}
+                      render={({field: {onChange, value}}) => (
+                        <View style={{width: nw(115), zIndex: 5}}>
+                          <Input
+                            placeholder={'Поверх'}
+                            inputMode={'numeric'}
+                            value={value}
+                            onChangeText={v => onChange(v)}
+                            error={errors.floor?.message}
+                          />
+                        </View>
+                      )}
+                    />
+                  </View>
+                )}
+              </View>
+            ) : (
+              spots.length > 1 && (
+                <Controller
+                  name="spotId"
                   control={control}
                   render={({field: {onChange, value}}) => (
                     <View
                       style={[
                         styles.dropDownContainer,
-                        districtError ? styles.errorFocus : null,
+                        spotError ? styles.errorFocus : null,
                         {marginTop: nh(15), zIndex: 5},
                       ]}>
                       <DropDown
                         value={value}
-                        placeholder={<Text>Выберите район доставки</Text>}
-                        options={districts}
-                        onChange={d => onChange(d)}
-                        error={errors.districtId?.message}
-                        snapPoints={'30'}>
+                        placeholder={<Text>Оберіть найближчий заклад</Text>}
+                        options={spots}
+                        onChange={s => onChange(s)}
+                        snapPoints={'30'}
+                        error={errors.spotId?.message}>
                         <View style={styles.inputContainer}>
                           <Text style={styles.selectOption}>
-                            {getSelectedDistrict(value) ? (
+                            {getSelectedSpot(value) ? (
                               <Text style={styles.whiteText}>
-                                {getSelectedDistrict(value)}
+                                {getSelectedSpot(value)}
                               </Text>
                             ) : (
-                              'Выберите район доставки'
+                              'Оберіть найближчий заклад'
                             )}
                           </Text>
                           <Caret color="#727272" width="15" />
@@ -435,293 +559,155 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                     </View>
                   )}
                 />
-              )}
-
-              <Controller
-                name="houseType"
-                control={control}
-                render={({field: {onChange, value}}) => (
-                  <View style={{marginTop: nh(15), marginBottom: nh(15)}}>
-                    <Swiper
-                      options={apart}
-                      value={value}
-                      onValueChange={v => {
-                        onChangeSwiperApartmentShippingSchema(v);
-                        onChange(v);
-                      }}
-                    />
-                  </View>
-                )}
-              />
-
-              <View style={styles.houseInputs}>
-                <Controller
-                  name="street"
-                  control={control}
-                  render={({field: {onChange, value}}) => (
-                    <View style={{width: nw(250), zIndex: 6}}>
-                      <InformationInput
-                        placeholder={'Вулиця'}
-                        inputMode={'text'}
-                        onChangeText={v => onChange(v)}
-                        value={value}
-                        error={errors.street?.message}
-                      />
-                    </View>
-                  )}
-                />
-
-                <Controller
-                  name="house"
-                  control={control}
-                  render={({field: {onChange, value}}) => (
-                    <View
-                      style={{
-                        width: nw(105),
-                        marginLeft: nw(10),
-                        zIndex: 6,
-                      }}>
-                      <InformationInput
-                        placeholder={'Будинок'}
-                        inputMode={'text'}
-                        onChangeText={v => onChange(v)}
-                        value={value}
-                        error={errors.house?.message}
-                      />
-                    </View>
-                  )}
-                />
-              </View>
-              {houseType === HouseTypeEnum.Apartment && (
-                <View style={styles.apartmentInputs}>
-                  <Controller
-                    name="apartment"
-                    control={control}
-                    render={({field: {onChange, value}}) => (
-                      <View style={{width: nw(114), zIndex: 5}}>
-                        <InformationInput
-                          placeholder={'Квартира'}
-                          inputMode={'text'}
-                          onChangeText={v => onChange(v)}
-                          value={value}
-                          error={errors.apartment?.message}
-                        />
-                      </View>
-                    )}
-                  />
-                  <Controller
-                    name="entrance"
-                    control={control}
-                    render={({field: {onChange, value}}) => (
-                      <View style={{width: nw(115), zIndex: 5}}>
-                        <InformationInput
-                          placeholder={"Під'їзд"}
-                          inputMode={'text'}
-                          value={value}
-                          onChangeText={v => onChange(v)}
-                          error={errors.entrance?.message}
-                        />
-                      </View>
-                    )}
-                  />
-                  <Controller
-                    name="floor"
-                    control={control}
-                    render={({field: {onChange, value}}) => (
-                      <View style={{width: nw(115), zIndex: 5}}>
-                        <InformationInput
-                          placeholder={'Поверх'}
-                          inputMode={'numeric'}
-                          value={value}
-                          onChangeText={v => onChange(v)}
-                          error={errors.floor?.message}
-                        />
-                      </View>
-                    )}
-                  />
-                </View>
-              )}
-            </View>
-          ) : (
-            spots.length > 1 && (
-              <Controller
-                name="spotId"
-                control={control}
-                render={({field: {onChange, value}}) => (
-                  <View
-                    style={[
-                      styles.dropDownContainer,
-                      spotError ? styles.errorFocus : null,
-                      {marginTop: nh(15), zIndex: 5},
-                    ]}>
-                    <DropDown
-                      value={value}
-                      placeholder={<Text>Оберіть найближчий заклад</Text>}
-                      options={spots}
-                      onChange={s => onChange(s)}
-                      snapPoints={'30'}
-                      error={errors.spotId?.message}>
-                      <View style={styles.inputContainer}>
-                        <Text style={styles.selectOption}>
-                          {getSelectedSpot(value) ? (
-                            <Text style={styles.whiteText}>
-                              {getSelectedSpot(value)}
-                            </Text>
-                          ) : (
-                            'Оберіть найближчий заклад'
-                          )}
-                        </Text>
-                        <Caret color="#727272" width="15" />
-                      </View>
-                    </DropDown>
-                  </View>
-                )}
-              />
-            )
-          )}
-          <Controller
-            name="name"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
-                <InformationInput
-                  placeholder="Имя"
-                  inputMode="text"
-                  value={value}
-                  onChangeText={v => onChange(v)}
-                />
-              </View>
+              )
             )}
-          />
-
-          <Controller
-            name="email"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <View style={styles.inputWrapper}>
-                <InformationInput
-                  placeholder="Email"
-                  inputMode="email"
-                  value={value}
-                  onChangeText={v => onChange(v)}
-                />
-              </View>
-            )}
-          />
-          <Controller
-            name="phone"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <View style={[styles.inputWrapper, {zIndex: 5}]}>
-                <InformationInput
-                  placeholder="Телефон"
-                  inputMode="tel"
-                  value={value}
-                  onChangeText={v => onChange(v)}
-                  error={errors.phone?.message}
-                />
-              </View>
-            )}
-          />
-          <Controller
-            name="comment"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <View style={styles.inputWrapper}>
-                <InformationInput
-                  placeholder="Комментарий к заказу"
-                  inputMode="text"
-                  value={value}
-                  onChangeText={v => onChange(v)}
-                />
-              </View>
-            )}
-          />
-          <View style={styles.textWrapper}>
-            <View style={styles.circle}>
-              <Text style={{color: 'black', lineHeight: nh(17)}}>2</Text>
-            </View>
-            <Text style={[styles.greyText, {marginLeft: nw(15)}]}>
-              Способ оплаты
-            </Text>
-          </View>
-          <Controller
-            name="paymentMethod"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <Swiper
-                value={value}
-                onValueChange={onChange}
-                options={paymentObj}
-              />
-            )}
-          />
-
-          <Controller
-            name="change"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
-                {paymentMethod === 'cash' && (
-                  <InformationInput
-                    placeholder="Приготовить сдачу с"
+            <Controller
+              name="name"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
+                  <Input
+                    placeholder="Имя"
                     inputMode="text"
                     value={value}
                     onChangeText={v => onChange(v)}
                   />
-                )}
-              </View>
-            )}
-          />
-          <Controller
-            name="sticks"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <View style={styles.personCountWrapper}>
-                <ForkKnife
-                  width={nw(32)}
-                  height={nw(32)}
-                  style={styles.forkKnife}
-                  color="white"
-                />
-                <Text style={styles.personText}>Количество персон?</Text>
-                <View style={{marginLeft: nw(45)}}>
-                  <Counter
-                    count={Number(value)}
-                    onHandleAdd={() => onChange(Number(value) + 1)}
-                    onHandleMinus={() =>
-                      onChange(Math.max(Number(value) - 1, 0))
-                    }
+                </View>
+              )}
+            />
+
+            <Controller
+              name="email"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <View style={styles.inputWrapper}>
+                  <Input
+                    placeholder="Email"
+                    inputMode="email"
+                    value={value}
+                    onChangeText={v => onChange(v)}
                   />
                 </View>
+              )}
+            />
+            <Controller
+              name="phone"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <View style={[styles.inputWrapper, {zIndex: 5}]}>
+                  <Input
+                    placeholder="Телефон"
+                    inputMode="tel"
+                    value={value}
+                    onChangeText={v => onChange(v)}
+                    error={errors.phone?.message}
+                  />
+                </View>
+              )}
+            />
+            <Controller
+              name="comment"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <View style={styles.inputWrapper}>
+                  <Input
+                    placeholder="Комментарий к заказу"
+                    inputMode="text"
+                    value={value}
+                    onChangeText={v => onChange(v)}
+                  />
+                </View>
+              )}
+            />
+            <View style={styles.textWrapper}>
+              <View style={styles.circle}>
+                <Text style={{color: 'black', lineHeight: nh(17)}}>2</Text>
               </View>
-            )}
-          />
-          <Text
-            style={[
-              styles.whiteText,
-              {
-                fontSize: nh(16),
-                fontWeight: '500',
-                marginTop: nh(30),
-                marginBottom: nh(10),
-              },
-            ]}>
-            Сумма заказа
-          </Text>
-          <View style={styles.verticalBar} />
-          <View style={styles.priceWrapper}>
-            <Text style={styles.whiteText}>К оплате</Text>
-            <Text style={styles.whiteText}>{total} ₴</Text>
-          </View>
-          <TouchableOpacity
-            style={styles.orderBtn}
-            onPress={handleSubmit(onSubmit)}>
-            <Text style={styles.blackText}>Заказать</Text>
-          </TouchableOpacity>
-        </ScrollView>
+              <Text style={[styles.greyText, {marginLeft: nw(15)}]}>
+                Способ оплаты
+              </Text>
+            </View>
+            <Controller
+              name="paymentMethod"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <Swiper
+                  value={value}
+                  onValueChange={onChange}
+                  options={paymentObj}
+                />
+              )}
+            />
+
+            <Controller
+              name="change"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
+                  {paymentMethod === 'cash' && (
+                    <Input
+                      placeholder="Приготовить сдачу с"
+                      inputMode="text"
+                      value={value}
+                      onChangeText={v => onChange(v)}
+                    />
+                  )}
+                </View>
+              )}
+            />
+            <Controller
+              name="sticks"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <View style={styles.personCountWrapper}>
+                  <ForkKnife
+                    width={nw(32)}
+                    height={nw(32)}
+                    style={styles.forkKnife}
+                    color="white"
+                  />
+                  <Text style={styles.personText}>Количество персон?</Text>
+                  <View style={{marginLeft: nw(45)}}>
+                    <Counter
+                      count={Number(value)}
+                      onHandleAdd={() => onChange(Number(value) + 1)}
+                      onHandleMinus={() =>
+                        onChange(Math.max(Number(value) - 1, 0))
+                      }
+                    />
+                  </View>
+                </View>
+              )}
+            />
+            <Text
+              style={[
+                styles.whiteText,
+                {
+                  fontSize: nh(16),
+                  fontWeight: '500',
+                  marginTop: nh(30),
+                  marginBottom: nh(10),
+                },
+              ]}>
+              Сумма заказа
+            </Text>
+            <View style={styles.verticalBar} />
+            <View style={styles.priceWrapper}>
+              <Text style={styles.whiteText}>К оплате</Text>
+              <Text style={styles.whiteText}>{total} ₴</Text>
+            </View>
+            <TouchableOpacity
+              style={styles.orderBtn}
+              onPress={handleSubmit(
+                // @ts-ignore
+                onSubmit,
+              )}>
+              <Text style={styles.blackText}>Заказать</Text>
+            </TouchableOpacity>
+          </ScrollView>
+        </View>
       </View>
-    </View>
+    </Sentry.ErrorBoundary>
   );
 });
 

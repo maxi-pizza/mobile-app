@@ -10,7 +10,7 @@ import {
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
 import Header from '../../../../components/Header/Header.tsx';
-import InformationInput from '../../components/InformationInput/InformationInput.tsx';
+import Input from '../../../../components/Input/Input.tsx';
 import BackButtonModal from '../../../../components/BackButtonModal/BackButtonModal.tsx';
 
 const ProfileScreen = ({
@@ -30,15 +30,15 @@ const ProfileScreen = ({
       {/*    <View style={styles.inputsWrapper}>*/}
       {/*      <View style={styles.inputTextWrapper}>*/}
       {/*        <Text style={styles.inputLabel}>Имя</Text>*/}
-      {/*        <InformationInput placeholder="Введите Имя" inputMode="text" />*/}
+      {/*        <Input placeholder="Введите Имя" inputMode="text" />*/}
       {/*      </View>*/}
       {/*      <View style={styles.inputTextWrapper}>*/}
       {/*        <Text style={styles.inputLabel}>Email</Text>*/}
-      {/*        <InformationInput placeholder="Введите Email" inputMode="email" />*/}
+      {/*        <Input placeholder="Введите Email" inputMode="email" />*/}
       {/*      </View>*/}
       {/*      <View style={styles.inputTextWrapper}>*/}
       {/*        <Text style={styles.inputLabel}>Телефон</Text>*/}
-      {/*        <InformationInput placeholder="Введите телефон" inputMode="tel" />*/}
+      {/*        <Input placeholder="Введите телефон" inputMode="tel" />*/}
       {/*      </View>*/}
       {/*      <TouchableOpacity style={styles.btnChangePass}>*/}
       {/*        <Text style={styles.changePassText}>Изменить пароль</Text>*/}

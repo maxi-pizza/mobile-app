@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
-import {nh, nw} from '../../../../../normalize.helper.ts';
+import {nh, nw} from '../../../normalize.helper.ts';
 
-const InformationInput = ({
+const Input = ({
   placeholder,
   inputMode,
   onChangeText,
@@ -77,4 +77,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default InformationInput;
+export default Input;

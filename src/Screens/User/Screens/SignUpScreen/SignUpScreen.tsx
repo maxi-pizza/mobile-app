@@ -1,7 +1,7 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
-import InformationInput from '../../components/InformationInput/InformationInput.tsx';
+import Input from '../../../../components/Input/Input.tsx';
 import PasswordInput from '../../components/PasswordInput/PasswordInput.tsx';
 import CheckBox from '../../../../components/CheckBox/CheckBox.tsx';
 import Header from '../../../../components/Header/Header.tsx';
@@ -13,13 +13,13 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
       {/*<Text style={styles.header}>Регистрация</Text>*/}
       {/*<View>*/}
       {/*  <View style={styles.inputMargin}>*/}
-      {/*    <InformationInput placeholder={'Имя'} inputMode={'text'} />*/}
+      {/*    <Input placeholder={'Имя'} inputMode={'text'} />*/}
       {/*  </View>*/}
       {/*  <View style={styles.inputMargin}>*/}
-      {/*    <InformationInput placeholder={'Фамилия'} inputMode={'text'} />*/}
+      {/*    <Input placeholder={'Фамилия'} inputMode={'text'} />*/}
       {/*  </View>*/}
       {/*  <View style={styles.inputMargin}>*/}
-      {/*    <InformationInput placeholder={'Email'} inputMode={'email'} />*/}
+      {/*    <Input placeholder={'Email'} inputMode={'email'} />*/}
       {/*  </View>*/}
       {/*  <View style={styles.inputMargin}>*/}
       {/*    <PasswordInput />*/}
