@@ -1,8 +1,10 @@
 import {makeAutoObservable} from 'mobx';
+import {NavigationProp} from '@react-navigation/native';
 
 class store {
   categorySlug = '';
   city: string = 'odesa';
+  nav: NavigationProp<any> | undefined;
 
   constructor() {
     makeAutoObservable(this);
@@ -12,6 +14,9 @@ class store {
   }
   changeCity(city: string) {
     this.city = city;
+  }
+  changeNavigation(navigation: NavigationProp<any>) {
+    this.nav = navigation;
   }
 }
 

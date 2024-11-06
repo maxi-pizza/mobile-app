@@ -1,5 +1,4 @@
 import React from 'react';
-import {Text, TouchableOpacity, View} from 'react-native';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import UserScreen from './Screens/UserScreen/UserScreen.tsx';

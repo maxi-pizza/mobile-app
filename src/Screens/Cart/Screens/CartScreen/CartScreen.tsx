@@ -21,7 +21,6 @@ import {Product} from '../../../../models/Product.ts';
 import {cartQuery} from '../../cart.query.ts';
 import {appConfig} from '../../../../config/app.ts';
 import {isClosed} from '../../../../components/ClosedRestaurantModal/ClosedRestaurant.tsx';
-import * as Sentry from '@sentry/react-native';
 
 const CartScreen = ({navigation}: {navigation: any}) => {
   const {data: cartItems} = useQuery(cartQuery);
@@ -49,53 +48,42 @@ const CartScreen = ({navigation}: {navigation: any}) => {
   }, 0);
 
   return (
-    <Sentry.ErrorBoundary
-      fallback={() => {
-        return <Text>An error occurred!</Text>;
-      }}
-      showDialog={true}>
-      <View style={styles.container}>
-        <Header />
-        <Pressable
-          style={{backgroundColor: 'black', width: 100, height: 100}}
-          onPress={() => {
-            throw new Error('ccart');
-          }}></Pressable>
-        {ids.length > 0 ? (
-          <View>
-            <Text style={[styles.cartTitle, styles.titleMargin]}>Корзина</Text>
-            <View
-              style={[
-                styles.productsWrapper,
-                {height: ids.length === 1 ? nh(155) : nh(330)},
-              ]}>
-              <ScrollView>
-                {cartProducts.map(item => (
-                  <View key={item.id}>
-                    <ProductCartCard item={item} />
-                  </View>
-                ))}
-              </ScrollView>
-            </View>
+    <View style={styles.container}>
+      <Header />
+      {ids.length > 0 ? (
+        <View>
+          <Text style={[styles.cartTitle, styles.titleMargin]}>Корзина</Text>
+          <View
+            style={[
+              styles.productsWrapper,
+              {height: ids.length === 1 ? nh(155) : nh(330)},
+            ]}>
+            <ScrollView>
+              {cartProducts.map(item => (
+                <View key={item.id}>
+                  <ProductCartCard item={item} />
+                </View>
+              ))}
+            </ScrollView>
+          </View>
 
-            <TouchableOpacity
-              disabled={closed}
-              onPress={() => navigation.navigate('Checkout')}
-              style={[
-                styles.orderButton,
-                closed ? {backgroundColor: 'grey'} : '',
-              ]}>
-              <Text style={styles.checkoutText}>Оформить заказ | {sum} ₴</Text>
-            </TouchableOpacity>
-          </View>
-        ) : (
-          <View style={styles.emptyCart}>
-            <EmptyCart />
-            <Text style={styles.emptyCartText}>Ваша корзина пуста :(</Text>
-          </View>
-        )}
-      </View>
-    </Sentry.ErrorBoundary>
+          <TouchableOpacity
+            disabled={closed}
+            onPress={() => navigation.navigate('Checkout')}
+            style={[
+              styles.orderButton,
+              closed ? {backgroundColor: 'grey'} : '',
+            ]}>
+            <Text style={styles.checkoutText}>Оформить заказ | {sum} ₴</Text>
+          </TouchableOpacity>
+        </View>
+      ) : (
+        <View style={styles.emptyCart}>
+          <EmptyCart />
+          <Text style={styles.emptyCartText}>Ваша корзина пуста :(</Text>
+        </View>
+      )}
+    </View>
   );
 };
 

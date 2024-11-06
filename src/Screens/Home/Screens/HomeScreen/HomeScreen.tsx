@@ -20,6 +20,7 @@ import {bannerQuery} from '../../../../components/Banner/banner.query.ts';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 const HomeScreen = observer(({navigation}: {navigation: any}) => {
+  store.changeNavigation(navigation);
   const {data: wishlists, isLoading: isWishlistLoading} =
     useQuery(wishlistQuery);
 
