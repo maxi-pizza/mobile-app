@@ -4,7 +4,7 @@ import {nh, nw} from '../../../normalize.helper.ts';
 
 import Trash from '../../assets/Icons/Trash.svg';
 
-import Counter from '../Counter/Counter.tsx';
+import {Counter} from '../Counter/Counter.tsx';
 import {Product} from '../../models/Product.ts';
 import Logo from '../../assets/Logo.svg';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';

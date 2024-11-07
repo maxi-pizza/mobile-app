@@ -9,8 +9,7 @@ import {
 } from 'react-native';
 import {nh, nw} from '../../../normalize.helper.ts';
 
-import Counter from '../Counter/Counter.tsx';
-
+import {Counter} from '../Counter/Counter.tsx';
 import Heart from '../../assets/Icons/Heart.svg';
 import {Product} from '../../models/Product.ts';
 import Logo from '../../assets/Logo.svg';
