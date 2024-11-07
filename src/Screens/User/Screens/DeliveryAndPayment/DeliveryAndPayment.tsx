@@ -1,12 +1,11 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import Header from '../../../../components/Header/Header.tsx';
+import {Header, BackButton} from '../../../../components';
 import WebView from 'react-native-webview';
 import {useQuery} from '@tanstack/react-query';
 import store from '../../../../stores/store.ts';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 import {observer} from 'mobx-react-lite';
-import BackButton from '../../../../components/BackButton/BackButton.tsx';
 import {cityQuery} from '../../../../components/Header/city.query.ts';
 
 const DeliveryAndPayment = observer(({navigation}: {navigation: any}) => {

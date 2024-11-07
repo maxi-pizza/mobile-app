@@ -3,7 +3,7 @@ import {Pressable, StyleSheet} from 'react-native';
 import {nw} from '../../../normalize.helper.ts';
 import Caret from '../../assets/Icons/Caret.svg';
 
-const BackButton = ({navigation}: {navigation: any}) => {
+export const BackButton = ({navigation}: {navigation: any}) => {
   return (
     <Pressable style={styles.hideBtn} onPress={() => navigation.goBack()}>
       <Caret style={styles.caret} width="21" height="21" color="black" />
@@ -28,5 +28,3 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
 });
-
-export default BackButton;

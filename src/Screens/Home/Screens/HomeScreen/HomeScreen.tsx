@@ -1,10 +1,14 @@
 import React from 'react';
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
-import Banner from '../../../../components/Banner/Banner.tsx';
-import Category from '../../../../components/Category/Category.tsx';
-import Search from '../../../../components/Search/Search.tsx';
-import Header from '../../../../components/Header/Header.tsx';
+
+import {
+  Header,
+  Category,
+  Banner,
+  Search,
+  ProductCard,
+} from '../../../../components';
 import {useQuery} from '@tanstack/react-query';
 import {productsQuery} from '../../products.query.ts';
 import {DEFAULT_PRODUCT_LIMIT} from '../../products.query.ts';
@@ -14,7 +18,6 @@ import {IProduct} from '@layerok/emojisushi-js-sdk';
 import {wishlistQuery} from '../../../Favourite/wishlist.query.ts';
 import {observer} from 'mobx-react-lite';
 import categoryStore from '../../../../stores/store.ts';
-import ProductCard from '../../../../components/ProductCard/ProductCard.tsx';
 import store from '../../../../stores/store.ts';
 import {bannerQuery} from '../../../../components/Banner/banner.query.ts';
 import Spinner from 'react-native-loading-spinner-overlay';

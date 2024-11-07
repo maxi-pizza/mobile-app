@@ -12,7 +12,7 @@ import Truck from '../../../../assets/Icons/Truck.svg';
 import Phone from '../../../../assets/Icons/Phone.svg';
 import CreditCard from '../../../../assets/Icons/CreditCard.svg';
 import Coins from '../../../../assets/Icons/Coins.svg';
-import Header from '../../../../components/Header/Header.tsx';
+import {Header} from '../../../../components';
 
 const UserScreen = ({navigation}: {navigation: any}) => {
   // const [logged, setLogged] = useState(true);

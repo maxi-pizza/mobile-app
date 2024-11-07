@@ -4,7 +4,7 @@ import {nh, nw} from '../../../normalize.helper.ts';
 
 import MagnifyingGlass from '../../assets/Icons/MagnifyingGlass.svg';
 
-const Search = ({
+export const Search = ({
   editable,
   autoFocus,
   onSearch,
@@ -61,4 +61,3 @@ const styles = StyleSheet.create({
     borderColor: 'yellow',
   },
 });
-export default Search;

@@ -2,7 +2,7 @@ import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
-import Header from '../../../../components/Header/Header.tsx';
+import {Header} from '../../../../components';
 import {useQuery} from '@tanstack/react-query';
 import {categoriesQuery} from '../../categories.query.ts';
 import {observer} from 'mobx-react-lite';

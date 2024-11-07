@@ -8,20 +8,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Header from '../../../../components/Header/Header.tsx';
+import {Header, BackButton, Counter} from '../../../../components';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
 import Heart from '../../../../assets/Icons/Heart.svg';
 import {Product} from '../../../../models/Product.ts';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {addItem, CART_QUERY_KEY, cartQuery} from '../../../Cart/cart.query.ts';
-import Counter from '../../../../components/Counter/Counter.tsx';
 import {
   addToWishlist,
   WISHLIST_QUERY_KEY,
   wishlistQuery,
 } from '../../../Favourite/wishlist.query.ts';
-import BackButtonScreen from '../../../../components/BackButton/BackButton.tsx';
+
 import NullImage from '../../../../assets/Logo.svg';
 
 const ProductModal = ({route, navigation}: {route: any; navigation: any}) => {
@@ -74,7 +73,7 @@ const ProductModal = ({route, navigation}: {route: any; navigation: any}) => {
   return (
     <View>
       <Header />
-      <BackButtonScreen navigation={navigation} />
+      <BackButton navigation={navigation} />
       <View style={styles.container}>
         <View style={styles.productContainer}>
           {product.mainImage ? (

@@ -14,7 +14,7 @@ import {
   cartQuery,
 } from '../../Screens/Cart/cart.query.ts';
 
-const ProductCartCard = ({item}: {item: Product}) => {
+export const ProductCartCard = ({item}: {item: Product}) => {
   const queryClient = useQueryClient();
 
   const {data: cart} = useQuery(cartQuery);
@@ -166,5 +166,3 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
 });
-
-export default ProductCartCard;

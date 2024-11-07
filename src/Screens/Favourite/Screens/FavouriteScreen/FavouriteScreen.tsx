@@ -1,7 +1,7 @@
 import React from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
-import Header from '../../../../components/Header/Header.tsx';
+import {Header, ProductCard} from '../../../../components';
 import {useQuery} from '@tanstack/react-query';
 import {wishlistQuery} from '../../wishlist.query.ts';
 import {Product} from '../../../../models/Product.ts';
@@ -9,7 +9,6 @@ import {
   DEFAULT_PRODUCT_LIMIT,
   productsQuery,
 } from '../../../Home/products.query.ts';
-import ProductCard from '../../../../components/ProductCard/ProductCard.tsx';
 
 import NoResult from '../../../../assets/Icons/NoResultSearch.svg';
 

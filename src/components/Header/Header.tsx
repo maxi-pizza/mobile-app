@@ -11,7 +11,7 @@ import {useQuery} from '@tanstack/react-query';
 import store from '../../stores/store.ts';
 import {cityQuery} from './city.query.ts';
 
-const Header = () => {
+export const Header = () => {
   const {data: citiesRes} = useQuery(cityQuery);
   const cities = (citiesRes || []).map(c => ({
     id: c.id,
@@ -98,5 +98,3 @@ const styles = StyleSheet.create({
     paddingBottom: nh(10),
   },
 });
-
-export default Header;

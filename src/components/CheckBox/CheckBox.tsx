@@ -4,14 +4,12 @@ import {nh, nw} from '../../../normalize.helper.ts';
 
 import Check from '../../assets/Icons/Check.svg';
 
-const CheckBox = () => {
+export const CheckBox = () => {
   const [isActive, setIsActive] = useState(false);
   return (
-        <Pressable style={styles.container} onPress={() => setIsActive(!isActive)}>
-          {isActive && (
-              <Check color="#FFE600"/>
-          )}
-        </Pressable>
+    <Pressable style={styles.container} onPress={() => setIsActive(!isActive)}>
+      {isActive && <Check color="#FFE600" />}
+    </Pressable>
   );
 };
 
@@ -26,5 +24,3 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
 });
-
-export default CheckBox;

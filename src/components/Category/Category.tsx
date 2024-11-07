@@ -7,7 +7,7 @@ import {categoriesQuery} from '../../Screens/Category/categories.query.ts';
 import store from '../../stores/store.ts';
 import {observer} from 'mobx-react-lite';
 
-const Category = observer(() => {
+export const Category = observer(() => {
   const {data: categoriesRes, isLoading} = useQuery({
     ...categoriesQuery(),
   });
@@ -58,5 +58,3 @@ const styles = StyleSheet.create({
     marginRight: nw(15),
   },
 });
-
-export default Category;

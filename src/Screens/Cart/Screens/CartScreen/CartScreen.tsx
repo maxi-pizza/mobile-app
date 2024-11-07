@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -10,8 +9,7 @@ import {
 
 import EmptyCart from '../../../../assets/Icons/EmptyCart.svg';
 import {nh, nw} from '../../../../../normalize.helper.ts';
-import ProductCartCard from '../../../../components/ProductCartCard/ProductCartCard.tsx';
-import Header from '../../../../components/Header/Header.tsx';
+import {ProductCartCard, Header, isClosed} from '../../../../components';
 import {useQuery} from '@tanstack/react-query';
 import {
   DEFAULT_PRODUCT_LIMIT,
@@ -20,7 +18,6 @@ import {
 import {Product} from '../../../../models/Product.ts';
 import {cartQuery} from '../../cart.query.ts';
 import {appConfig} from '../../../../config/app.ts';
-import {isClosed} from '../../../../components/ClosedRestaurantModal/ClosedRestaurant.tsx';
 
 const CartScreen = ({navigation}: {navigation: any}) => {
   const {data: cartItems} = useQuery(cartQuery);

@@ -1,10 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
-import Input from '../../../../components/Input/Input.tsx';
 import PasswordInput from '../../components/PasswordInput/PasswordInput.tsx';
-import CheckBox from '../../../../components/CheckBox/CheckBox.tsx';
-import Header from '../../../../components/Header/Header.tsx';
+
+import {Header, Input, CheckBox} from '../../../../components';
 
 const SignUpScreen = ({navigation}: {navigation: any}) => {
   return (

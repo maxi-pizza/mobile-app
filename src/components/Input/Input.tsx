@@ -2,7 +2,41 @@ import React, {useState} from 'react';
 import {StyleSheet, Text, TextInput, View} from 'react-native';
 import {nh, nw} from '../../../normalize.helper.ts';
 
-const Input = ({
+const styles = StyleSheet.create({
+  input: {
+    height: nh(47),
+    borderRadius: 10,
+    backgroundColor: '#272727',
+    color: 'white',
+    paddingLeft: nw(10),
+    fontSize: nh(14),
+    fontFamily: 'MontserratRegular',
+  },
+  focused: {
+    borderWidth: 1,
+    borderColor: '#FFE600',
+  },
+  errorFocus: {
+    borderWidth: 1,
+    borderColor: 'red',
+  },
+  errorContainer: {
+    paddingHorizontal: 5,
+    paddingVertical: 2,
+    backgroundColor: 'rgb(205, 56, 56)',
+    position: 'absolute',
+    right: 0,
+    top: 45,
+  },
+  errorText: {
+    fontFamily: 'MontserratRegular',
+    fontSize: nh(12),
+    color: 'white',
+    fontWeight: '500',
+  },
+});
+
+export const Input = ({
   placeholder,
   inputMode,
   onChangeText,
@@ -42,39 +76,3 @@ const Input = ({
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  input: {
-    height: nh(47),
-    borderRadius: 10,
-    backgroundColor: '#272727',
-    color: 'white',
-    paddingLeft: nw(10),
-    fontSize: nh(14),
-    fontFamily: 'MontserratRegular',
-  },
-  focused: {
-    borderWidth: 1,
-    borderColor: '#FFE600',
-  },
-  errorFocus: {
-    borderWidth: 1,
-    borderColor: 'red',
-  },
-  errorContainer: {
-    paddingHorizontal: 5,
-    paddingVertical: 2,
-    backgroundColor: 'rgb(205, 56, 56)',
-    position: 'absolute',
-    right: 0,
-    top: 45,
-  },
-  errorText: {
-    fontFamily: 'MontserratRegular',
-    fontSize: nh(12),
-    color: 'white',
-    fontWeight: '500',
-  },
-});
-
-export default Input;

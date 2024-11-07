@@ -3,7 +3,7 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
 import OrderCard from './components/OrderCard.tsx';
-import Header from '../../../../components/Header/Header.tsx';
+import {Header} from '../../../../components';
 
 const OrderHistoryScreen = () => {
   return (

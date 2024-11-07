@@ -26,7 +26,7 @@ import {
   WISHLIST_QUERY_KEY,
 } from '../../Screens/Favourite/wishlist.query.ts';
 
-const ProductCard = ({
+export const ProductCard = ({
   product,
   wishlists,
   navigation,
@@ -271,5 +271,3 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
 });
-
-export default ProductCard;

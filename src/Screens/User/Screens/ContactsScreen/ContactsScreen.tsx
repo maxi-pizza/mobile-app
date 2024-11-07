@@ -12,8 +12,7 @@ import {nh, nw} from '../../../../../normalize.helper.ts';
 import Phone from '../../../../assets/Icons/Phone.svg';
 import Instagram from '../../../../assets/Icons/Instagram.svg';
 import Telegram from '../../../../assets/Icons/Telegram.svg';
-import Header from '../../../../components/Header/Header.tsx';
-import BackButton from '../../../../components/BackButton/BackButton.tsx';
+import {Header, BackButton} from '../../../../components';
 import {useQuery} from '@tanstack/react-query';
 
 import store from '../../../../stores/store.ts';

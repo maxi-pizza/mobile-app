@@ -1,17 +1,14 @@
 import React, {useState} from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import Header from '../../../../components/Header/Header.tsx';
-import Search from '../../../../components/Search/Search.tsx';
+import {Header, Search, ProductCard, BackButton} from '../../../../components';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 import NoResultSearch from '../../../../assets/Icons/NoResultSearch.svg';
 import {useQuery} from '@tanstack/react-query';
 import {DEFAULT_PRODUCT_LIMIT, productsQuery} from '../../products.query.ts';
 import {Product} from '../../../../models/Product.ts';
-import ProductCard from '../../../../components/ProductCard/ProductCard.tsx';
 import {fuzzySearch} from '../../../../common/utils/fuzzySearch.ts';
 import store from '../../../../stores/store.ts';
 import {observer} from 'mobx-react-lite';
-import BackButton from '../../../../components/BackButton/BackButton.tsx';
 
 const SearchModal = observer(({navigation}: {navigation: any}) => {
   const [search, setSearch] = useState('');

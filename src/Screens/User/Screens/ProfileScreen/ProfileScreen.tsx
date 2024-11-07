@@ -9,9 +9,7 @@ import {
 } from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
-import Header from '../../../../components/Header/Header.tsx';
-import Input from '../../../../components/Input/Input.tsx';
-import BackButtonModal from '../../../../components/BackButtonModal/BackButtonModal.tsx';
+import {Header, Input, BackButtonModal} from '../../../../components';
 
 const ProfileScreen = ({
   visible,

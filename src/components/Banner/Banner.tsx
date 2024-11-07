@@ -1,9 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
 import {nh, nw} from '../../../normalize.helper.ts';
-import {QueryOptions, useQuery} from '@tanstack/react-query';
-import {agent} from '../../../APIClient.tsx';
-import {IGetBannersRes} from '@layerok/emojisushi-js-sdk';
+import {useQuery} from '@tanstack/react-query';
 import Animated, {
   scrollTo,
   useAnimatedRef,
@@ -12,7 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {bannerQuery} from './banner.query.ts';
 
-const Banner = () => {
+export const Banner = () => {
   const flatRef = useAnimatedRef<Animated.FlatList<any>>();
   const [isAuto, setIsAuto] = useState(true);
   const interval = useRef<NodeJS.Timeout>();
@@ -80,5 +78,3 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
 });
-
-export default Banner;

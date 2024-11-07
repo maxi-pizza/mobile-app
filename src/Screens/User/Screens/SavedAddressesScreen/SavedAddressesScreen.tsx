@@ -3,7 +3,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '../../../../../normalize.helper.ts';
 
 import SavedAddress from './components/SavedAddress.tsx';
-import Header from '../../../../components/Header/Header.tsx';
+import {Header} from '../../../../components';
 
 const SavedAddressesScreen = () => {
   return (
