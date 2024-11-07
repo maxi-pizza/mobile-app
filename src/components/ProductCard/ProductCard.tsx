@@ -7,23 +7,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {nh, nw} from '../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import {Counter} from '../Counter/Counter.tsx';
+import {Counter} from '~/components';
 import Heart from '../../assets/Icons/Heart.svg';
-import {Product} from '../../models/Product.ts';
+import {Product} from '~/models/Product.ts';
 import Logo from '../../assets/Logo.svg';
 
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {
-  addItem,
-  CART_QUERY_KEY,
-  cartQuery,
-} from '../../Screens/Cart/cart.query.ts';
+import {addItem, CART_QUERY_KEY, cartQuery} from '~/Screens/Cart/cart.query.ts';
 import {
   addToWishlist,
   WISHLIST_QUERY_KEY,
-} from '../../Screens/Favourite/wishlist.query.ts';
+} from '~/Screens/Favourite/wishlist.query.ts';
 
 export const ProductCard = ({
   product,

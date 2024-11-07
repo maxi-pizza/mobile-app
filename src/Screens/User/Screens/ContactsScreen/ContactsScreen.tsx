@@ -7,17 +7,17 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {nh, nw} from '../../../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import Phone from '../../../../assets/Icons/Phone.svg';
-import Instagram from '../../../../assets/Icons/Instagram.svg';
-import Telegram from '../../../../assets/Icons/Telegram.svg';
-import {Header, BackButton} from '../../../../components';
+import Phone from '~/assets/Icons/Phone.svg';
+import Instagram from '~/assets/Icons/Instagram.svg';
+import Telegram from '~/assets/Icons/Telegram.svg';
+import {Header, BackButton} from '~/components';
 import {useQuery} from '@tanstack/react-query';
 
-import store from '../../../../stores/store.ts';
+import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
-import {cityQuery} from '../../../../components/Header/city.query.ts';
+import {cityQuery} from '~/components/Header/city.query.ts';
 
 const ContactsScreen = observer(({navigation}: {navigation: any}) => {
   const {data: cityRes} = useQuery(cityQuery);

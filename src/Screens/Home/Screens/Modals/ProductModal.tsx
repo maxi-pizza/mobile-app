@@ -8,20 +8,20 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {Header, BackButton, Counter} from '../../../../components';
-import {nh, nw} from '../../../../../normalize.helper.ts';
+import {Header, BackButton, Counter} from '~/components';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import Heart from '../../../../assets/Icons/Heart.svg';
-import {Product} from '../../../../models/Product.ts';
+import Heart from '~/assets/Icons/Heart.svg';
+import {Product} from '~/models/Product.ts';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {addItem, CART_QUERY_KEY, cartQuery} from '../../../Cart/cart.query.ts';
+import {addItem, CART_QUERY_KEY, cartQuery} from '~/Screens/Cart/cart.query.ts';
 import {
   addToWishlist,
   WISHLIST_QUERY_KEY,
   wishlistQuery,
-} from '../../../Favourite/wishlist.query.ts';
+} from '~/Screens/Favourite/wishlist.query.ts';
 
-import NullImage from '../../../../assets/Logo.svg';
+import NullImage from '~/assets/Logo.svg';
 
 const ProductModal = ({route, navigation}: {route: any; navigation: any}) => {
   const queryClient = useQueryClient();

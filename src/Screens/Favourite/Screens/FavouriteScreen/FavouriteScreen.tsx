@@ -1,16 +1,16 @@
 import React from 'react';
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import {nh, nw} from '../../../../../normalize.helper.ts';
-import {Header, ProductCard} from '../../../../components';
+import {nh, nw} from '~/common/normalize.helper.ts';
+import {Header, ProductCard} from '~/components';
 import {useQuery} from '@tanstack/react-query';
-import {wishlistQuery} from '../../wishlist.query.ts';
-import {Product} from '../../../../models/Product.ts';
+import {wishlistQuery} from '~/Screens/Favourite/wishlist.query.ts';
+import {Product} from '~/models/Product.ts';
 import {
   DEFAULT_PRODUCT_LIMIT,
   productsQuery,
-} from '../../../Home/products.query.ts';
+} from '~/Screens/Home/products.query.ts';
 
-import NoResult from '../../../../assets/Icons/NoResultSearch.svg';
+import NoResult from '~/assets/Icons/NoResultSearch.svg';
 
 const FavouriteScreen = ({navigation}: {navigation: any}) => {
   const {data: wishlists, isLoading: isWishlistLoading} =

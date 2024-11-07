@@ -1,25 +1,20 @@
 import React from 'react';
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
-import {nh, nw} from '../../../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import {
-  Header,
-  Category,
-  Banner,
-  Search,
-  ProductCard,
-} from '../../../../components';
+import {Header, Category, Banner, Search, ProductCard} from '~/components';
 import {useQuery} from '@tanstack/react-query';
-import {productsQuery} from '../../products.query.ts';
-import {DEFAULT_PRODUCT_LIMIT} from '../../products.query.ts';
-import {Product} from '../../../../models/Product.ts';
-import {categoriesQuery} from '../../../Category/categories.query.ts';
+import {
+  productsQuery,
+  DEFAULT_PRODUCT_LIMIT,
+} from '~/Screens/Home/products.query.ts';
+import {Product} from '~/models/Product.ts';
+import {categoriesQuery} from '~/Screens/Category/categories.query.ts';
 import {IProduct} from '@layerok/emojisushi-js-sdk';
-import {wishlistQuery} from '../../../Favourite/wishlist.query.ts';
+import {wishlistQuery} from '~/Screens/Favourite/wishlist.query.ts';
 import {observer} from 'mobx-react-lite';
-import categoryStore from '../../../../stores/store.ts';
-import store from '../../../../stores/store.ts';
-import {bannerQuery} from '../../../../components/Banner/banner.query.ts';
+import store from '~/stores/store.ts';
+import {bannerQuery} from '~/components/Banner/banner.query.ts';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 const HomeScreen = observer(({navigation}: {navigation: any}) => {
@@ -45,7 +40,7 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
       .filter(category =>
         store.city === 'chorno' ? category.slug !== 'pitsa' : true,
       )
-      .find(category => category.slug === categoryStore.categorySlug);
+      .find(category => category.slug === store.categorySlug);
   };
 
   const categoryItems = (productQueryRes?.data || []).filter(belongsToCategory);
@@ -53,7 +48,7 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
   const items = categoryItems.map(item => new Product(item));
 
   const selectedCategory = (categoryQueryRes?.data || []).find(category => {
-    return category.slug === categoryStore.categorySlug;
+    return category.slug === store.categorySlug;
   });
   const isLoading = isWishlistLoading || isCategoryLoading || isProductsLoading;
   return (

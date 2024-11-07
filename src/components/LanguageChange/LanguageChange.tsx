@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Pressable, StyleSheet, Text} from 'react-native';
-import {nh, nw} from '../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
 const LanguageChange = () => {
   const [isActive, setIsActive] = useState(true);

@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {nh, nw} from '../../../../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import Heart from '../../../../../assets/Icons/Heart.svg';
-import Trash from '../../../../../assets/Icons/Trash.svg';
+import Heart from '~/assets/Icons/Heart.svg';
+import Trash from '~/assets/Icons/Trash.svg';
 
 const SavedAddress = ({address}: {address: string}) => {
   const [isFavourite, setIsFavourite] = useState(false);

@@ -1,8 +1,8 @@
 import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
-import CartScreen from './Screens/CartScreen/CartScreen.tsx';
-import Checkout from './Screens/CartScreen/modals/Checkout.tsx';
+import CartScreen from '~/Screens/Cart/Screens/CartScreen/CartScreen.tsx';
+import Checkout from '~/Screens/Cart/Screens/CartScreen/modals/Checkout.tsx';
 
 type ScreenProps = {
   CartScreen: undefined;

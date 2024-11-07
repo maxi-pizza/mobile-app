@@ -7,9 +7,9 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {nh, nw} from '../../../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import {Header, Input, BackButtonModal} from '../../../../components';
+import {Header, Input, BackButtonModal} from '~/components';
 
 const ProfileScreen = ({
   visible,

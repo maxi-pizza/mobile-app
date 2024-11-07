@@ -1,7 +1,7 @@
 import React from 'react';
 import {Pressable, StyleSheet} from 'react-native';
-import {nw} from '../../../normalize.helper.ts';
-import Caret from '../../assets/Icons/Caret.svg';
+import {nw} from '~/common/normalize.helper.ts';
+import Caret from '~/assets/Icons/Caret.svg';
 
 export const BackButton = ({navigation}: {navigation: any}) => {
   return (

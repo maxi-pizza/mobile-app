@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Header} from '../../../../components';
-import Success from '../../../../assets/Icons/Success.svg';
-import {nh, nw} from '../../../../../normalize.helper.ts';
+import {Header} from '~/components';
+import Success from '~/assets/Icons/Success.svg';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
 const ThankYou = ({navigation}: {navigation: any}) => {
   return (

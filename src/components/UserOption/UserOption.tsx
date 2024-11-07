@@ -1,8 +1,8 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {nh, nw} from '../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-const UserOption = ({
+export const UserOption = ({
   svgIcon,
   title,
 }: {
@@ -45,5 +45,3 @@ const styles = StyleSheet.create({
     marginBottom: nh(15),
   },
 });
-
-export default UserOption;

@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {nh, nw} from '../../../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import SavedAddress from './components/SavedAddress.tsx';
-import {Header} from '../../../../components';
+import SavedAddress from '~/Screens/User/Screens/SavedAddressesScreen/components/SavedAddress.tsx';
+import {Header} from '~/components';
 
 const SavedAddressesScreen = () => {
   return (

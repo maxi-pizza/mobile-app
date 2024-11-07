@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Image, StyleSheet, View} from 'react-native';
-import {nh, nw} from '../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 import {useQuery} from '@tanstack/react-query';
 import Animated, {
   scrollTo,

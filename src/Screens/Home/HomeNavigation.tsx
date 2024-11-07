@@ -1,8 +1,8 @@
-import HomeScreen from './Screens/HomeScreen/HomeScreen.tsx';
+import HomeScreen from '~/Screens/Home/Screens/HomeScreen/HomeScreen.tsx';
 import {createStackNavigator} from '@react-navigation/stack';
-import ProductModal from './Screens/Modals/ProductModal.tsx';
-import SearchModal from './Screens/Modals/SearchModal.tsx';
-import ThankYou from '../Cart/Screens/CartScreen/ThankYou.tsx';
+import ProductModal from '~/Screens/Home/Screens/Modals/ProductModal.tsx';
+import SearchModal from '~/Screens/Home/Screens/Modals/SearchModal.tsx';
+import ThankYou from '~/Screens/Cart/Screens/CartScreen/ThankYou.tsx';
 
 type ScreenProps = {
   Home: undefined;

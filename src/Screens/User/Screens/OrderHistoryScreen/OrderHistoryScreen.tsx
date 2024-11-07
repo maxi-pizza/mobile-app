@@ -1,9 +1,9 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {nh, nw} from '../../../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
 import OrderCard from './components/OrderCard.tsx';
-import {Header} from '../../../../components';
+import {Header} from '~/components';
 
 const OrderHistoryScreen = () => {
   return (

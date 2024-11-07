@@ -1,8 +1,8 @@
 import React from 'react';
 import {Image, StyleSheet, Text, View} from 'react-native';
-import {nh, nw} from '../../../../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import ProductSrc from '../../../../../assets/Product.png';
+import ProductSrc from '~/assets/Product.png';
 
 const ProductCardInCheckout = () => {
   return (

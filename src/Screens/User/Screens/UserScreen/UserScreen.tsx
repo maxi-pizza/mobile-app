@@ -1,18 +1,17 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {nh, nw} from '../../../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import UserOption from '../../../../components/UserOption/UserOption.tsx';
 import ProfileScreen from '../ProfileScreen/ProfileScreen.tsx';
 
-import UserCircle from '../../../../assets/Icons/UserCircle.svg';
-import Caret from '../../../../assets/Icons/Caret.svg';
-import ClockCounter from '../../../../assets/Icons/ClockCounterClockwise.svg';
-import Truck from '../../../../assets/Icons/Truck.svg';
-import Phone from '../../../../assets/Icons/Phone.svg';
-import CreditCard from '../../../../assets/Icons/CreditCard.svg';
-import Coins from '../../../../assets/Icons/Coins.svg';
-import {Header} from '../../../../components';
+import UserCircle from '~/assets/Icons/UserCircle.svg';
+import Caret from '~/assets/Icons/Caret.svg';
+import ClockCounter from '~/assets/Icons/ClockCounterClockwise.svg';
+import Truck from '~/assets/Icons/Truck.svg';
+import Phone from '~/assets/Icons/Phone.svg';
+import CreditCard from '~/assets/Icons/CreditCard.svg';
+import Coins from '~/assets/Icons/Coins.svg';
+import {Header, UserOption} from '~/components';
 
 const UserScreen = ({navigation}: {navigation: any}) => {
   // const [logged, setLogged] = useState(true);

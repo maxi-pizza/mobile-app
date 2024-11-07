@@ -1,24 +1,20 @@
 import React from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import {nh, nw} from '../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import Trash from '../../assets/Icons/Trash.svg';
+import Trash from '~/assets/Icons/Trash.svg';
 
-import {Counter} from '../Counter/Counter.tsx';
-import {Product} from '../../models/Product.ts';
-import Logo from '../../assets/Logo.svg';
+import {Counter} from '~/components';
+import {Product} from '~/models/Product.ts';
+import Logo from '~/assets/Logo.svg';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {
-  addItem,
-  CART_QUERY_KEY,
-  cartQuery,
-} from '../../Screens/Cart/cart.query.ts';
+import {addItem, CART_QUERY_KEY, cartQuery} from '~/Screens/Cart/cart.query.ts';
 
 export const ProductCartCard = ({item}: {item: Product}) => {
   const queryClient = useQueryClient();
 
   const {data: cart} = useQuery(cartQuery);
-  const count = cart?.[item.id]?.['count'] || 0;
+  const count = cart?.[item.id]?.count || 0;
   const storagePrice = item?.getNewPrice(undefined)?.price;
 
   const {mutate} = useMutation({

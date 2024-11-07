@@ -1,18 +1,15 @@
-import { StyleSheet, View } from 'react-native';
-import {nh, nw} from '../../../normalize.helper.ts';
-import HomeButtonSvg from '../../assets/Icons/home.svg';
+import {StyleSheet, View} from 'react-native';
+import {nh, nw} from '~/common/normalize.helper.ts';
+import HomeButtonSvg from '~/assets/Icons/home.svg';
 import React from 'react';
-
 
 const HomeButton: React.FC = () => {
   return (
     <View style={[styles.container, styles.shadowProp, styles.margin]}>
-        <HomeButtonSvg style={styles.img} />
+      <HomeButtonSvg style={styles.img} />
     </View>
-
   );
 };
-
 
 const styles = StyleSheet.create({
   container: {
@@ -22,7 +19,6 @@ const styles = StyleSheet.create({
     borderRadius: nw(60),
     alignItems: 'center',
     justifyContent: 'center',
-
   },
   img: {
     width: nw(20),

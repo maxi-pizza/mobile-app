@@ -1,10 +1,10 @@
 import React, {useEffect} from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {CategoryCard} from '../CategoryCard/CategoryCard.tsx';
-import {nh, nw} from '../../../normalize.helper.ts';
+import {CategoryCard} from '~/components';
+import {nh, nw} from '~/common/normalize.helper.ts';
 import {useQuery} from '@tanstack/react-query';
-import {categoriesQuery} from '../../Screens/Category/categories.query.ts';
-import store from '../../stores/store.ts';
+import {categoriesQuery} from '~/Screens/Category/categories.query.ts';
+import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
 
 export const Category = observer(() => {

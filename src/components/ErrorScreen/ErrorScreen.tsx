@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
-import ErrorSvg from '../../assets/Icons/Error.svg';
-import {nh, nw} from '../../../normalize.helper.ts';
-import store from '../../stores/store.ts';
+import ErrorSvg from '~/assets/Icons/Error.svg';
+import {nh, nw} from '~/common/normalize.helper.ts';
+import store from '~/stores/store.ts';
 
 const ErrorScreen = ({resetError}: {resetError: () => void}) => {
   console.log(resetError);

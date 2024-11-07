@@ -1,15 +1,15 @@
 import React, {useCallback} from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {RouteProp} from '@react-navigation/core/src/types.tsx';
-import {nh} from '../../../normalize.helper.ts';
+import {nh} from '~/common/normalize.helper.ts';
 
-import TabBarIcon from '../TabBarIcon/TabBarIcon.tsx';
-import FavouriteScreen from '../../Screens/Favourite/Screens/FavouriteScreen/FavouriteScreen.tsx';
-import CategoryScreen from '../../Screens/Category/Screens/CategoryScreen/CategoryScreen.tsx';
+import TabBarIcon from '~/components/TabBarIcon/TabBarIcon.tsx';
+import FavouriteScreen from '~/Screens/Favourite/Screens/FavouriteScreen/FavouriteScreen.tsx';
+import CategoryScreen from '~/Screens/Category/Screens/CategoryScreen/CategoryScreen.tsx';
 
-import StackNavigation from '../../Screens/User/StackNavigation.tsx';
-import CartNavigation from '../../Screens/Cart/CartNavigation.tsx';
-import HomeNavigation from '../../Screens/Home/HomeNavigation.tsx';
+import StackNavigation from '~/Screens/User/StackNavigation.tsx';
+import CartNavigation from '~/Screens/Cart/CartNavigation.tsx';
+import HomeNavigation from '~/Screens/Home/HomeNavigation.tsx';
 
 type RootTabParams = {
   HomeNavigation: undefined;

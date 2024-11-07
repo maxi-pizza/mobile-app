@@ -1,9 +1,9 @@
 import React, {useState} from 'react';
 import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
-import {nh, nw} from '../../../../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import Caret from '../../../../../assets/Icons/Caret.svg';
-import ProductSrc from '../../.././../../assets/Product.png';
+import Caret from '~/assets/Icons/Caret.svg';
+import ProductSrc from '~/assets/Product.png';
 
 const OrderCard = ({status}: {status: boolean}) => {
   const [isOpen, setIsOpen] = useState(false);

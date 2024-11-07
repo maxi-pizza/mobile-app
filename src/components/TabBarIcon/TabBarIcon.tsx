@@ -1,11 +1,11 @@
 import React from 'react';
-import HomeButton from '../HomeButton/HomeButton.tsx';
-import Heart from '../../assets/Icons/Heart.svg';
-import Category from '../../assets/Icons/Category.svg';
-import User from '../../assets/Icons/User.svg';
+import HomeButton from '~/components/HomeButton/HomeButton.tsx';
+import Heart from '~/assets/Icons/Heart.svg';
+import Category from '~/assets/Icons/Category.svg';
+import User from '~/assets/Icons/User.svg';
 import {TouchableOpacity} from 'react-native';
 import {NavigationProp} from '@react-navigation/native';
-import CartBottomTab from '../CartBottomTab/CartBottomTab.tsx';
+import CartBottomTab from '~/components/CartBottomTab/CartBottomTab.tsx';
 
 type TabBarIconProps = {
   routeName: 'HomeNavigation' | 'Favourite' | 'Cart' | 'Category' | 'User';

@@ -6,42 +6,37 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {nh, nw} from '../../../../../../normalize.helper.ts';
+
 import * as yup from 'yup';
 
 import Swiper from '../components/Swiper.tsx';
-import {
-  Input,
-  Counter,
-  Header,
-  BackButton,
-  DropDown,
-} from '../../../../../components';
+import {Input, Counter, Header, BackButton, DropDown} from '~/components';
 
 import {useQuery} from '@tanstack/react-query';
-import {spotsQuery} from '../../../spots.query.ts';
+import {spotsQuery} from '~/Screens/Cart/spots.query.ts';
 import * as Sentry from '@sentry/react-native';
 
-import Truck from '../../../../../assets/Icons/Truck.svg';
-import Package from '../../../../../assets/Icons/Package.svg';
-import Card from '../../../../../assets/Icons/CreditCard.svg';
-import Cash from '../../../../../assets/Icons/Money.svg';
+import Truck from '~/assets/Icons/Truck.svg';
+import Package from '~/assets/Icons/Package.svg';
+import Card from '~/assets/Icons/CreditCard.svg';
+import Cash from '~/assets/Icons/Money.svg';
+import Caret from '~/assets/Icons/Caret.svg';
+import ForkKnife from '~/assets/Icons/ForkKnife.svg';
 
-import Caret from '../../../../../assets/Icons/Caret.svg';
-import {shippingQuery} from '../../../shipping.query.ts';
-import {paymentQuery} from '../../../payment.query.ts';
-import store from '../../../../../stores/store.ts';
+import {shippingQuery} from '~/Screens/Cart/shipping.query.ts';
+import {paymentQuery} from '~/Screens/Cart/payment.query.ts';
+import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
-import {cartQuery} from '../../../cart.query.ts';
+import {cartQuery} from '~/Screens/Cart/cart.query.ts';
 import {Controller, useForm, useWatch} from 'react-hook-form';
-import ForkKnife from '../../../../../assets/Icons/ForkKnife.svg';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {isValidUkrainianPhone} from '../../../utils.ts';
-import {agent} from '../../../../../../APIClient.tsx';
+import {agent} from '~/../APIClient.tsx';
 import {IDistrict} from '@layerok/emojisushi-js-sdk';
-import {cityQuery} from '../../../../../components/Header/city.query.ts';
+import {cityQuery} from '~/components/Header/city.query.ts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
 enum HouseTypeEnum {
   Apartment = 'high_rise_building',

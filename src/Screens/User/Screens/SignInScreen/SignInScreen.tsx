@@ -1,9 +1,9 @@
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {nh, nw} from '../../../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import PasswordInput from '../../components/PasswordInput/PasswordInput.tsx';
-import {Header, Input} from '../../../../components';
+import PasswordInput from '~/Screens/User/components/PasswordInput/PasswordInput.tsx';
+import {Header, Input} from '~/components';
 
 const SignInScreen = ({navigation}: {navigation: any}) => {
   return (

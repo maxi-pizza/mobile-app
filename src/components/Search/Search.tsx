@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import {StyleSheet, TextInput, View} from 'react-native';
-import {nh, nw} from '../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import MagnifyingGlass from '../../assets/Icons/MagnifyingGlass.svg';
+import MagnifyingGlass from '~/assets/Icons/MagnifyingGlass.svg';
 
 export const Search = ({
   editable,

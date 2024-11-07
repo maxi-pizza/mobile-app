@@ -1,10 +1,10 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {nw, nh} from '../../../normalize.helper.ts';
+import {nw, nh} from '~/common/normalize.helper.ts';
 import {ICategory} from '@layerok/emojisushi-js-sdk';
-import CategoryNullImage from '../../assets/Logo.svg';
+import CategoryNullImage from '~/assets/Logo.svg';
 
-import categoryStore from '../../stores/store.ts';
+import categoryStore from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
 
 export const CategoryCard = observer(({category}: {category: ICategory}) => {

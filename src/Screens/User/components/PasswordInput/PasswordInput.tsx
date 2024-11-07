@@ -1,24 +1,26 @@
 import React, {useState} from 'react';
 import {StyleSheet, TextInput, View} from 'react-native';
-import {nh, nw} from '../../../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import Eye from '../../../../assets/Icons/Eye.svg';
+import Eye from '~/assets/Icons/Eye.svg';
 
 const PasswordInput = () => {
   const [isFocused, setIsFocused] = useState(false);
   const [isSecure, setIsSecure] = useState(true);
 
   return (
-      <View>
-        <TextInput style={[styles.input, isFocused ? styles.focused : null]}
-                   onFocus={() => setIsFocused(true)}
-                   onBlur={() => setIsFocused(false)}
-                   placeholder="Пароль"
-                   placeholderTextColor="#616161"
-                   secureTextEntry={isSecure}
-                   inputMode="text"/>
-        <Eye onPress={() => setIsSecure(!isSecure)} style={styles.hideBtn}/>
-      </View>
+    <View>
+      <TextInput
+        style={[styles.input, isFocused ? styles.focused : null]}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
+        placeholder="Пароль"
+        placeholderTextColor="#616161"
+        secureTextEntry={isSecure}
+        inputMode="text"
+      />
+      <Eye onPress={() => setIsSecure(!isSecure)} style={styles.hideBtn} />
+    </View>
   );
 };
 

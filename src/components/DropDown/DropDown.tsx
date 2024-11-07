@@ -1,6 +1,6 @@
 import React, {ReactNode, useCallback, useRef} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {nh, nw} from '../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
 import {observer} from 'mobx-react-lite';
 

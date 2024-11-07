@@ -1,10 +1,10 @@
 import React from 'react';
 
-import CartIcon from '../../assets/Icons/Cart.svg';
+import CartIcon from '~/assets/Icons/Cart.svg';
 import {StyleSheet, Text, View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
-import {cartQuery} from '../../Screens/Cart/cart.query.ts';
-import {nh, nw} from '../../../normalize.helper.ts';
+import {cartQuery} from '~/Screens/Cart/cart.query.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
 const CartBottomTab = ({focused}: {focused: any}) => {
   const {data: cart} = useQuery(cartQuery);

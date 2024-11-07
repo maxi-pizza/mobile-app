@@ -7,17 +7,17 @@ import {
   View,
 } from 'react-native';
 
-import EmptyCart from '../../../../assets/Icons/EmptyCart.svg';
-import {nh, nw} from '../../../../../normalize.helper.ts';
-import {ProductCartCard, Header, isClosed} from '../../../../components';
+import EmptyCart from '~/assets/Icons/EmptyCart.svg';
+import {nh, nw} from '~/common/normalize.helper.ts';
+import {ProductCartCard, Header, isClosed} from '~/components';
 import {useQuery} from '@tanstack/react-query';
 import {
   DEFAULT_PRODUCT_LIMIT,
   productsQuery,
-} from '../../../Home/products.query.ts';
-import {Product} from '../../../../models/Product.ts';
-import {cartQuery} from '../../cart.query.ts';
-import {appConfig} from '../../../../config/app.ts';
+} from '~/Screens/Home/products.query.ts';
+import {Product} from '~/models/Product.ts';
+import {cartQuery} from '~/Screens/Cart/cart.query.ts';
+import {appConfig} from '~/config/app.ts';
 
 const CartScreen = ({navigation}: {navigation: any}) => {
   const {data: cartItems} = useQuery(cartQuery);

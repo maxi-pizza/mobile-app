@@ -1,14 +1,13 @@
 import React from 'react';
 import {ScrollView, StyleSheet, Text, View} from 'react-native';
-import {nh, nw} from '../../../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
-import {Header} from '../../../../components';
+import {Header} from '~/components';
 import {useQuery} from '@tanstack/react-query';
-import {categoriesQuery} from '../../categories.query.ts';
+import {categoriesQuery} from '~/Screens/Category/categories.query.ts';
 import {observer} from 'mobx-react-lite';
 import Category from '../components/Category.tsx';
-import categoryStore from '../../../../stores/store.ts';
-import store from '../../../../stores/store.ts';
+import store from '~/stores/store.ts';
 
 const CategoryScreen = observer(({navigation}: {navigation: any}) => {
   const {data: categoriesRes, isLoading} = useQuery({
@@ -20,7 +19,7 @@ const CategoryScreen = observer(({navigation}: {navigation: any}) => {
       store.city === 'chorno' ? category.slug !== 'pitsa' : true,
     );
   const onHandleCategory = (slug: string) => {
-    categoryStore.changeCategory(slug);
+    store.changeCategory(slug);
     navigation.navigate('Home');
   };
 

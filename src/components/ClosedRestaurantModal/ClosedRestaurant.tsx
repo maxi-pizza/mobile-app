@@ -1,10 +1,10 @@
 import React, {useCallback, useEffect, useRef} from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {BottomSheetModal} from '@gorhom/bottom-sheet';
-import {appConfig} from '../../config/app.ts';
+import {appConfig} from '~/config/app.ts';
 
-import LockKeySvg from '../../assets/Icons/LockKey.svg';
-import {nh, nw} from '../../../normalize.helper.ts';
+import LockKeySvg from '~/assets/Icons/LockKey.svg';
+import {nh, nw} from '~/common/normalize.helper.ts';
 
 function addLeadingZero(number: number) {
   return '0'.concat(number + '').slice(-2);

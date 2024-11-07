@@ -1,6 +1,6 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
-import {nh, nw} from '../../../../../../normalize.helper.ts';
+import {nh, nw} from '~/common/normalize.helper.ts';
 import {SvgProps} from 'react-native-svg';
 
 type Option = {
