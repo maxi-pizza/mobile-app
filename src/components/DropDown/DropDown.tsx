@@ -10,7 +10,7 @@ type OptionProps = {
   slug?: string;
 };
 
-const DropDown = observer(
+export const DropDown = observer(
   ({
     value,
     placeholder,
@@ -133,5 +133,3 @@ const styles = StyleSheet.create({
     color: 'yellow',
   },
 });
-
-export default DropDown;

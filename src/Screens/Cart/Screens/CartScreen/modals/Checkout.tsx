@@ -10,10 +10,14 @@ import {nh, nw} from '../../../../../../normalize.helper.ts';
 import * as yup from 'yup';
 
 import Swiper from '../components/Swiper.tsx';
-import Input from '../../../../../components/Input/Input.tsx';
-import DropDown from '../../../../../components/DropDown/DropDown.tsx';
-import Header from '../../../../../components/Header/Header.tsx';
-import BackButtonScreen from '../../../../../components/BackButton/BackButton.tsx';
+import {
+  Input,
+  Counter,
+  Header,
+  BackButton,
+  DropDown,
+} from '../../../../../components';
+
 import {useQuery} from '@tanstack/react-query';
 import {spotsQuery} from '../../../spots.query.ts';
 import * as Sentry from '@sentry/react-native';
@@ -31,7 +35,6 @@ import {observer} from 'mobx-react-lite';
 import {cartQuery} from '../../../cart.query.ts';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import ForkKnife from '../../../../../assets/Icons/ForkKnife.svg';
-import Counter from '../../../../../components/Counter/Counter.tsx';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {isValidUkrainianPhone} from '../../../utils.ts';
 import {agent} from '../../../../../../APIClient.tsx';
@@ -350,7 +353,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
           overlayColor="rgba(0, 0, 0, 0.75)"
         />
         <Header />
-        <BackButtonScreen navigation={navigation} />
+        <BackButton navigation={navigation} />
         <View style={styles.container}>
           <ScrollView
             contentContainerStyle={styles.scrollView}
