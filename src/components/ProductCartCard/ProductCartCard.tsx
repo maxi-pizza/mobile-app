@@ -39,6 +39,9 @@ export const ProductCartCard = ({item}: {item: Product}) => {
       price: storagePrice ? storagePrice / 100 : 0,
     });
   };
+
+  const price = item?.getOldPrice(undefined)?.price_formatted;
+  const discountPrice = item?.getNewPrice(undefined)?.price_formatted;
   return (
     <View style={styles.container}>
       <View style={styles.imageTitleContainer}>
@@ -63,8 +66,10 @@ export const ProductCartCard = ({item}: {item: Product}) => {
         />
       </View>
       <View style={styles.priceWrapper}>
-        <Text style={styles.regularPrice}>9556 ₴</Text>
-        <Text style={styles.discountPrice}>7953 ₴</Text>
+        <Text style={styles.regularPrice}>{discountPrice ? price : ''}</Text>
+        <Text style={styles.discountPrice}>
+          {discountPrice ? discountPrice : price}
+        </Text>
       </View>
     </View>
   );

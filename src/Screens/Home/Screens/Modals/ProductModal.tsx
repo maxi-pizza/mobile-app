@@ -111,7 +111,7 @@ const ProductModal = ({route, navigation}: {route: any; navigation: any}) => {
             ]}
           />
           <Text style={styles.whiteText}>
-            {product.ingredients.length === 0 ? '' : 'Ингредиенты'}
+            {product.ingredients.length === 0 ? '' : 'Інгредієнти'}
           </Text>
           <FlatList
             style={{marginTop: nh(10), height: nh(160)}}
@@ -136,7 +136,7 @@ const ProductModal = ({route, navigation}: {route: any; navigation: any}) => {
             <TouchableOpacity
               style={styles.addBtn}
               onPress={() => onHandleAdd()}>
-              <Text style={styles.blackText}>Купить сейчас</Text>
+              <Text style={styles.blackText}>Купити зараз</Text>
             </TouchableOpacity>
           )}
         </View>

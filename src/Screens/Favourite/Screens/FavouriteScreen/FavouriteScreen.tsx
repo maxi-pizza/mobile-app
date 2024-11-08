@@ -35,7 +35,7 @@ const FavouriteScreen = ({navigation}: {navigation: any}) => {
         <View style={styles.noResultContainer}>
           <NoResult height={nh(200)} width={nw(200)} color={'#393939'} />
           <Text style={[styles.noResultText, {marginTop: nh(15)}]}>
-            Выбранные товары не найдены
+            Вибрані товари не знайдено
           </Text>
         </View>
       ) : (

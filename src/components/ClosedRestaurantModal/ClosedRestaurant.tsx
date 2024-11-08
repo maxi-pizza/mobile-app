@@ -49,13 +49,13 @@ const ClosedRestaurant = () => {
       handleIndicatorStyle={styles.indicator}>
       <View style={styles.backgroundContainer}>
         <LockKeySvg color={'yellow'} width={100} height={100} />
-        <Text style={styles.whiteText}>Restaurant is closed</Text>
+        <Text style={styles.whiteText}>Ресторан зачинено</Text>
         <Text
           style={[
             styles.whiteText,
             {fontWeight: '400', fontSize: nh(14), marginBottom: nh(15)},
           ]}>
-          Working time {appConfig.workingHours[0][0]}:
+          Робочий час {appConfig.workingHours[0][0]}:
           {addLeadingZero(appConfig.workingHours[0][1])} -{' '}
           {appConfig.workingHours[1][0]}:{appConfig.workingHours[1][1]}
         </Text>

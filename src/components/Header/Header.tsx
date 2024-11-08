@@ -40,7 +40,7 @@ export const Header = () => {
           placeholder={
             <>
               <Text style={[styles.chooseText, {marginRight: nw(10)}]}>
-                Выберите город
+                Оберіть місто
               </Text>
               <MapPin color="white" />
             </>

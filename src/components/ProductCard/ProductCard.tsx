@@ -130,7 +130,7 @@ export const ProductCard = ({
           />
         ) : (
           <TouchableOpacity onPress={onHandleAdd} style={styles.addBtn}>
-            <Text style={styles.btnText}>Add to cart</Text>
+            <Text style={styles.btnText}>Додати в кошик</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -250,7 +250,7 @@ const styles = StyleSheet.create({
   },
   addBtn: {
     backgroundColor: 'transparent',
-    width: nw(111),
+    width: nw(120),
     height: nh(35),
     borderRadius: 7,
     display: 'flex',

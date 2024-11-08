@@ -89,7 +89,7 @@ const SearchModal = observer(({navigation}: {navigation: any}) => {
               width={nw(200)}
               height={nh(200)}
             />
-            <Text style={styles.noResultText}>Ничего не найдено</Text>
+            <Text style={styles.noResultText}>Нічого не знайдено</Text>
           </View>
         </View>
       )}

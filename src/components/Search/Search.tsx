@@ -27,7 +27,7 @@ export const Search = ({
         multiline={false}
         placeholderTextColor="#3F3F3F"
         style={[styles.input, isFocused && styles.focused]}
-        placeholder="Что-то ищете?"
+        placeholder="Шукати..."
         autoFocus={autoFocus}
       />
     </View>

@@ -26,7 +26,7 @@ const CategoryScreen = observer(({navigation}: {navigation: any}) => {
   return (
     <View style={styles.container}>
       <Header />
-      <Text style={styles.category}>Категории</Text>
+      <Text style={styles.category}>Категорії</Text>
       <ScrollView
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.categoryContainer}>

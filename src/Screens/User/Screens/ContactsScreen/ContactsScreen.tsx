@@ -41,7 +41,7 @@ const ContactsScreen = observer(({navigation}: {navigation: any}) => {
       <Header />
       <BackButton navigation={navigation} />
       <View style={styles.wrapper}>
-        <Text style={styles.header}>Контакты</Text>
+        <Text style={styles.header}>Контакти</Text>
         <View style={styles.btnWrapper}>
           <TouchableOpacity
             onPress={() =>
@@ -52,7 +52,7 @@ const ContactsScreen = observer(({navigation}: {navigation: any}) => {
             }
             style={styles.btn}>
             <Instagram width="17" height="17" color="black" />
-            <Text style={styles.btnText}> Наш инстаграм | @emoji_sushi</Text>
+            <Text style={styles.btnText}> Наш інстаграм | @emoji_sushi</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() =>

@@ -24,7 +24,7 @@ export const Category = observer(() => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Категории</Text>
+      <Text style={styles.title}>Категорії</Text>
       <ScrollView
         horizontal={true}
         showsHorizontalScrollIndicator={false}

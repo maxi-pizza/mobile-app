@@ -18,7 +18,7 @@ const ErrorScreen = ({resetError}: {resetError: () => void}) => {
             store.nav!.goBack();
             resetError();
           }}>
-          <Text style={styles.btnText}>Повернутися на головну сторiнку</Text>
+          <Text style={styles.btnText}>Повернутися на головну сторінку</Text>
         </TouchableOpacity>
       </View>
     </View>

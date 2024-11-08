@@ -353,13 +353,13 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
           <ScrollView
             contentContainerStyle={styles.scrollView}
             showsVerticalScrollIndicator={false}>
-            <Text style={styles.header}>Оформление заказа</Text>
+            <Text style={styles.header}>Оформлення замовлення</Text>
             <View style={styles.textWrapper}>
               <View style={styles.circle}>
                 <Text style={{color: 'black', lineHeight: nh(17)}}>1</Text>
               </View>
               <Text style={[styles.greyText, {marginLeft: nw(15)}]}>
-                Введите данные
+                Введіть дані
               </Text>
             </View>
             <Controller
@@ -394,7 +394,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                         ]}>
                         <DropDown
                           value={value}
-                          placeholder={<Text>Выберите район доставки</Text>}
+                          placeholder={<Text>Виберіть район доставки</Text>}
                           options={districts}
                           onChange={d => onChange(d)}
                           error={errors.districtId?.message}
@@ -406,7 +406,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                                   {getSelectedDistrict(value)}
                                 </Text>
                               ) : (
-                                'Выберите район доставки'
+                                'Виберіть район доставки'
                               )}
                             </Text>
                             <Caret color="#727272" width="15" />
@@ -565,7 +565,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
               render={({field: {onChange, value}}) => (
                 <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
                   <Input
-                    placeholder="Имя"
+                    placeholder="Ім'я"
                     inputMode="text"
                     value={value}
                     onChangeText={v => onChange(v)}
@@ -609,7 +609,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
               render={({field: {onChange, value}}) => (
                 <View style={styles.inputWrapper}>
                   <Input
-                    placeholder="Комментарий к заказу"
+                    placeholder="Коментар до замовлення"
                     inputMode="text"
                     value={value}
                     onChangeText={v => onChange(v)}
@@ -622,7 +622,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                 <Text style={{color: 'black', lineHeight: nh(17)}}>2</Text>
               </View>
               <Text style={[styles.greyText, {marginLeft: nw(15)}]}>
-                Способ оплаты
+                Спосіб оплати
               </Text>
             </View>
             <Controller
@@ -644,7 +644,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                 <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
                   {paymentMethod === 'cash' && (
                     <Input
-                      placeholder="Приготовить сдачу с"
+                      placeholder="Приготувати здачу з"
                       inputMode="text"
                       value={value}
                       onChangeText={v => onChange(v)}
@@ -664,7 +664,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                     style={styles.forkKnife}
                     color="white"
                   />
-                  <Text style={styles.personText}>Количество персон?</Text>
+                  <Text style={styles.personText}>Кількість персон?</Text>
                   <View style={{marginLeft: nw(45)}}>
                     <Counter
                       count={Number(value)}
@@ -687,11 +687,11 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                   marginBottom: nh(10),
                 },
               ]}>
-              Сумма заказа
+              Сума замовлення
             </Text>
             <View style={styles.verticalBar} />
             <View style={styles.priceWrapper}>
-              <Text style={styles.whiteText}>К оплате</Text>
+              <Text style={styles.whiteText}>До оплати</Text>
               <Text style={styles.whiteText}>{total} ₴</Text>
             </View>
             <TouchableOpacity
@@ -700,7 +700,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                 // @ts-ignore
                 onSubmit,
               )}>
-              <Text style={styles.blackText}>Заказать</Text>
+              <Text style={styles.blackText}>Замовити</Text>
             </TouchableOpacity>
           </ScrollView>
         </View>

@@ -49,7 +49,7 @@ const CartScreen = ({navigation}: {navigation: any}) => {
       <Header />
       {ids.length > 0 ? (
         <View>
-          <Text style={[styles.cartTitle, styles.titleMargin]}>Корзина</Text>
+          <Text style={[styles.cartTitle, styles.titleMargin]}>Кошик</Text>
           <View
             style={[
               styles.productsWrapper,
@@ -71,13 +71,15 @@ const CartScreen = ({navigation}: {navigation: any}) => {
               styles.orderButton,
               closed ? {backgroundColor: 'grey'} : '',
             ]}>
-            <Text style={styles.checkoutText}>Оформить заказ | {sum} ₴</Text>
+            <Text style={styles.checkoutText}>
+              Оформити замовлення | {sum} ₴
+            </Text>
           </TouchableOpacity>
         </View>
       ) : (
         <View style={styles.emptyCart}>
           <EmptyCart />
-          <Text style={styles.emptyCartText}>Ваша корзина пуста :(</Text>
+          <Text style={styles.emptyCartText}>Ваш кошик порожній :(</Text>
         </View>
       )}
     </View>
