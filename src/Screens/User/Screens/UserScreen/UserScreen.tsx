@@ -12,8 +12,9 @@ import Phone from '~/assets/Icons/Phone.svg';
 import CreditCard from '~/assets/Icons/CreditCard.svg';
 import Coins from '~/assets/Icons/Coins.svg';
 import {Header, UserOption} from '~/components';
+import {observer} from 'mobx-react-lite';
 
-const UserScreen = ({navigation}: {navigation: any}) => {
+const UserScreen = observer(({navigation}: {navigation: any}) => {
   // const [logged, setLogged] = useState(true);
   // const [isVisible, setIsVisible] = useState(false);
 
@@ -103,7 +104,7 @@ const UserScreen = ({navigation}: {navigation: any}) => {
       </TouchableOpacity>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

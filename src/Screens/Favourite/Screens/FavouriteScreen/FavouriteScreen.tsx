@@ -11,10 +11,13 @@ import {
 } from '~/Screens/Home/products.query.ts';
 
 import NoResult from '~/assets/Icons/NoResultSearch.svg';
+import store from '~/stores/store.ts';
+import {observer} from 'mobx-react-lite';
 
-const FavouriteScreen = ({navigation}: {navigation: any}) => {
-  const {data: wishlists, isLoading: isWishlistLoading} =
-    useQuery(wishlistQuery);
+const FavouriteScreen = observer(({navigation}: {navigation: any}) => {
+  const {data: wishlists, isLoading: isWishlistLoading} = useQuery(
+    wishlistQuery(store.city),
+  );
 
   const {data: productQueryRes, isLoading: isProductsLoading} = useQuery(
     productsQuery({
@@ -55,7 +58,7 @@ const FavouriteScreen = ({navigation}: {navigation: any}) => {
       )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

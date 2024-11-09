@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   FlatList,
   Image,
@@ -21,7 +21,7 @@ import {
 } from '~/Screens/Cart/cart.query.ts';
 import {
   addToWishlist,
-  WISHLIST_QUERY_KEY,
+  WISHLIST_STORAGE_KEY,
   wishlistQuery,
 } from '~/Screens/Favourite/wishlist.query.ts';
 
@@ -33,7 +33,7 @@ const ProductModal = observer(
   ({route, navigation}: {route: any; navigation: any}) => {
     const queryClient = useQueryClient();
     const product: Product = route.params.product || [];
-    const {data: wishlists} = useQuery(wishlistQuery);
+    const {data: wishlists} = useQuery(wishlistQuery(store.city));
 
     const {data: cart} = useQuery(cartQuery(store.city));
     const {mutate: cartMutation} = useMutation({
@@ -64,9 +64,11 @@ const ProductModal = observer(
       });
     };
     const {mutate: addWishlist} = useMutation({
-      mutationFn: ({id}: {id: number}) => addToWishlist(id),
+      mutationFn: ({id}: {id: number}) => addToWishlist(id, store.city),
       onSuccess: () => {
-        queryClient.invalidateQueries({queryKey: WISHLIST_QUERY_KEY});
+        queryClient.invalidateQueries({
+          queryKey: [WISHLIST_STORAGE_KEY, store.city],
+        });
       },
     });
     const wishIds = Object.keys(wishlists || {});

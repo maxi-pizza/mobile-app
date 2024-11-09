@@ -22,7 +22,7 @@ import {
 } from '~/Screens/Cart/cart.query.ts';
 import {
   addToWishlist,
-  WISHLIST_QUERY_KEY,
+  WISHLIST_STORAGE_KEY,
 } from '~/Screens/Favourite/wishlist.query.ts';
 import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
@@ -53,9 +53,11 @@ export const ProductCard = observer(
     const wishIds = Object.keys(wishlists || {});
     const favourite = wishIds.includes(String(product.id));
     const {mutate: addWishlist} = useMutation({
-      mutationFn: ({id}: {id: number}) => addToWishlist(id),
+      mutationFn: ({id}: {id: number}) => addToWishlist(id, store.city),
       onSuccess: () => {
-        queryClient.invalidateQueries({queryKey: WISHLIST_QUERY_KEY});
+        queryClient.invalidateQueries({
+          queryKey: [WISHLIST_STORAGE_KEY, store.city],
+        });
       },
     });
     const price = product?.getOldPrice(undefined)?.price_formatted;
