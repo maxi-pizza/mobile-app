@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   FlatList,
   Image,
@@ -14,7 +14,11 @@ import {nh, nw} from '~/common/normalize.helper.ts';
 import Heart from '~/assets/Icons/Heart.svg';
 import {Product} from '~/models/Product.ts';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {addItem, CART_QUERY_KEY, cartQuery} from '~/Screens/Cart/cart.query.ts';
+import {
+  addItem,
+  CART_STORAGE_KEY,
+  cartQuery,
+} from '~/Screens/Cart/cart.query.ts';
 import {
   addToWishlist,
   WISHLIST_QUERY_KEY,
@@ -22,128 +26,135 @@ import {
 } from '~/Screens/Favourite/wishlist.query.ts';
 
 import NullImage from '~/assets/Logo.svg';
+import store from '~/stores/store.ts';
+import {observer} from 'mobx-react-lite';
 
-const ProductModal = ({route, navigation}: {route: any; navigation: any}) => {
-  const queryClient = useQueryClient();
-  const product: Product = route.params.product || [];
-  const {data: wishlists, isLoading: isWishlistLoading} =
-    useQuery(wishlistQuery);
+const ProductModal = observer(
+  ({route, navigation}: {route: any; navigation: any}) => {
+    const queryClient = useQueryClient();
+    const product: Product = route.params.product || [];
+    const {data: wishlists} = useQuery(wishlistQuery);
 
-  const {data: cart} = useQuery(cartQuery);
-  const {mutate: cartMutation} = useMutation({
-    mutationFn: ({count, price}: {count: number; price: number}) =>
-      addItem(product.id, count, price),
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: CART_QUERY_KEY});
-    },
-  });
-  const price = product?.getOldPrice(undefined)?.price_formatted;
-  const discountPrice = product?.getNewPrice(undefined)?.price_formatted;
-
-  const count = cart?.[product.id]?.count || 0;
-
-  const storagePrice = product?.getNewPrice(undefined)?.price;
-  const onHandleAdd = () => {
-    cartMutation({
-      count: count + 1,
-      price: storagePrice ? storagePrice / 100 : 0,
+    const {data: cart} = useQuery(cartQuery(store.city));
+    const {mutate: cartMutation} = useMutation({
+      mutationFn: ({count, price}: {count: number; price: number}) =>
+        addItem(product.id, count, price, store.city),
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [CART_STORAGE_KEY, store.city],
+        });
+      },
     });
-  };
-  const onHandleMinus = () => {
-    cartMutation({
-      count: Math.max(count - 1, 0),
-      price: storagePrice ? storagePrice / 100 : 0,
-    });
-  };
-  const {mutate: addWishlist} = useMutation({
-    mutationFn: ({id}: {id: number}) => addToWishlist(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: WISHLIST_QUERY_KEY});
-    },
-  });
-  const wishIds = Object.keys(wishlists || {});
-  const favourite = wishIds.includes(String(product.id));
+    const price = product?.getOldPrice(undefined)?.price_formatted;
+    const discountPrice = product?.getNewPrice(undefined)?.price_formatted;
 
-  const handleFavouriteButton = () => {
-    addWishlist({
-      id: product.id,
-    });
-  };
+    const count = cart?.[product.id]?.count || 0;
 
-  return (
-    <View>
-      <Header />
-      <BackButton navigation={navigation} />
-      <View style={styles.container}>
-        <View style={styles.productContainer}>
-          {product.mainImage ? (
-            <Image source={{uri: product.mainImage}} style={styles.image} />
-          ) : (
-            <NullImage width={nw(265)} height={nh(171)} opacity={0.2} />
-          )}
-          <View style={styles.heartTitleWrapper}>
-            <View style={styles.titleWrapper}>
-              <Text style={styles.productTitle}>{product.name}</Text>
-              <Text style={styles.weightText}>{product.weight}г</Text>
-            </View>
-            <Pressable style={styles.heartBtn} onPress={handleFavouriteButton}>
-              <Heart width={nw(20)} color={favourite ? 'yellow' : 'white'} />
-            </Pressable>
-          </View>
-          <View
-            style={[
-              styles.horizontalBar,
-              {marginTop: nh(15), marginBottom: nh(15)},
-            ]}
-          />
-          <View style={styles.priceWrapper}>
-            <Text style={styles.price}>
-              {discountPrice ? discountPrice : price}
-            </Text>
-            <Text style={styles.discountPrice}>
-              {discountPrice ? price : ''}
-            </Text>
-          </View>
-          <View
-            style={[
-              styles.horizontalBar,
-              {marginTop: nh(15), marginBottom: nh(15)},
-            ]}
-          />
-          <Text style={styles.whiteText}>
-            {product.ingredients.length === 0 ? '' : 'Інгредієнти'}
-          </Text>
-          <FlatList
-            style={{marginTop: nh(10), height: nh(160)}}
-            data={product.ingredients}
-            renderItem={ingredient => (
-              <View style={styles.dotWrapper}>
-                <View style={styles.dot} />
-                <Text style={styles.ingredientsText}>{ingredient.item}</Text>
-              </View>
+    const storagePrice = product?.getNewPrice(undefined)?.price;
+    const onHandleAdd = () => {
+      cartMutation({
+        count: count + 1,
+        price: storagePrice ? storagePrice / 100 : 0,
+      });
+    };
+    const onHandleMinus = () => {
+      cartMutation({
+        count: Math.max(count - 1, 0),
+        price: storagePrice ? storagePrice / 100 : 0,
+      });
+    };
+    const {mutate: addWishlist} = useMutation({
+      mutationFn: ({id}: {id: number}) => addToWishlist(id),
+      onSuccess: () => {
+        queryClient.invalidateQueries({queryKey: WISHLIST_QUERY_KEY});
+      },
+    });
+    const wishIds = Object.keys(wishlists || {});
+    const favourite = wishIds.includes(String(product.id));
+
+    const handleFavouriteButton = () => {
+      addWishlist({
+        id: product.id,
+      });
+    };
+
+    return (
+      <View>
+        <Header dropdownVisible={false} />
+        <BackButton navigation={navigation} />
+        <View style={styles.container}>
+          <View style={styles.productContainer}>
+            {product.mainImage ? (
+              <Image source={{uri: product.mainImage}} style={styles.image} />
+            ) : (
+              <NullImage width={nw(265)} height={nh(171)} opacity={0.2} />
             )}
-            keyExtractor={ingredient => ingredient}
-          />
-          {count > 0 ? (
-            <View style={{marginTop: nh(30)}}>
-              <Counter
-                onHandleMinus={onHandleMinus}
-                onHandleAdd={onHandleAdd}
-                count={count}
-              />
+            <View style={styles.heartTitleWrapper}>
+              <View style={styles.titleWrapper}>
+                <Text style={styles.productTitle}>{product.name}</Text>
+                <Text style={styles.weightText}>{product.weight}г</Text>
+              </View>
+              <Pressable
+                style={styles.heartBtn}
+                onPress={handleFavouriteButton}>
+                <Heart width={nw(20)} color={favourite ? 'yellow' : 'white'} />
+              </Pressable>
             </View>
-          ) : (
-            <TouchableOpacity
-              style={styles.addBtn}
-              onPress={() => onHandleAdd()}>
-              <Text style={styles.blackText}>Купити зараз</Text>
-            </TouchableOpacity>
-          )}
+            <View
+              style={[
+                styles.horizontalBar,
+                {marginTop: nh(15), marginBottom: nh(15)},
+              ]}
+            />
+            <View style={styles.priceWrapper}>
+              <Text style={styles.price}>
+                {discountPrice ? discountPrice : price}
+              </Text>
+              <Text style={styles.discountPrice}>
+                {discountPrice ? price : ''}
+              </Text>
+            </View>
+            <View
+              style={[
+                styles.horizontalBar,
+                {marginTop: nh(15), marginBottom: nh(15)},
+              ]}
+            />
+            <Text style={styles.whiteText}>
+              {product.ingredients.length === 0 ? '' : 'Інгредієнти'}
+            </Text>
+            <FlatList
+              style={{marginTop: nh(10), height: nh(160)}}
+              data={product.ingredients}
+              renderItem={ingredient => (
+                <View style={styles.dotWrapper}>
+                  <View style={styles.dot} />
+                  <Text style={styles.ingredientsText}>{ingredient.item}</Text>
+                </View>
+              )}
+              keyExtractor={ingredient => ingredient}
+            />
+            {count > 0 ? (
+              <View style={{marginTop: nh(30)}}>
+                <Counter
+                  onHandleMinus={onHandleMinus}
+                  onHandleAdd={onHandleAdd}
+                  count={count}
+                />
+              </View>
+            ) : (
+              <TouchableOpacity
+                style={styles.addBtn}
+                onPress={() => onHandleAdd()}>
+                <Text style={styles.blackText}>Купити зараз</Text>
+              </TouchableOpacity>
+            )}
+          </View>
         </View>
       </View>
-    </View>
-  );
-};
+    );
+  },
+);
 
 const styles = StyleSheet.create({
   container: {

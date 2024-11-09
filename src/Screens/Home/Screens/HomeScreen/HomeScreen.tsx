@@ -16,6 +16,7 @@ import {observer} from 'mobx-react-lite';
 import store from '~/stores/store.ts';
 import {bannerQuery} from '~/components/Banner/banner.query.ts';
 import Spinner from 'react-native-loading-spinner-overlay';
+import {CART_STORAGE_KEY} from '~/Screens/Cart/cart.query.ts';
 
 const HomeScreen = observer(({navigation}: {navigation: any}) => {
   store.changeNavigation(navigation);

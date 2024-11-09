@@ -11,7 +11,11 @@ import {useQuery} from '@tanstack/react-query';
 import store from '~/stores/store.ts';
 import {cityQuery} from './city.query.ts';
 
-export const Header = () => {
+export const Header = ({
+  dropdownVisible = true,
+}: {
+  dropdownVisible?: boolean;
+}) => {
   const {data: citiesRes} = useQuery(cityQuery);
   const cities = (citiesRes || []).map(c => ({
     id: c.id,
@@ -32,25 +36,27 @@ export const Header = () => {
       <View style={styles.block} />
       <Logo style={styles.logo} />
       <View>
-        <DropDown
-          snapPoints={'29%'}
-          options={cities}
-          onChange={onChange}
-          value={selected?.id}
-          placeholder={
-            <>
-              <Text style={[styles.chooseText, {marginRight: nw(10)}]}>
-                Оберіть місто
-              </Text>
+        {dropdownVisible ? (
+          <DropDown
+            snapPoints={'29%'}
+            options={cities}
+            onChange={onChange}
+            value={selected?.id}
+            placeholder={
+              <>
+                <Text style={[styles.chooseText, {marginRight: nw(10)}]}>
+                  Оберіть місто
+                </Text>
+                <MapPin color="white" />
+              </>
+            }>
+            <View style={styles.cityContainer}>
               <MapPin color="white" />
-            </>
-          }>
-          <View style={styles.cityContainer}>
-            <MapPin color="white" />
-            <Text style={styles.whiteText}>{selected?.name}</Text>
-            <Caret color="white" />
-          </View>
-        </DropDown>
+              <Text style={styles.whiteText}>{selected?.name}</Text>
+              <Caret color="white" />
+            </View>
+          </DropDown>
+        ) : null}
       </View>
     </View>
   );

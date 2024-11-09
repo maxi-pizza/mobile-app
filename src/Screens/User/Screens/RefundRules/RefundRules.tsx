@@ -8,7 +8,7 @@ import store from '~/stores/store.ts';
 const RefundRules = () => {
   const {data: cityRes} = useQuery(cityQuery);
   const city = cityRes?.find(c => c.slug === store.city);
-  console.log(city!.frontend_url);
+
   return (
     <View
       style={{

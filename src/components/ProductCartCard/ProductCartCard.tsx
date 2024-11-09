@@ -8,20 +8,26 @@ import {Counter} from '~/components';
 import {Product} from '~/models/Product.ts';
 import Logo from '~/assets/Logo.svg';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {addItem, CART_QUERY_KEY, cartQuery} from '~/Screens/Cart/cart.query.ts';
+import {
+  addItem,
+  CART_STORAGE_KEY,
+  cartQuery,
+} from '~/Screens/Cart/cart.query.ts';
+import store from '~/stores/store.ts';
+import {observer} from 'mobx-react-lite';
 
-export const ProductCartCard = ({item}: {item: Product}) => {
+export const ProductCartCard = observer(({item}: {item: Product}) => {
   const queryClient = useQueryClient();
 
-  const {data: cart} = useQuery(cartQuery);
+  const {data: cart} = useQuery(cartQuery(store.city));
   const count = cart?.[item.id]?.count || 0;
   const storagePrice = item?.getNewPrice(undefined)?.price;
 
   const {mutate} = useMutation({
     mutationFn: ({count, price}: {count: number; price: number}) =>
-      addItem(item.id, count, price),
+      addItem(item.id, count, price, store.city),
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: CART_QUERY_KEY});
+      queryClient.invalidateQueries({queryKey: [CART_STORAGE_KEY, store.city]});
     },
   });
   const handleAdd = () => {
@@ -73,7 +79,7 @@ export const ProductCartCard = ({item}: {item: Product}) => {
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

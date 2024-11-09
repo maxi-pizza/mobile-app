@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Image,
   Pressable,
@@ -15,128 +15,140 @@ import {Product} from '~/models/Product.ts';
 import Logo from '../../assets/Logo.svg';
 
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {addItem, CART_QUERY_KEY, cartQuery} from '~/Screens/Cart/cart.query.ts';
+import {
+  addItem,
+  CART_STORAGE_KEY,
+  cartQuery,
+} from '~/Screens/Cart/cart.query.ts';
 import {
   addToWishlist,
   WISHLIST_QUERY_KEY,
 } from '~/Screens/Favourite/wishlist.query.ts';
+import store from '~/stores/store.ts';
+import {observer} from 'mobx-react-lite';
 
-export const ProductCard = ({
-  product,
-  wishlists,
-  navigation,
-}: {
-  product: Product;
-  wishlists?: Record<string, number>;
-  navigation: any;
-}) => {
-  const queryClient = useQueryClient();
-  const {data: cart} = useQuery(cartQuery);
-  const count = cart?.[product.id]?.count || 0;
-  const {mutate: cartMutation} = useMutation({
-    mutationFn: ({count, price}: {count: number; price: number}) =>
-      addItem(product.id, count, price),
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: CART_QUERY_KEY});
-    },
-  });
-  const wishIds = Object.keys(wishlists || {});
-  const favourite = wishIds.includes(String(product.id));
+export const ProductCard = observer(
+  ({
+    product,
+    wishlists,
+    navigation,
+  }: {
+    product: Product;
+    wishlists?: Record<string, number>;
+    navigation: any;
+  }) => {
+    const queryClient = useQueryClient();
 
-  const {mutate: addWishlist} = useMutation({
-    mutationFn: ({id}: {id: number}) => addToWishlist(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: WISHLIST_QUERY_KEY});
-    },
-  });
-  const price = product?.getOldPrice(undefined)?.price_formatted;
-  const discountPrice = product?.getNewPrice(undefined)?.price_formatted;
-
-  const storagePrice = product?.getNewPrice(undefined)?.price;
-  const onHandleAdd = () => {
-    cartMutation({
-      count: count + 1,
-      price: storagePrice ? storagePrice / 100 : 0,
+    const {data: cart} = useQuery(cartQuery(store.city));
+    const count = cart?.[product.id]?.count || 0;
+    const {mutate: cartMutation} = useMutation({
+      mutationFn: ({count, price}: {count: number; price: number}) =>
+        addItem(product.id, count, price, store.city),
+      onSuccess: () => {
+        queryClient.invalidateQueries({
+          queryKey: [CART_STORAGE_KEY, store.city],
+        });
+      },
     });
-  };
-  const onHandleMinus = () => {
-    cartMutation({
-      count: Math.max(count - 1, 0),
-      price: storagePrice ? storagePrice / 100 : 0,
+    const wishIds = Object.keys(wishlists || {});
+    const favourite = wishIds.includes(String(product.id));
+    const {mutate: addWishlist} = useMutation({
+      mutationFn: ({id}: {id: number}) => addToWishlist(id),
+      onSuccess: () => {
+        queryClient.invalidateQueries({queryKey: WISHLIST_QUERY_KEY});
+      },
     });
-  };
+    const price = product?.getOldPrice(undefined)?.price_formatted;
+    const discountPrice = product?.getNewPrice(undefined)?.price_formatted;
 
-  const handleFavouriteButton = () => {
-    addWishlist({
-      id: product.id,
-    });
-  };
-  const descriptionThreeWords = (str: string | null) => {
-    if (str === '' || str === null) {
-      return false;
-    }
-    const words: string[] = str.split(',').map(word => word.trim());
-    let result: string[] = words.slice(0, 3);
-    if (words.length > 3) {
-      return result.join(', ') + '...';
-    }
-    return result.join(', ');
-  };
-  return (
-    <View style={styles.wrapper}>
-      <Text style={styles.weight}>{product.weight} г</Text>
-      <Pressable
-        onPress={() =>
-          navigation.navigate('ProductModal', {
-            product: product,
-          })
-        }>
+    const storagePrice = product?.getNewPrice(undefined)?.price;
+    const onHandleAdd = () => {
+      cartMutation({
+        count: count + 1,
+        price: storagePrice ? storagePrice / 100 : 0,
+      });
+    };
+    const onHandleMinus = () => {
+      cartMutation({
+        count: Math.max(count - 1, 0),
+        price: storagePrice ? storagePrice / 100 : 0,
+      });
+    };
+
+    const handleFavouriteButton = () => {
+      addWishlist({
+        id: product.id,
+      });
+    };
+    const descriptionThreeWords = (str: string | null) => {
+      if (str === '' || str === null) {
+        return false;
+      }
+      const words: string[] = str.split(',').map(word => word.trim());
+      let result: string[] = words.slice(0, 3);
+      if (words.length > 3) {
+        return result.join(', ') + '...';
+      }
+      return result.join(', ');
+    };
+    return (
+      <View style={styles.wrapper}>
+        <Text style={styles.weight}>{product.weight} г</Text>
         <Pressable
-          onPress={handleFavouriteButton}
-          style={styles.heartContainer}>
-          <Heart
-            width="14"
-            height="12"
-            color={favourite ? 'yellow' : 'white'}
-          />
-        </Pressable>
+          onPress={() =>
+            navigation.navigate('ProductModal', {
+              product: product,
+            })
+          }>
+          <Pressable
+            onPress={handleFavouriteButton}
+            style={styles.heartContainer}>
+            <Heart
+              width="14"
+              height="12"
+              color={favourite ? 'yellow' : 'white'}
+            />
+          </Pressable>
 
-        <View style={styles.imageDescriptionWrapper}>
-          {product.mainImage !== undefined ? (
-            <Image style={styles.image} source={{uri: product?.mainImage}} />
-          ) : (
-            <Logo style={styles.svg} fillOpacity={0.1} />
-          )}
-          <View style={styles.textWrapper}>
-            <Text style={styles.title}>{product.name}</Text>
-            <Text style={styles.description}>
-              {descriptionThreeWords(product.descriptionShort)}
+          <View style={styles.imageDescriptionWrapper}>
+            {product.mainImage !== undefined ? (
+              <Image style={styles.image} source={{uri: product?.mainImage}} />
+            ) : (
+              <Logo style={styles.svg} fillOpacity={0.1} />
+            )}
+            <View style={styles.textWrapper}>
+              <Text style={styles.title}>{product.name}</Text>
+              <Text style={styles.description}>
+                {descriptionThreeWords(product.descriptionShort)}
+              </Text>
+            </View>
+          </View>
+        </Pressable>
+        <View style={styles.priceAndButtonContainer}>
+          <View style={styles.priceContainer}>
+            <Text style={styles.discountPrice}>
+              {discountPrice ? price : ''}
+            </Text>
+            <Text style={styles.price}>
+              {discountPrice ? discountPrice : price}
             </Text>
           </View>
+          {count > 0 ? (
+            <Counter
+              onHandleMinus={onHandleMinus}
+              onHandleAdd={onHandleAdd}
+              count={count}
+            />
+          ) : (
+            <TouchableOpacity onPress={onHandleAdd} style={styles.addBtn}>
+              <Text style={styles.btnText}>Додати в кошик</Text>
+            </TouchableOpacity>
+          )}
         </View>
-      </Pressable>
-      <View style={styles.priceAndButtonContainer}>
-        <View style={styles.priceContainer}>
-          <Text style={styles.discountPrice}>{discountPrice ? price : ''}</Text>
-          <Text style={styles.price}>
-            {discountPrice ? discountPrice : price}
-          </Text>
-        </View>
-        {count > 0 ? (
-          <Counter
-            onHandleMinus={onHandleMinus}
-            onHandleAdd={onHandleAdd}
-            count={count}
-          />
-        ) : (
-          <TouchableOpacity onPress={onHandleAdd} style={styles.addBtn}>
-            <Text style={styles.btnText}>Додати в кошик</Text>
-          </TouchableOpacity>
-        )}
       </View>
-    </View>
-  );
-};
+    );
+  },
+);
 
 const styles = StyleSheet.create({
   wrapper: {

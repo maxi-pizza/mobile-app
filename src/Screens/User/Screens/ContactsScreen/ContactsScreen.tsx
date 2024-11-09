@@ -33,7 +33,7 @@ const ContactsScreen = observer(({navigation}: {navigation: any}) => {
         await Linking.openURL(webUrl);
       }
     } catch (e) {
-      console.log(e);
+      throw new Error(e);
     }
   };
   return (

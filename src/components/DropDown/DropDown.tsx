@@ -8,6 +8,7 @@ type OptionProps = {
   id: number;
   name: string;
   slug?: string;
+  temporarily_unavailable?: boolean;
 };
 
 export const DropDown = observer(
@@ -52,14 +53,20 @@ export const DropDown = observer(
             {options.map(option => (
               <Pressable
                 key={option.id}
-                onPress={() => handleOptionPress(option)}>
+                onPress={() => handleOptionPress(option)}
+                style={styles.textWrapper}
+                disabled={option.temporarily_unavailable ? true : false}>
                 <Text
                   style={[
                     styles.cityText,
                     value === option.id && styles.selectedOption,
+                    option.temporarily_unavailable && styles.temporarilySpot,
                   ]}>
                   {option.name}
                 </Text>
+                {option.temporarily_unavailable ? (
+                  <Text style={styles.temporarily}>Тимчасово недоступно</Text>
+                ) : null}
               </Pressable>
             ))}
           </View>
@@ -82,12 +89,26 @@ const styles = StyleSheet.create({
   whiteText: {
     color: 'white',
   },
+  textWrapper: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  temporarilySpot: {
+    color: 'grey',
+  },
   bottomSheetContent: {
     backgroundColor: '#1C1C1C',
     height: nh(190),
     paddingLeft: nw(15),
     width: nw(365),
     borderRadius: 10,
+  },
+  temporarily: {
+    color: 'orange',
+    fontWeight: '600',
+    fontSize: nh(12),
+    fontFamily: 'MontserratRegular',
   },
   cityText: {
     fontFamily: 'MontserratRegular',

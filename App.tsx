@@ -11,6 +11,10 @@ import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 import ClosedRestaurant from './src/components/ClosedRestaurantModal/ClosedRestaurant.tsx';
 import * as Sentry from '@sentry/react-native';
 import ErrorScreen from './src/components/ErrorScreen/ErrorScreen.tsx';
+import {
+  configureReanimatedLogger,
+  ReanimatedLogLevel,
+} from 'react-native-reanimated';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,6 +25,10 @@ const queryClient = new QueryClient({
 });
 Sentry.init({});
 function App() {
+  configureReanimatedLogger({
+    level: ReanimatedLogLevel.warn,
+    strict: false, // Reanimated runs in strict mode by default
+  });
   return (
     <Sentry.ErrorBoundary
       fallback={({resetError}) => <ErrorScreen resetError={resetError} />}>

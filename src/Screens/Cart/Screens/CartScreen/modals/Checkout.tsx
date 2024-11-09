@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -27,7 +27,7 @@ import {shippingQuery} from '~/Screens/Cart/shipping.query.ts';
 import {paymentQuery} from '~/Screens/Cart/payment.query.ts';
 import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
-import {cartQuery} from '~/Screens/Cart/cart.query.ts';
+import {CART_STORAGE_KEY, cartQuery} from '~/Screens/Cart/cart.query.ts';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {isValidUkrainianPhone} from '../../../utils.ts';
@@ -79,7 +79,8 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
   const [requestLoading, setRequestLoading] = useState(false);
   const {data: spotsRes} = useQuery(spotsQuery);
   const {data: cityRes} = useQuery(cityQuery);
-  const {data: cartRes} = useQuery(cartQuery);
+
+  const {data: cartRes} = useQuery(cartQuery(store.city));
 
   const {data: shippingRes} = useQuery(shippingQuery);
   const {data: paymentRes} = useQuery(paymentQuery);
@@ -106,6 +107,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
 
   const city = cities.find(c => c.slug === store.city);
   const districts = city?.districts || [];
+
   const apart = [
     {value: HouseTypeEnum.House, name: 'Приватний будинок'},
     {value: HouseTypeEnum.Apartment, name: 'Апартаменти'},
@@ -320,7 +322,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
         cart: {items},
         sticks: +sticks,
       });
-      AsyncStorage.removeItem('cart');
+      AsyncStorage.removeItem(CART_STORAGE_KEY + `_${store.city}`);
       setRequestLoading(false);
       navigation.goBack();
       navigation.navigate('ThankYou');

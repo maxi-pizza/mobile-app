@@ -18,9 +18,11 @@ import {
 import {Product} from '~/models/Product.ts';
 import {cartQuery} from '~/Screens/Cart/cart.query.ts';
 import {appConfig} from '~/config/app.ts';
+import store from '~/stores/store.ts';
+import {observer} from 'mobx-react-lite';
 
-const CartScreen = ({navigation}: {navigation: any}) => {
-  const {data: cartItems} = useQuery(cartQuery);
+const CartScreen = observer(({navigation}: {navigation: any}) => {
+  const {data: cartItems} = useQuery(cartQuery(store.city));
 
   const {data: productQueryRes, isLoading: isProductsLoading} = useQuery(
     productsQuery({
@@ -84,7 +86,7 @@ const CartScreen = ({navigation}: {navigation: any}) => {
       )}
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

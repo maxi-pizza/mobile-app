@@ -5,9 +5,11 @@ import {StyleSheet, Text, View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
 import {cartQuery} from '~/Screens/Cart/cart.query.ts';
 import {nh, nw} from '~/common/normalize.helper.ts';
+import store from '~/stores/store.ts';
+import {observer} from 'mobx-react-lite';
 
-const CartBottomTab = ({focused}: {focused: any}) => {
-  const {data: cart} = useQuery(cartQuery);
+const CartBottomTab = observer(({focused}: {focused: any}) => {
+  const {data: cart} = useQuery(cartQuery(store.city));
 
   const ids = Object.keys(cart || {});
   const count = ids.reduce((acc, id) => {
@@ -24,7 +26,7 @@ const CartBottomTab = ({focused}: {focused: any}) => {
       <CartIcon width={26} color={focused ? 'yellow' : 'white'} />
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   badge: {

@@ -6,7 +6,6 @@ import {nh, nw} from '~/common/normalize.helper.ts';
 import store from '~/stores/store.ts';
 
 const ErrorScreen = ({resetError}: {resetError: () => void}) => {
-  console.log(resetError);
   return (
     <View style={styles.container}>
       <View style={styles.errorWrapper}>
