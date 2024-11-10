@@ -65,7 +65,7 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
         <FlatList
           ListHeaderComponent={
             <View>
-              {banners.length > 0 && <Banner />}
+              {banners.length > 0 && <Banner navigation={navigation} />}
               <View style={styles.searchWrapper}>
                 <Pressable onPress={() => navigation.navigate('SearchModal')}>
                   <Search onSearch={() => ''} editable={false} />

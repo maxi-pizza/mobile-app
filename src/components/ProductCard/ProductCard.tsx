@@ -99,7 +99,7 @@ export const ProductCard = observer(
         <Pressable
           onPress={() =>
             navigation.navigate('ProductModal', {
-              product: product,
+              product: product.id,
             })
           }>
           <Pressable

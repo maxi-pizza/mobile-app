@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, Pressable, StyleSheet, View} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import {useQuery} from '@tanstack/react-query';
 import Animated, {
@@ -10,7 +10,7 @@ import Animated, {
 } from 'react-native-reanimated';
 import {bannerQuery} from './banner.query.ts';
 
-export const Banner = () => {
+export const Banner = ({navigation}: {navigation: any}) => {
   const flatRef = useAnimatedRef<Animated.FlatList<any>>();
   const [isAuto, setIsAuto] = useState(true);
   const interval = useRef<NodeJS.Timeout>();
@@ -18,11 +18,7 @@ export const Banner = () => {
   const width = nw(365);
 
   const {data: bannerRes, isLoading: isBannerLoading} = useQuery(bannerQuery);
-  const banners = (bannerRes?.data || []).map(item => ({
-    id: item.id,
-    image: item.image_small,
-    product_id: item.product,
-  }));
+  const banners = bannerRes?.data || [];
 
   useEffect(() => {
     if (isAuto) {
@@ -50,7 +46,17 @@ export const Banner = () => {
         data={banners}
         keyExtractor={item => String(item.id)}
         renderItem={({item}) => (
-          <Image style={styles.banner} source={{uri: item.image.path}} />
+          <Pressable
+            onPress={() =>
+              navigation.navigate('ProductModal', {
+                product: item.product?.id,
+              })
+            }>
+            <Image
+              style={styles.banner}
+              source={{uri: item.image_small.path}}
+            />
+          </Pressable>
         )}
         horizontal={true}
         showsHorizontalScrollIndicator={false}

@@ -28,11 +28,30 @@ import {
 import NullImage from '~/assets/Logo.svg';
 import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
+import {
+  DEFAULT_PRODUCT_LIMIT,
+  productsQuery,
+} from '~/Screens/Home/products.query.ts';
+import {IProduct} from '@layerok/emojisushi-js-sdk';
 
 const ProductModal = observer(
   ({route, navigation}: {route: any; navigation: any}) => {
+    const {data: itemRes} = useQuery(
+      productsQuery({
+        category_slug: 'menu',
+        limit: DEFAULT_PRODUCT_LIMIT,
+      }),
+    );
     const queryClient = useQueryClient();
-    const product: Product = route.params.product || [];
+    const id = route.params.product || [];
+    const item: IProduct | undefined = (itemRes?.data || []).find(
+      i => i.id === id,
+    );
+    if (!item) {
+      throw new Error('undefined product');
+    }
+    const product = new Product(item);
+
     const {data: wishlists} = useQuery(wishlistQuery(store.city));
 
     const {data: cart} = useQuery(cartQuery(store.city));
