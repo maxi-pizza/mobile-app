@@ -52,6 +52,7 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
     return category.slug === store.categorySlug;
   });
   const isLoading = isWishlistLoading || isCategoryLoading || isProductsLoading;
+
   return (
     <View style={styles.container}>
       <Spinner

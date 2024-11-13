@@ -60,7 +60,7 @@ const ClosedRestaurant = () => {
           {appConfig.workingHours[1][0]}:{appConfig.workingHours[1][1]}
         </Text>
         <Pressable style={styles.btn} onPress={onHandleClose}>
-          <Text style={styles.btnText}>Close</Text>
+          <Text style={styles.btnText}>Закрити</Text>
         </Pressable>
       </View>
     </BottomSheetModal>

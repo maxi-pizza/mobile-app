@@ -15,6 +15,7 @@ import {
   configureReanimatedLogger,
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
+import {agent} from './APIClient.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -27,10 +28,16 @@ Sentry.init({});
 function App() {
   configureReanimatedLogger({
     level: ReanimatedLogLevel.warn,
-    strict: false, // Reanimated runs in strict mode by default
+    strict: false,
   });
   return (
     <Sentry.ErrorBoundary
+      onError={(error, componentStack) =>
+        agent.axiosClient.post('/log', {
+          error: error.message,
+          stack: componentStack,
+        })
+      }
       fallback={({resetError}) => <ErrorScreen resetError={resetError} />}>
       <GestureHandlerRootView>
         <QueryClientProvider client={queryClient}>

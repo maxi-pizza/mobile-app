@@ -87,8 +87,8 @@ export const ProductCard = observer(
         return false;
       }
       const words: string[] = str.split(',').map(word => word.trim());
-      let result: string[] = words.slice(0, 3);
-      if (words.length > 3) {
+      let result: string[] = words.slice(0, 4);
+      if (words.length > 4) {
         return result.join(', ') + '...';
       }
       return result.join(', ');
@@ -156,15 +156,15 @@ const styles = StyleSheet.create({
   wrapper: {
     backgroundColor: '#1C1C1C',
     width: nw(365),
-    height: nh(150),
+    height: nh(180),
     borderRadius: nw(10),
     position: 'relative',
     marginBottom: nh(15),
     display: 'flex',
   },
   image: {
-    width: nw(111),
-    height: nh(68),
+    width: nw(115),
+    height: nh(100),
     marginTop: nh(20),
     marginLeft: nw(15),
     objectFit: 'contain',
@@ -225,7 +225,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     color: '#838383',
     width: nw(190),
-    height: nh(32),
+    height: nh(60),
   },
   button: {
     width: nw(35),
