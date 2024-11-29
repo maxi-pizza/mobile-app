@@ -61,7 +61,11 @@ export const Navigation = () => {
   return (
     <Tab.Navigator screenOptions={getOptions} initialRouteName="HomeNavigation">
       <Tab.Screen name="Favourite" component={FavouriteScreen} />
-      <Tab.Screen name="Cart" component={CartNavigation} />
+      <Tab.Screen
+        name="Cart"
+        options={{unmountOnBlur: true}}
+        component={CartNavigation}
+      />
       <Tab.Screen name="HomeNavigation" component={HomeNavigation} />
       <Tab.Screen name="Category" component={CategoryScreen} />
       <Tab.Screen name="User" component={StackNavigation} />

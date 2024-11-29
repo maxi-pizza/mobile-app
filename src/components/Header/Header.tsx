@@ -10,57 +10,56 @@ import {DropDown} from '~/components';
 import {useQuery} from '@tanstack/react-query';
 import store from '~/stores/store.ts';
 import {cityQuery} from './city.query.ts';
+import {observer} from 'mobx-react-lite';
 
-export const Header = ({
-  dropdownVisible = true,
-}: {
-  dropdownVisible?: boolean;
-}) => {
-  const {data: citiesRes} = useQuery(cityQuery);
-  const cities = (citiesRes || []).map(c => ({
-    id: c.id,
-    name: c.name,
-    slug: c.slug,
-  }));
+export const Header = observer(
+  ({dropdownVisible = true}: {dropdownVisible?: boolean}) => {
+    const {data: citiesRes} = useQuery(cityQuery);
+    const cities = (citiesRes || []).map(c => ({
+      id: c.id,
+      name: c.name,
+      slug: c.slug,
+    }));
 
-  const onChange = (value: number | string | undefined) => {
-    const city = cities.find(c => c.id === value);
-    if (city) {
-      store.changeCity(city.slug);
-    }
-  };
-  const selected = cities.find(c => c.slug === store.city);
+    const onChange = (value: number | string | undefined) => {
+      const city = cities.find(c => c.id === value);
+      if (city) {
+        store.changeCity(city.slug);
+      }
+    };
+    const selected = cities.find(c => c.slug === store.city);
 
-  return (
-    <View style={styles.container}>
-      <View style={styles.block} />
-      <Logo style={styles.logo} />
-      <View>
-        {dropdownVisible ? (
-          <DropDown
-            snapPoints={'29%'}
-            options={cities}
-            onChange={onChange}
-            value={selected?.id}
-            placeholder={
-              <>
-                <Text style={[styles.chooseText, {marginRight: nw(10)}]}>
-                  Оберіть місто
-                </Text>
+    return (
+      <View style={styles.container}>
+        <View style={styles.block} />
+        <Logo style={styles.logo} />
+        <View>
+          {dropdownVisible ? (
+            <DropDown
+              snapPoints={'29%'}
+              options={cities}
+              onChange={onChange}
+              value={selected?.id}
+              placeholder={
+                <>
+                  <Text style={[styles.chooseText, {marginRight: nw(10)}]}>
+                    Оберіть місто
+                  </Text>
+                  <MapPin color="white" />
+                </>
+              }>
+              <View style={styles.cityContainer}>
                 <MapPin color="white" />
-              </>
-            }>
-            <View style={styles.cityContainer}>
-              <MapPin color="white" />
-              <Text style={styles.whiteText}>{selected?.name}</Text>
-              <Caret color="white" />
-            </View>
-          </DropDown>
-        ) : null}
+                <Text style={styles.whiteText}>{selected?.name}</Text>
+                <Caret color="white" />
+              </View>
+            </DropDown>
+          ) : null}
+        </View>
       </View>
-    </View>
-  );
-};
+    );
+  },
+);
 
 const styles = StyleSheet.create({
   container: {

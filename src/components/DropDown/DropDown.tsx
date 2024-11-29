@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginBottom: nh(20),
     marginTop: nh(15),
+    color: 'white',
   },
   bottom: {
     backgroundColor: 'transparent',

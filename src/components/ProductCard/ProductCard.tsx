@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   Image,
   Pressable,
@@ -135,6 +135,7 @@ export const ProductCard = observer(
               {discountPrice ? discountPrice : price}
             </Text>
           </View>
+
           {count > 0 ? (
             <Counter
               onHandleMinus={onHandleMinus}

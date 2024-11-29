@@ -83,21 +83,21 @@ android {
         applicationId "com.emojisushimobile"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "1.1"
     }
     signingConfigs {
         debug {
-            storeFile file('release-key.keystore')
-            storePassword '18397297'
-            keyAlias 'release-key-alias'
-            keyPassword '18397297'
+            storeFile file('realesEmojisushi.keystore')
+            storePassword 'vgyBHUnjiMKO'
+            keyAlias 'alias'
+            keyPassword 'vgyBHUnjiMKO'
         }
         release {
-                storeFile file('release-key.keystore')
-                storePassword '18397297'
-                keyAlias 'release-key-alias'
-                keyPassword '18397297'
+                storeFile file('realesEmojisushi.keystore')
+                storePassword 'vgyBHUnjiMKO'
+                keyAlias 'alias'
+                keyPassword 'vgyBHUnjiMKO'
             }
     }
     buildTypes {

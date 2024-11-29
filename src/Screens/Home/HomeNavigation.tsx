@@ -14,7 +14,6 @@ const HomeNavigation = () => {
   const Stack = createStackNavigator<ScreenProps>();
   const stackOptions = {
     headerShown: false,
-    animationEnabled: false,
   };
 
   return (

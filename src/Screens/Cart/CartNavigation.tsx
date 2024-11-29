@@ -12,24 +12,28 @@ type ScreenProps = {
 const Stack = createStackNavigator<ScreenProps>();
 
 const CartNavigation = () => {
-  const stackOptions = {
-    headerShown: false,
-    animationEnabled: false,
-  };
-
   return (
     <Stack.Navigator initialRouteName="CartScreen">
-      <Stack.Group screenOptions={stackOptions}>
-        <Stack.Screen name="CartScreen" component={CartScreen} />
-      </Stack.Group>
-      <Stack.Group
-        screenOptions={{
+      <Stack.Screen
+        options={{
+          headerShown: false,
+          animationEnabled: false,
+        }}
+        name="CartScreen"
+        component={CartScreen}
+      />
+      <Stack.Screen
+        options={{
           presentation: 'modal',
           headerShown: false,
           animationTypeForReplace: 'push',
-        }}>
-        <Stack.Screen name="Checkout" component={Checkout} />
-      </Stack.Group>
+          cardStyle: {
+            backgroundColor: '#141414',
+          },
+        }}
+        name="Checkout"
+        component={Checkout}
+      />
     </Stack.Navigator>
   );
 };

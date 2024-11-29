@@ -34,6 +34,7 @@ function App() {
     <Sentry.ErrorBoundary
       onError={(error, componentStack) =>
         agent.axiosClient.post('/log', {
+          // @ts-ignore
           error: error.message,
           stack: componentStack,
         })
