@@ -22,6 +22,9 @@ const HomeNavigation = () => {
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="ThankYou" component={ThankYou} />
       </Stack.Group>
+      <div>
+        <div></div>
+      </div>
 
       <Stack.Group
         screenOptions={{
