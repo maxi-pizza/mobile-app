@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -10,7 +10,7 @@ import {
 import EmptyCart from '~/assets/Icons/EmptyCart.svg';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import {ProductCartCard, Header, isClosed} from '~/components';
-import {useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
   DEFAULT_PRODUCT_LIMIT,
   productsQuery,
@@ -37,6 +37,7 @@ const CartScreen = observer(({navigation}: {navigation: any}) => {
   });
 
   const ids = Object.keys(cartItems || {});
+
   const cart = (productQueryRes?.data || []).filter(item =>
     ids.includes(String(item.id)),
   );

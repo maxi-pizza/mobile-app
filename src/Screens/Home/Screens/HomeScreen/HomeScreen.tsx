@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 
 import {Header, Category, Banner, Search, ProductCard} from '~/components';
-import {useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
   productsQuery,
   DEFAULT_PRODUCT_LIMIT,
@@ -16,13 +16,20 @@ import {observer} from 'mobx-react-lite';
 import store from '~/stores/store.ts';
 import {bannerQuery} from '~/components/Banner/banner.query.ts';
 import Spinner from 'react-native-loading-spinner-overlay';
+import {
+  CART_STORAGE_KEY,
+  cartQuery,
+  removeOldProducts,
+} from '~/Screens/Cart/cart.query.ts';
 
 const HomeScreen = observer(({navigation}: {navigation: any}) => {
+  const queryClient = useQueryClient();
   store.changeNavigation(navigation);
   const {data: wishlists, isLoading: isWishlistLoading} = useQuery(
     wishlistQuery(store.city),
   );
 
+  const {data: cartQueryRes} = useQuery(cartQuery(store.city));
   const {data: categoryQueryRes, isLoading: isCategoryLoading} = useQuery({
     ...categoriesQuery(),
   });
@@ -35,6 +42,28 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
       limit: DEFAULT_PRODUCT_LIMIT,
     }),
   );
+  const cartIds = Object.keys(cartQueryRes || {});
+  const {mutate: removeOldProductsMutation} = useMutation({
+    mutationFn: ({ids, city}: {ids: string[]; city: string}) =>
+      removeOldProducts({ids, city}),
+    onSuccess: (data, variables) =>
+      queryClient.invalidateQueries(cartQuery(variables.city)),
+  });
+
+  useEffect(() => {
+    if (cartIds.length > 0) {
+      const existProductsIds = (productQueryRes?.data || []).map(item =>
+        String(item.id),
+      );
+
+      const notExistProducts = cartIds.filter(
+        cartId => !existProductsIds.includes(cartId),
+      );
+      if (notExistProducts.length > 0) {
+        removeOldProductsMutation({ids: notExistProducts, city: store.city});
+      }
+    }
+  }, [productQueryRes]);
 
   const belongsToCategory = (product: IProduct) => {
     return !!product.categories

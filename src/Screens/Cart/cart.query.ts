@@ -1,4 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useMutation} from '@tanstack/react-query';
+import store from '~/stores/store.ts';
 
 export const CART_STORAGE_KEY = 'cart';
 
@@ -36,4 +38,19 @@ export const addItem = async (
   }
 
   return await getItems(city);
+};
+
+export const removeOldProducts = async ({
+  ids,
+  city,
+}: {
+  ids: string[];
+  city: string;
+}) => {
+  const cart = await getItems(city);
+  ids.forEach(id => delete cart[id]);
+  await AsyncStorage.setItem(
+    CART_STORAGE_KEY + `_${city}`,
+    JSON.stringify(cart),
+  );
 };
