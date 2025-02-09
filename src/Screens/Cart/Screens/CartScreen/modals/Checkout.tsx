@@ -14,7 +14,6 @@ import {Input, Counter, Header, BackButton, DropDown} from '~/components';
 
 import {useQuery} from '@tanstack/react-query';
 import {spotsQuery} from '~/Screens/Cart/spots.query.ts';
-import * as Sentry from '@sentry/react-native';
 
 import Truck from '~/assets/Icons/Truck.svg';
 import Package from '~/assets/Icons/Package.svg';
@@ -302,10 +301,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
       shippingMethod === ShippingMethodEnum.Takeaway
         ? spotId
         : getDistrictDefaultSpot(district!).id;
-    if (!resultantSpotId) {
-      setRequestLoading(false);
-      throw new Error('Invalid spot ID');
-    }
+
     try {
       await agent.placeOrderV2({
         phone,
@@ -316,7 +312,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
         address,
         payment_method_id: paymentId!.id,
         shipping_method_id: shippingId!.id,
-        spot_id: resultantSpotId,
+        spot_id: resultantSpotId!,
 
         change,
         comment,
@@ -329,12 +325,12 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
       navigation.navigate('ThankYou');
     } catch (e) {
       if (e instanceof Error) {
-        setRequestLoading(false);
         throw new Error(e.message);
       } else {
-        setRequestLoading(false);
         throw new Error(`Unknown error ${e}`);
       }
+    } finally {
+      setRequestLoading(false);
     }
   };
 
@@ -383,7 +379,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
 
           {shippingMethod === ShippingMethodEnum.Courier ? (
             <View>
-              {districts.length > 1 && (
+              {districts.length !== 1 && (
                 <Controller
                   name="districtId"
                   control={control}
@@ -396,7 +392,11 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                       ]}>
                       <DropDown
                         value={value}
-                        placeholder={<Text>Виберіть район доставки</Text>}
+                        placeholder={
+                          <Text style={styles.whiteText}>
+                            Виберіть район доставки
+                          </Text>
+                        }
                         options={districts}
                         onChange={d => onChange(d)}
                         error={errors.districtId?.message}
@@ -525,7 +525,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
               )}
             </View>
           ) : (
-            spots.length > 1 && (
+            spots.length !== 1 && (
               <Controller
                 name="spotId"
                 control={control}
@@ -538,7 +538,11 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                     ]}>
                     <DropDown
                       value={value}
-                      placeholder={<Text>Оберіть найближчий заклад</Text>}
+                      placeholder={
+                        <Text style={styles.whiteText}>
+                          Оберіть найближчий заклад
+                        </Text>
+                      }
                       options={spots}
                       onChange={s => onChange(s)}
                       snapPoints={'30'}
