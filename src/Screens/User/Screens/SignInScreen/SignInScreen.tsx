@@ -36,6 +36,7 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
     handleSubmit,
     control,
     formState: {errors},
+    setError,
   } = useForm({
     defaultValues: InitialValue,
     resolver: yupResolver<FormValues>(
@@ -63,7 +64,12 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
           message: string;
           errors?: Record<string, string[]>;
         }>;
-        console.log(error.response?.data.message);
+        const code = error.response?.status;
+        if (code == 422) {
+          setError('password', {
+            message: 'Неверное имя пользователя или пароль',
+          });
+        }
       } else {
         throw new Error(`Unknown error ${e}`);
       }
