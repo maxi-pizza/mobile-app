@@ -1,27 +1,102 @@
+import {yupResolver} from '@hookform/resolvers/yup';
 import React from 'react';
+import {Controller, useForm} from 'react-hook-form';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
+import * as yup from 'yup';
 
 import {Header, Input} from '~/components';
+import {useMutation} from '@tanstack/react-query';
+import {agent} from '~/../APIClient';
+import axios, {AxiosError} from 'axios';
+import Spinner from 'react-native-loading-spinner-overlay/lib';
 
+const validationRequired = 'Заповніть це поле';
+const ResetSchema = yup.object({
+  email: yup.string().email().min(6).max(255).required(validationRequired),
+});
+type FormValues = {
+  email: string;
+};
+const InitialValue: FormValues = {
+  email: '',
+};
 const ResetPasswordScreen = () => {
+  const {mutate: resetMutation, isLoading} = useMutation({
+    mutationFn: async (data: FormValues) => {
+      const {email} = data;
+      return await agent.restorePassword({
+        email: email,
+        redirect_url: '',
+      });
+    },
+    onSuccess: data => {},
+    onError: e => {
+      if (axios.isAxiosError(e)) {
+        let error = e as AxiosError<{
+          message: string;
+          errors?: Record<string, string[]>;
+        }>;
+        const fieldErrors = error.response?.data.message;
+        if (fieldErrors) {
+          setError('email', {
+            message: fieldErrors,
+          });
+        }
+      } else {
+        throw new Error(`Unknown error ${e}`);
+      }
+    },
+  });
+  const {
+    handleSubmit,
+    control,
+    formState: {errors},
+    setError,
+  } = useForm({
+    defaultValues: InitialValue,
+    resolver: yupResolver<FormValues>(ResetSchema),
+  });
+  const onSubmit = (data: FormValues) => {
+    resetMutation(data);
+  };
   return (
     <View style={styles.container}>
-      {/*<Header />*/}
-      {/*<Text style={styles.header}>Восстановление пароля</Text>*/}
-      {/*<Input placeholder="Email" inputMode="email" />*/}
-      {/*<Text style={styles.emailText}>*/}
-      {/*  Введите Ваш E-mail адрес для которого необходимо скинуть пароль*/}
-      {/*</Text>*/}
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={{color: 'yellow'}}
+        overlayColor="rgba(0, 0, 0, 0.75)"
+      />
+      <Header />
+      <Text style={styles.header}>Восстановление пароля</Text>
+      <View style={styles.inputTextWrapper}>
+        <Controller
+          name="email"
+          control={control}
+          render={({field: {onChange, value}}) => (
+            <Input
+              placeholder="Email"
+              inputMode="text"
+              value={value}
+              onChangeText={v => onChange(v)}
+              error={errors.email?.message}
+            />
+          )}
+        />
+      </View>
+      <Text style={styles.emailText}>
+        Введите Ваш E-mail адрес для которого необходимо скинуть пароль
+      </Text>
 
-      {/*<TouchableOpacity style={styles.btn}>*/}
-      {/*  <Text style={styles.btnText}>Отправить</Text>*/}
-      {/*</TouchableOpacity>*/}
-      {/*<View style={styles.textWrapper}>*/}
-      {/*  <Text style={styles.yellowText}>*/}
-      {/*    Не пришел код? <Text style={styles.link}>Отправить ещё</Text>*/}
-      {/*  </Text>*/}
-      {/*</View>*/}
+      <TouchableOpacity style={styles.btn} onPress={handleSubmit(onSubmit)}>
+        <Text style={styles.btnText}>Отправить</Text>
+      </TouchableOpacity>
+      <View style={styles.textWrapper}>
+        <Text style={styles.yellowText}>
+          Не пришел код? <Text style={styles.link}>Отправить ещё</Text>
+        </Text>
+      </View>
     </View>
   );
 };
@@ -39,6 +114,11 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: nh(30),
     marginBottom: nh(30),
+  },
+  inputTextWrapper: {
+    marginBottom: nh(15),
+    width: '100%',
+    paddingHorizontal: nw(12),
   },
   emailText: {
     fontFamily: 'MontserratRegular',
