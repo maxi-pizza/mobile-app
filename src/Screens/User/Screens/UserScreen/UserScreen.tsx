@@ -14,26 +14,32 @@ import Coins from '~/assets/Icons/Coins.svg';
 import {Header, UserOption} from '~/components';
 import {observer} from 'mobx-react-lite';
 import {agent} from '~/../APIClient.tsx';
-import { IUser } from '@layerok/emojisushi-js-sdk';
+import {useQuery} from '@tanstack/react-query';
+import Spinner from 'react-native-loading-spinner-overlay/lib/index';
 
 const UserScreen = observer(({navigation}: {navigation: any}) => {
   const [logged, setLogged] = useState(false);
-  const [user, setUser] = useState<IUser | undefined>(undefined);
   const [isVisible, setIsVisible] = useState(false);
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      const req = await agent.fetchUser();
-      if (req.status == 200){
-        setLogged(true);
-        setUser(req.data)
-      }
-    };
-    fetchUser();
-  }, []);
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['userData'],
+    queryFn: () => agent.fetchUser(),
+    select: req => req.data,
+    onSuccess: () => setLogged(true),
+  });
 
   return (
     <View style={styles.container}>
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={{color: 'yellow'}}
+        overlayColor="rgba(0, 0, 0, 0.75)"
+      />
       <Header />
       {logged ? (
         <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>

@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay/lib';
 import {nh, nw} from '~/common/normalize.helper.ts';
 
 import {Header, Input, BackButtonModal} from '~/components';
@@ -18,38 +19,45 @@ const ProfileScreen = ({
   visible: boolean;
   setIsVisible: (a: boolean) => void;
 }) => {
+    
   return (
     <Modal visible={visible} onRequestClose={() => setIsVisible(!visible)}>
-      {/*<View style={styles.container}>*/}
-      {/*  <Header />*/}
-      {/*  <BackButtonModal setIsVisible={setIsVisible} visible={visible} />*/}
-      {/*  <ScrollView>*/}
-      {/*    <Text style={styles.header}>Профиль</Text>*/}
-      {/*    <View style={styles.inputsWrapper}>*/}
-      {/*      <View style={styles.inputTextWrapper}>*/}
-      {/*        <Text style={styles.inputLabel}>Имя</Text>*/}
-      {/*        <Input placeholder="Введите Имя" inputMode="text" />*/}
-      {/*      </View>*/}
-      {/*      <View style={styles.inputTextWrapper}>*/}
-      {/*        <Text style={styles.inputLabel}>Email</Text>*/}
-      {/*        <Input placeholder="Введите Email" inputMode="email" />*/}
-      {/*      </View>*/}
-      {/*      <View style={styles.inputTextWrapper}>*/}
-      {/*        <Text style={styles.inputLabel}>Телефон</Text>*/}
-      {/*        <Input placeholder="Введите телефон" inputMode="tel" />*/}
-      {/*      </View>*/}
-      {/*      <TouchableOpacity style={styles.btnChangePass}>*/}
-      {/*        <Text style={styles.changePassText}>Изменить пароль</Text>*/}
-      {/*      </TouchableOpacity>*/}
-      {/*    </View>*/}
-      {/*  </ScrollView>*/}
+      <View style={styles.container}>
+        {/* <Spinner
+          visible={isLoading}
+          textContent={'Loading...'}
+          textStyle={{color: 'yellow'}}
+          overlayColor="rgba(0, 0, 0, 0.75)"
+        /> */}
+        <Header />
+        <BackButtonModal setIsVisible={setIsVisible} visible={visible} />
+        <ScrollView>
+          <Text style={styles.header}>Профиль</Text>
+          <View style={styles.inputsWrapper}>
+            <View style={styles.inputTextWrapper}>
+              <Text style={styles.inputLabel}>Имя</Text>
+              {/* <Input placeholder="Введите Имя" inputMode="text" /> */}
+            </View>
+            <View style={styles.inputTextWrapper}>
+              <Text style={styles.inputLabel}>Email</Text>
+              {/* <Input placeholder="Введите Email" inputMode="email" /> */}
+            </View>
+            <View style={styles.inputTextWrapper}>
+              <Text style={styles.inputLabel}>Телефон</Text>
+              {/* <Input placeholder="Введите телефон" inputMode="tel" /> */}
+            </View>
+            <TouchableOpacity style={styles.btnChangePass}>
+              <Text style={styles.changePassText}>Изменить пароль</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
 
-      {/*  <View style={styles.footer}>*/}
-      {/*    <TouchableOpacity style={styles.saveBtn}>*/}
-      {/*      <Text style={styles.btnText}>Сохранить</Text>*/}
-      {/*    </TouchableOpacity>*/}
-      {/*  </View>*/}
-      {/*</View>*/}
+        <View style={styles.footer}>
+          <TouchableOpacity style={styles.saveBtn}>
+            <Text style={styles.btnText}>Сохранить</Text>
+          </TouchableOpacity>
+        </View>
+      </View>
     </Modal>
   );
 };
