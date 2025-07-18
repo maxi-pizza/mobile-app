@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 import PasswordInput from '~/Screens/User/components/PasswordInput/PasswordInput.tsx';
 import {Header, Input} from '~/components';
@@ -10,11 +11,13 @@ import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 
 import {agent} from '~/../APIClient.tsx';
+import {useMutation} from '@tanstack/react-query';
+import axios, {AxiosError} from 'axios';
 
 const validationRequired = 'Заповніть це поле';
 const LoginSchema = yup.object({
   email: yup.string().email().required(validationRequired),
-  password: yup.string(),
+  password: yup.string().min(8).max(255).required(validationRequired),
 });
 type FormValues = {
   email: string;
@@ -37,24 +40,40 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
       LoginSchema,
     ),
   });
-  const onSubmit = async (data: FormValues) => {
-    const {email, password} = data;
-    try {
-      await agent.login({
+  const {mutate: loginMutation, isLoading} = useMutation({
+    mutationFn: async (data: FormValues) => {
+      const {email, password} = data;
+      return await agent.login({
         email,
         password,
       });
+    },
+    onSuccess: () => {
       navigation.goBack();
-    } catch (e) {
-      if (e instanceof Error) {
-        throw new Error(e.message);
+    },
+    onError: e => {
+      if (axios.isAxiosError(e)) {
+        let error = e as AxiosError<{
+          message: string;
+          errors?: Record<string, string[]>;
+        }>;
+        console.log(error.response?.data.message)
       } else {
         throw new Error(`Unknown error ${e}`);
       }
-    }
+    },
+  });
+  const onSubmit = async (data: FormValues) => {
+    loginMutation(data);
   };
   return (
     <View style={styles.container}>
+      <Spinner
+        visible={isLoading}
+        textContent={'Loading...'}
+        textStyle={{color: 'yellow'}}
+        overlayColor="rgba(0, 0, 0, 0.75)"
+      />
       <Header />
       <Text style={styles.header}>Вход в аккаунт</Text>
       <View>
@@ -82,6 +101,7 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
                 placeholder="Пароль"
                 value={value}
                 onChangeText={v => onChange(v)}
+                error={errors.password?.message}
               />
             )}
           />
