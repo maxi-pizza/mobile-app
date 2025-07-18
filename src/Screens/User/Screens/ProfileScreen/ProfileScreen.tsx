@@ -1,4 +1,7 @@
-import React from 'react';
+import {IUser} from '@layerok/emojisushi-js-sdk';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import React, {useEffect} from 'react';
+import {Controller, useForm} from 'react-hook-form';
 import {
   Modal,
   ScrollView,
@@ -8,9 +11,34 @@ import {
   View,
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
+import {agent} from '~/../APIClient';
 import {nh, nw} from '~/common/normalize.helper.ts';
+import * as yup from 'yup';
 
 import {Header, Input, BackButtonModal} from '~/components';
+import {yupResolver} from '@hookform/resolvers/yup';
+import axios, {AxiosError} from 'axios';
+import {clearToken} from '~/common/token/token';
+
+const validationRequired = 'Заповніть це поле';
+const UserInfoSchema = yup.object({
+  name: yup.string().min(2).required(validationRequired),
+  surname: yup.string().min(2).required(validationRequired),
+  email: yup.string().email().min(6).max(255).required(validationRequired),
+  phone: yup.string().min(6),
+});
+type FormValues = {
+  name: string;
+  surname: string;
+  email: string;
+  phone: string;
+};
+const InitialValue: FormValues = {
+  name: '',
+  surname: '',
+  email: '',
+  phone: '',
+};
 
 const ProfileScreen = ({
   visible,
@@ -19,31 +47,146 @@ const ProfileScreen = ({
   visible: boolean;
   setIsVisible: (a: boolean) => void;
 }) => {
-    
+  const queryClient = useQueryClient();
+  const {
+    handleSubmit,
+    control,
+    formState: {errors},
+    setValue,
+    setError,
+  } = useForm({
+    defaultValues: InitialValue,
+    resolver: yupResolver<FormValues>(
+      // @ts-ignore
+      UserInfoSchema,
+    ),
+  });
+
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['userData'],
+    queryFn: () => agent.fetchUser(),
+    select: req => req.data,
+  });
+  const {mutate: updateUser, isLoading: isSaving} = useMutation({
+    mutationFn: (data: FormValues) => agent.updateUser(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries(['userData']);
+    },
+    onError: e => {
+      if (axios.isAxiosError(e)) {
+        let error = e as AxiosError<{
+          message: string;
+          errors?: Record<string, string[]>;
+        }>;
+        const fieldErrors = error.response?.data.errors;
+        if (fieldErrors) {
+          Object.keys(fieldErrors).forEach(key => {
+            if (key === 'phone') {
+              setError('phone', {
+                message: fieldErrors[key][0],
+              });
+            }
+          });
+        }
+      } else {
+        throw new Error(`Unknown error ${e}`);
+      }
+    },
+  });
+  const onSubmit = (data: FormValues) => {
+    updateUser(data);
+  };
+  useEffect(() => {
+    setValue('name', user?.name ?? '');
+    setValue('surname', user?.surname ?? '');
+    setValue('email', user?.email ?? '');
+    setValue('phone', user?.phone ?? '');
+  }, [user]);
   return (
     <Modal visible={visible} onRequestClose={() => setIsVisible(!visible)}>
       <View style={styles.container}>
-        {/* <Spinner
-          visible={isLoading}
+        <Spinner
+          visible={isLoading || isSaving}
           textContent={'Loading...'}
           textStyle={{color: 'yellow'}}
           overlayColor="rgba(0, 0, 0, 0.75)"
-        /> */}
+        />
         <Header />
-        <BackButtonModal setIsVisible={setIsVisible} visible={visible} />
+        <View style={styles.backButton}>
+          <BackButtonModal setIsVisible={setIsVisible} visible={visible} />
+        </View>
         <ScrollView>
           <Text style={styles.header}>Профиль</Text>
           <View style={styles.inputsWrapper}>
             <View style={styles.inputTextWrapper}>
               <Text style={styles.inputLabel}>Имя</Text>
-              {/* <Input placeholder="Введите Имя" inputMode="text" /> */}
+              <Controller
+                name="name"
+                control={control}
+                render={({field: {onChange, value}}) => (
+                  <Input
+                    placeholder="Имя"
+                    inputMode="text"
+                    value={value}
+                    onChangeText={v => onChange(v)}
+                    error={errors.name?.message}
+                  />
+                )}
+              />
+            </View>
+            <View style={styles.inputTextWrapper}>
+              <Text style={styles.inputLabel}>Фамилия</Text>
+              <Controller
+                name="surname"
+                control={control}
+                render={({field: {onChange, value}}) => (
+                  <Input
+                    placeholder="Фамилия"
+                    inputMode="text"
+                    value={value}
+                    onChangeText={v => onChange(v)}
+                    error={errors.surname?.message}
+                  />
+                )}
+              />
             </View>
             <View style={styles.inputTextWrapper}>
               <Text style={styles.inputLabel}>Email</Text>
+              <Controller
+                name="email"
+                control={control}
+                render={({field: {onChange, value}}) => (
+                  <Input
+                    placeholder="Email"
+                    inputMode="text"
+                    value={value}
+                    onChangeText={onChange}
+                    error={errors.email?.message}
+                    editable={false}
+                  />
+                )}
+              />
               {/* <Input placeholder="Введите Email" inputMode="email" /> */}
             </View>
             <View style={styles.inputTextWrapper}>
               <Text style={styles.inputLabel}>Телефон</Text>
+              <Controller
+                name="phone"
+                control={control}
+                render={({field: {onChange, value}}) => (
+                  <Input
+                    placeholder="phone"
+                    inputMode="text"
+                    value={value}
+                    onChangeText={onChange}
+                    error={errors.phone?.message}
+                  />
+                )}
+              />
               {/* <Input placeholder="Введите телефон" inputMode="tel" /> */}
             </View>
             <TouchableOpacity style={styles.btnChangePass}>
@@ -53,7 +196,9 @@ const ProfileScreen = ({
         </ScrollView>
 
         <View style={styles.footer}>
-          <TouchableOpacity style={styles.saveBtn}>
+          <TouchableOpacity
+            style={styles.saveBtn}
+            onPress={handleSubmit(onSubmit)}>
             <Text style={styles.btnText}>Сохранить</Text>
           </TouchableOpacity>
         </View>
@@ -66,6 +211,10 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     backgroundColor: '#141414',
+    width: '100%',
+    paddingHorizontal: nw(12),
+    display: 'flex',
+    alignItems: 'center',
   },
   header: {
     fontFamily: 'MontserratRegular',
@@ -80,6 +229,7 @@ const styles = StyleSheet.create({
   inputsWrapper: {
     display: 'flex',
     alignItems: 'center',
+    width: '100%',
   },
   footer: {
     backgroundColor: '#171717',
@@ -109,6 +259,7 @@ const styles = StyleSheet.create({
   },
   inputTextWrapper: {
     marginBottom: nh(15),
+    width: '100%',
   },
   inputLabel: {
     fontFamily: 'MontserratRegular',
@@ -133,6 +284,10 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     color: 'black',
   },
+  backButton: {
+    position: 'absolute',
+    left: 0
+  }
 });
 
 export default ProfileScreen;

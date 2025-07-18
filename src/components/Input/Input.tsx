@@ -40,12 +40,14 @@ export const Input = ({
   placeholder,
   inputMode,
   onChangeText,
+  editable = true,
   value,
   error,
 }: {
   placeholder: string;
   inputMode: 'email' | 'text' | 'tel' | 'numeric';
   onChangeText: (text: string) => void;
+  editable?: boolean;
   value: string;
   error?: string;
 }) => {
@@ -66,6 +68,8 @@ export const Input = ({
         inputMode={inputMode}
         onChangeText={onChangeText}
         value={value}
+        editable={editable}
+
       />
 
       {error && (

@@ -13,6 +13,7 @@ import axios, {AxiosError} from 'axios';
 import {agent} from '~/../APIClient.tsx';
 import {useMutation} from '@tanstack/react-query';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
+import { setToken } from '~/common/token/token';
 
 const validationRequired = 'Заповніть це поле';
 const RegisterSchema = yup.object({
@@ -64,7 +65,9 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
         agree,
       });
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
+      const {token} = data.data.data;
+      setToken(token);
       navigation.goBack();
     },
     onError: e => {
@@ -78,7 +81,7 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
           Object.keys(fieldErrors).forEach(key => {
             if (key === 'email') {
               setError('email', {
-                message: 'Email is already in use',
+                message: fieldErrors[key][0],
               });
             }
           });

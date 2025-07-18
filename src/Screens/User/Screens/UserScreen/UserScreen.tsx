@@ -14,10 +14,12 @@ import Coins from '~/assets/Icons/Coins.svg';
 import {Header, UserOption} from '~/components';
 import {observer} from 'mobx-react-lite';
 import {agent} from '~/../APIClient.tsx';
-import {useQuery} from '@tanstack/react-query';
+import {QueryClient, useQuery, useQueryClient} from '@tanstack/react-query';
 import Spinner from 'react-native-loading-spinner-overlay/lib/index';
+import {clearToken} from '~/common/token/token.ts';
 
 const UserScreen = observer(({navigation}: {navigation: any}) => {
+  const queryClient = useQueryClient();
   const [logged, setLogged] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
@@ -27,11 +29,20 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
     error,
   } = useQuery({
     queryKey: ['userData'],
-    queryFn: () => agent.fetchUser(),
+    queryFn: () => {
+      setLogged(false);
+      return agent.fetchUser();
+    },
     select: req => req.data,
     onSuccess: () => setLogged(true),
+    onError: () => setLogged(false),
   });
-
+  const signOut = async () => {
+    console.log('a')
+    setLogged(false);
+    await clearToken();
+    queryClient.invalidateQueries(['userData']);
+  };
   return (
     <View style={styles.container}>
       <Spinner
@@ -42,26 +53,35 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
       />
       <Header />
       {logged ? (
-        <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
+        <>
           <View style={styles.horizontalLine} />
-          <View style={styles.profileContainer}>
-            <View style={styles.profileTextUserWrapper}>
-              <View style={styles.userCircle}>
-                <UserCircle color="#727272" />
+          <View style={styles.profileContainerColumn}>
+            <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
+              <View style={styles.profileContainer}>
+                <View style={styles.profileTextUserWrapper}>
+                  <View style={styles.userCircle}>
+                    <UserCircle color="#727272" />
+                  </View>
+                  <View style={styles.profileTextWrapper}>
+                    <Text style={styles.profileText}>Ваш профіль</Text>
+                    <Text style={styles.gmail}>{user?.email}</Text>
+                  </View>
+                </View>
+                <Caret
+                  style={styles.caret}
+                  width="15"
+                  height="15"
+                  color="#FFE600"
+                />
               </View>
-              <View style={styles.profileTextWrapper}>
-                <Text style={styles.profileText}>Ваш профіль</Text>
-                <Text style={styles.gmail}>{user?.email}</Text>
-              </View>
-            </View>
-            <Caret
-              style={styles.caret}
-              width="15"
-              height="15"
-              color="#FFE600"
-            />
+            </TouchableOpacity>
+            <TouchableOpacity style={styles.signUpBtn} onPress={signOut}>
+              <Text style={styles.signUpBtnText} >
+                Выход
+              </Text>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+        </>
       ) : (
         <View style={styles.withoutAccount}>
           <View style={styles.withoutAccountWrapper}>
@@ -148,6 +168,15 @@ const styles = StyleSheet.create({
     height: nh(102),
     display: 'flex',
     flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginLeft: nw(13),
+  },
+  profileContainerColumn: {
+    width: '100%',
+    height: nh(150),
+    display: 'flex',
+    flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'space-between',
     marginLeft: nw(13),
