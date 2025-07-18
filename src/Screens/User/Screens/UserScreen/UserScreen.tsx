@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 
@@ -13,15 +13,29 @@ import CreditCard from '~/assets/Icons/CreditCard.svg';
 import Coins from '~/assets/Icons/Coins.svg';
 import {Header, UserOption} from '~/components';
 import {observer} from 'mobx-react-lite';
+import {agent} from '~/../APIClient.tsx';
+import { IUser } from '@layerok/emojisushi-js-sdk';
 
 const UserScreen = observer(({navigation}: {navigation: any}) => {
-   const [logged, setLogged] = useState(false);
-   const [isVisible, setIsVisible] = useState(false);
+  const [logged, setLogged] = useState(false);
+  const [user, setUser] = useState<IUser | undefined>(undefined);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const req = await agent.fetchUser();
+      if (req.status == 200){
+        setLogged(true);
+        setUser(req.data)
+      }
+    };
+    fetchUser();
+  }, []);
 
   return (
     <View style={styles.container}>
       <Header />
-       {logged ? (
+      {logged ? (
         <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
           <View style={styles.horizontalLine} />
           <View style={styles.profileContainer}>
@@ -31,7 +45,7 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
               </View>
               <View style={styles.profileTextWrapper}>
                 <Text style={styles.profileText}>Ваш профіль</Text>
-                <Text style={styles.gmail}>mymail@gmail.com</Text>
+                <Text style={styles.gmail}>{user?.email}</Text>
               </View>
             </View>
             <Caret
@@ -82,7 +96,7 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
           title="Збережені адреси"
           svgIcon={<Truck color="#727272" />}
         />
-      </TouchableOpacity> 
+      </TouchableOpacity>
 
       <View style={styles.horizontalLine} />
 

@@ -13,6 +13,8 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {agent} from '~/../APIClient.tsx';
 import {useMutation} from '@tanstack/react-query';
 import axios, {AxiosError} from 'axios';
+import {LoginResData} from '@layerok/emojisushi-js-sdk';
+import {setToken} from '~/common/token/token';
 
 const validationRequired = 'Заповніть це поле';
 const LoginSchema = yup.object({
@@ -48,7 +50,9 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
         password,
       });
     },
-    onSuccess: () => {
+    onSuccess: data => {
+      const {token} = data.data.data;
+      setToken(token);
       navigation.goBack();
     },
     onError: e => {
@@ -57,7 +61,7 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
           message: string;
           errors?: Record<string, string[]>;
         }>;
-        console.log(error.response?.data.message)
+        console.log(error.response?.data.message);
       } else {
         throw new Error(`Unknown error ${e}`);
       }
