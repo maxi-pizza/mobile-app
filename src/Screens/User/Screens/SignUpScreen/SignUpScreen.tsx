@@ -5,10 +5,10 @@ import PasswordInput from '~/Screens/User/components/PasswordInput/PasswordInput
 
 import {Header, Input, CheckBox} from '~/components';
 
-import {Controller, useForm, useWatch} from 'react-hook-form';
+import {Controller, useForm} from 'react-hook-form';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {AxiosError} from 'axios';
+import axios, {AxiosError} from 'axios';
 
 import {agent} from '~/../APIClient.tsx';
 import {useMutation} from '@tanstack/react-query';
@@ -42,6 +42,7 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
     handleSubmit,
     control,
     formState: {errors},
+    setError,
   } = useForm({
     defaultValues: InitialValue,
     resolver: yupResolver<FormValues>(
@@ -67,9 +68,21 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
       navigation.goBack();
     },
     onError: e => {
-      let err = e as AxiosError;
-      if (err.isAxiosError) {
-        console.log(err.message);
+      if (axios.isAxiosError(e)) {
+        let error = e as AxiosError<{
+          message: string;
+          errors?: Record<string, string[]>;
+        }>;
+        const fieldErrors = error.response?.data.errors;    
+        if (fieldErrors) {
+          Object.keys(fieldErrors).forEach(key => {
+            if (key === 'email') {
+              setError('email', {
+                message: 'Email is already in use',
+              });
+            }
+          });
+        }
       } else {
         throw new Error(`Unknown error ${e}`);
       }
