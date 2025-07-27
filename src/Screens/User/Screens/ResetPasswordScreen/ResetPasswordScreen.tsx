@@ -1,5 +1,5 @@
 import {yupResolver} from '@hookform/resolvers/yup';
-import React from 'react';
+import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
@@ -22,6 +22,7 @@ const InitialValue: FormValues = {
   email: '',
 };
 const ResetPasswordScreen = () => {
+  const [isSent, setIsSent] = useState(false);
   const {mutate: resetMutation, isLoading} = useMutation({
     mutationFn: async (data: FormValues) => {
       const {email} = data;
@@ -30,8 +31,11 @@ const ResetPasswordScreen = () => {
         redirect_url: '',
       });
     },
-    onSuccess: data => {},
+    onSuccess: () => {
+      setIsSent(true);
+    },
     onError: e => {
+      setIsSent(false);
       if (axios.isAxiosError(e)) {
         let error = e as AxiosError<{
           message: string;
@@ -85,18 +89,32 @@ const ResetPasswordScreen = () => {
           )}
         />
       </View>
-      <Text style={styles.emailText}>
-        Введите Ваш E-mail адрес для которого необходимо скинуть пароль
-      </Text>
-
-      <TouchableOpacity style={styles.btn} onPress={handleSubmit(onSubmit)}>
-        <Text style={styles.btnText}>Отправить</Text>
-      </TouchableOpacity>
-      <View style={styles.textWrapper}>
-        <Text style={styles.yellowText}>
-          Не пришел код? <Text style={styles.link}>Отправить ещё</Text>
+      {isSent && (
+        <Text style={styles.checkEmailText}>
+          Будь ласка перевірте Вашу пошту. Ми надіслали Вам лист, що містить
+          посилання для відновлення пароля
         </Text>
-      </View>
+      )}
+
+      {!isSent && (
+        <>
+          <Text style={styles.emailText}>
+            Введите Ваш E-mail адрес для которого необходимо скинуть пароль
+          </Text>
+          <TouchableOpacity style={styles.btn} onPress={handleSubmit(onSubmit)}>
+            <Text style={styles.btnText}>Отправить</Text>
+          </TouchableOpacity>
+        </>
+      )}
+      {isSent && (
+        <TouchableOpacity
+          style={styles.textWrapper}
+          onPress={handleSubmit(onSubmit)}>
+          <Text style={styles.yellowText}>
+            Не пришел код? <Text style={styles.link}>Отправить ещё</Text>
+          </Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 };
@@ -128,6 +146,14 @@ const styles = StyleSheet.create({
     color: 'white',
     marginTop: nh(10),
     marginBottom: nh(20),
+    width: nw(365),
+  },
+  checkEmailText: {
+    fontFamily: 'MontserratRegular',
+    fontSize: nh(12),
+    lineHeight: 14,
+    fontWeight: '400',
+    color: 'green',
     width: nw(365),
   },
   btn: {
