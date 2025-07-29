@@ -18,7 +18,7 @@ import {
 } from '~/Screens/Home/products.query.ts';
 import {Product} from '~/models/Product.ts';
 import {categoriesQuery} from '~/Screens/Category/categories.query.ts';
-import {IProduct} from '@layerok/emojisushi-js-sdk';
+import {IProduct} from '~/api/emojisushi-js-sdk';
 import {wishlistQuery} from '~/Screens/Favourite/wishlist.query.ts';
 import {observer} from 'mobx-react-lite';
 import store from '~/stores/store.ts';
@@ -94,54 +94,51 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
     setRefreshing(true);
 
     try {
-      await queryClient.refetchQueries()
+      await queryClient.refetchQueries();
     } finally {
       setRefreshing(false);
     }
   }, []);
   return (
-    <ScrollView
-      contentContainerStyle={{flexGrow: 1}}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }>
-      <View style={styles.container}>
-        <Spinner
-          visible={isLoading || refreshing}
-          textContent={'Loading...'}
-          textStyle={{color: 'yellow'}}
-          overlayColor="rgba(0, 0, 0, 0.75)"
-        />
-        <Header />
-        <View style={styles.productsWrapper}>
-          <FlatList
-            ListHeaderComponent={
-              <View>
-                {banners.length > 0 && <Banner navigation={navigation} />}
-                <View style={styles.searchWrapper}>
-                  <Pressable onPress={() => navigation.navigate('SearchModal')}>
-                    <Search onSearch={() => ''} editable={false} />
-                  </Pressable>
-                </View>
-                <Category />
-                <Text style={styles.product}>{selectedCategory?.name}</Text>
+    <View style={styles.container}>
+      <Spinner
+        visible={isLoading || refreshing}
+        textContent={'Loading...'}
+        textStyle={{color: 'yellow'}}
+        overlayColor="rgba(0, 0, 0, 0.75)"
+      />
+      <Header />
+      <View style={styles.productsWrapper}>
+        <FlatList
+          ListHeaderComponent={
+            <View>
+              {banners.length > 0 && <Banner navigation={navigation} />}
+              <View style={styles.searchWrapper}>
+                <Pressable onPress={() => navigation.navigate('SearchModal')}>
+                  <Search onSearch={() => ''} editable={false} />
+                </Pressable>
               </View>
-            }
-            data={items}
-            keyExtractor={item => String(item.id)}
-            renderItem={({item}) => (
-              <ProductCard
-                navigation={navigation}
-                wishlists={wishlists}
-                product={item}
-              />
-            )}
-            contentContainerStyle={styles.grid}
-            showsVerticalScrollIndicator={false}
-          />
-        </View>
+              <Category />
+              <Text style={styles.product}>{selectedCategory?.name}</Text>
+            </View>
+          }
+          data={items}
+          keyExtractor={item => String(item.id)}
+          renderItem={({item}) => (
+            <ProductCard
+              navigation={navigation}
+              wishlists={wishlists}
+              product={item}
+            />
+          )}
+          contentContainerStyle={styles.grid}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        />
       </View>
-    </ScrollView>
+    </View>
   );
 });
 
