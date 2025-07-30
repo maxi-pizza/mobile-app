@@ -6,14 +6,16 @@ import ContactsScreen from './Screens/ContactsScreen/ContactsScreen.tsx';
 import SignInScreen from './Screens/SignInScreen/SignInScreen.tsx';
 import SignUpScreen from './Screens/SignUpScreen/SignUpScreen.tsx';
 import ResetPasswordScreen from './Screens/ResetPasswordScreen/ResetPasswordScreen.tsx';
-import OrderHistoryScreen from './Screens/OrderHistoryScreen/OrderHistoryScreen.tsx';
+import BonusHistoryScreen from './Screens/BonusHistoryScreen/BonusHistoryScreen.tsx';
 import SavedAddressesScreen from './Screens/SavedAddressesScreen/SavedAddressesScreen.tsx';
 import DeliveryAndPayment from './Screens/DeliveryAndPayment/DeliveryAndPayment.tsx';
 import RefundRules from './Screens/RefundRules/RefundRules.tsx';
+import UpdatePasswordScreen from './Screens/UpdatePasswordScreen/UpdatePasswordScreen.tsx';
 
 type ScreenProps = {
   Profile: undefined;
-  OrderHistory: undefined;
+  //   OrderHistory: undefined;
+  BonusHistory: undefined;
   UserScreen: undefined;
   SavedAddresses: undefined;
   DeliveryAndPayment: undefined;
@@ -22,6 +24,7 @@ type ScreenProps = {
   SignIn: undefined;
   SignUp: undefined;
   ResetPassword: undefined;
+  UpdatePassword: undefined;
 };
 
 const Stack = createStackNavigator<ScreenProps>();
@@ -35,9 +38,17 @@ const StackNavigation = () => {
   return (
     <Stack.Navigator screenOptions={stackOptions} initialRouteName="UserScreen">
       <Stack.Screen name="UserScreen" component={UserScreen} />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="OrderHistory"
         component={OrderHistoryScreen}
+        options={{
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
+        }}
+      /> */}
+      <Stack.Screen
+        name="BonusHistory"
+        component={BonusHistoryScreen}
         options={{
           gestureEnabled: true,
           gestureDirection: 'horizontal',
@@ -94,6 +105,14 @@ const StackNavigation = () => {
       <Stack.Screen
         name="ResetPassword"
         component={ResetPasswordScreen}
+        options={{
+          gestureEnabled: true,
+          gestureDirection: 'horizontal',
+        }}
+      />
+      <Stack.Screen
+        name="UpdatePassword"
+        component={UpdatePasswordScreen}
         options={{
           gestureEnabled: true,
           gestureDirection: 'horizontal',
