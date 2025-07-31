@@ -2,7 +2,7 @@ import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import CategoryNullImage from '~/assets/Logo.svg';
-import {ICategory} from '@layerok/emojisushi-js-sdk';
+import {ICategory} from '~/api';
 
 const Category = ({
   category,

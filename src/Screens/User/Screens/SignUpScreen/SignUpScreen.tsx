@@ -11,9 +11,9 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import axios, {AxiosError} from 'axios';
 
 import {agent} from '~/../APIClient.tsx';
-import {useMutation} from '@tanstack/react-query';
+import {useMutation, useQueryClient} from '@tanstack/react-query';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
-import { setToken } from '~/common/token/token';
+import {setToken} from '~/common/token/token';
 
 const validationRequired = 'Заповніть це поле';
 const RegisterSchema = yup.object({
@@ -51,6 +51,8 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
       RegisterSchema,
     ),
   });
+  const queryClient = useQueryClient();
+
   const {mutate: registerMutation, isLoading} = useMutation({
     mutationFn: async (data: FormValues) => {
       const {email, password, name, surname, agree} = data;
@@ -65,9 +67,10 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
         agree,
       });
     },
-    onSuccess: (data) => {
+    onSuccess: async data => {
+      queryClient.invalidateQueries(['userData']);
       const {token} = data.data.data;
-      setToken(token);
+      await setToken(token);
       navigation.goBack();
     },
     onError: e => {
@@ -76,7 +79,7 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
           message: string;
           errors?: Record<string, string[]>;
         }>;
-        const fieldErrors = error.response?.data.errors;    
+        const fieldErrors = error.response?.data.errors;
         if (fieldErrors) {
           Object.keys(fieldErrors).forEach(key => {
             if (key === 'email') {

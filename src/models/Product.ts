@@ -1,4 +1,4 @@
-import {IProduct, IWishlist} from '@layerok/emojisushi-js-sdk';
+import {IProduct, IWishlist} from '~/api';
 import {Variant} from './Variant';
 
 export class Product {

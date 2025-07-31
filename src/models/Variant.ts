@@ -1,4 +1,4 @@
-import { IVariant } from '@layerok/emojisushi-js-sdk';
+import { IVariant } from '~/api';
 
 
 export class Variant {

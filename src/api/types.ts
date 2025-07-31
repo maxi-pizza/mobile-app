@@ -685,9 +685,10 @@ export type IBonusHistory = {
   updated_at: string;
 };
 
-export type IGetBonusHistory = IBonusHistory[];
+export type IGetBonusHistoryRes = IBonusHistory[];
 
-export type IGetBonusOptions = {
+export type IGetBonusOptionsRes = {
+  bonus_enabled: boolean;
   bonus_rate: number;
   max_bonus: number;
   get_bonus_from_used_bonus: boolean;

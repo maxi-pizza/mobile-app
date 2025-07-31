@@ -13,7 +13,6 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import {agent} from '~/../APIClient.tsx';
 import {useMutation, useQueryClient} from '@tanstack/react-query';
 import axios, {AxiosError} from 'axios';
-import {LoginResData} from '@layerok/emojisushi-js-sdk';
 import {setToken} from '~/common/token/token';
 
 const validationRequired = 'Заповніть це поле';
@@ -52,10 +51,10 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
         password,
       });
     },
-    onSuccess: data => {
+    onSuccess: async data => {
       queryClient.invalidateQueries(['userData']);
       const {token} = data.data.data;
-      setToken(token);
+      await setToken(token);
       navigation.goBack();
     },
     onError: e => {
@@ -65,7 +64,7 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
           errors?: Record<string, string[]>;
         }>;
         const code = error.response?.status;
-        if (code == 422) {
+        if (code === 422) {
           setError('password', {
             message: 'Неверное имя пользователя или пароль',
           });

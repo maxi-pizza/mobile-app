@@ -1,5 +1,5 @@
 import {QueryOptions} from '@tanstack/react-query';
-import {IGetBannersRes} from '@layerok/emojisushi-js-sdk';
+import {IGetBannersRes} from '~/api';
 import {agent} from '~/../APIClient.tsx';
 
 export const bannerQueryKeys = {

@@ -1,13 +1,10 @@
-import {createEmojisushiAgent} from '@layerok/emojisushi-js-sdk';
-import {useNavigation} from '@react-navigation/native';
-import {useQueryClient} from '@tanstack/react-query';
-import {observer} from 'mobx-react-lite';
+import {createEmojisushiAgent} from '~/api';
 import {clearToken, getToken} from '~/common/token/token';
 
 //https://api.emojisushi.com.ua/api
 //https://stage-api.emojisushi.com.ua/api
 export const agent = createEmojisushiAgent({
-  service: 'https://stage-api.emojisushi.com.ua/api',
+  service: 'http://192.168.100.19:8080/api',
 });
 
 agent.axiosClient.interceptors.request.use(async config => {
@@ -15,7 +12,7 @@ agent.axiosClient.interceptors.request.use(async config => {
   if (token && config.headers) {
     config.headers.Authorization = `Bearer ${token}`;
   }
-  return config;
+   return config;
 });
 agent.axiosClient.interceptors.response.use(
   response => response,

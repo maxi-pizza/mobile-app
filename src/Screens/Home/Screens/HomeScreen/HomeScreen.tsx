@@ -18,7 +18,7 @@ import {
 } from '~/Screens/Home/products.query.ts';
 import {Product} from '~/models/Product.ts';
 import {categoriesQuery} from '~/Screens/Category/categories.query.ts';
-import {IProduct} from '~/api/emojisushi-js-sdk';
+import {IProduct} from '~/api';
 import {wishlistQuery} from '~/Screens/Favourite/wishlist.query.ts';
 import {observer} from 'mobx-react-lite';
 import store from '~/stores/store.ts';

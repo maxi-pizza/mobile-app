@@ -21,6 +21,8 @@ import {
   IGetCitiesRes,
   IGetCatalogRes,
   IGetCheckoutFormRes,
+  IGetBonusHistoryRes,
+  IGetBonusOptionsRes,
 } from "./types";
 
 export function createEmojisushiAgent(options: { service: string }) {
@@ -443,13 +445,13 @@ export function createEmojisushiAgent(options: { service: string }) {
       .then((res) => res.data);
   }
   function getBonusHistory(params = {}, axiosConfig = {}) {
-    return client.get(
+    return client.get<IGetBonusHistoryRes>(
       'user/bonus/history',
       Object.assign({params, skipAuthRefresh: true}, axiosConfig),
     );
   }
   function getBonusOptions(params = {}, axiosConfig = {}) {
-    return client.get(
+    return client.get<IGetBonusOptionsRes>(
       'bonuses/options',
       Object.assign({params, skipAuthRefresh: true}, axiosConfig),
     );

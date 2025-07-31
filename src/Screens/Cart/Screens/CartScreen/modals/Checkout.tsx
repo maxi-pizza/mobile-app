@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -12,7 +12,7 @@ import * as yup from 'yup';
 import Swiper from '../components/Swiper.tsx';
 import {Input, Counter, Header, BackButton, DropDown} from '~/components';
 
-import {useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {spotsQuery} from '~/Screens/Cart/spots.query.ts';
 
 import Truck from '~/assets/Icons/Truck.svg';
@@ -31,11 +31,15 @@ import {Controller, useForm, useWatch} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {isValidUkrainianPhone} from '../../../utils.ts';
 import {agent} from '~/../APIClient.tsx';
-import {IDistrict} from '@layerok/emojisushi-js-sdk';
+import {IDistrict} from '~/api';
 import {cityQuery} from '~/components/Header/city.query.ts';
+import {bonusOptionsQuery} from '~/common/queries/bonusOptions.query.ts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {nh, nw} from '~/common/normalize.helper.ts';
+
+import axios, {AxiosError} from 'axios';
+import {getToken} from '~/common/token/token.ts';
 
 enum HouseTypeEnum {
   Apartment = 'high_rise_building',
@@ -53,8 +57,8 @@ enum ShippingMethodEnum {
 type FormValues = {
   shippingMethod: ShippingMethodEnum;
   paymentMethod: PaymentMethodEnum;
-  spotId: number | undefined;
-  districtId: number | undefined;
+  spotId?: number | undefined;
+  districtId?: number | undefined;
   name: string;
   phone: string;
   email: string;
@@ -67,18 +71,48 @@ type FormValues = {
   comment: string;
   sticks: number;
   change: string;
+  bonusesToUse: string | null;
 };
 const validationRequired = 'Заповніть це поле';
 
 const getDistrictDefaultSpot = (district: IDistrict) => {
-  return district.spots[0];
+  //@ts-ignore
+  return district.spot;
 };
 
 const Checkout = observer(({navigation}: {navigation: any}) => {
-  const [requestLoading, setRequestLoading] = useState(false);
   const {data: spotsRes} = useQuery(spotsQuery);
   const {data: cityRes} = useQuery(cityQuery);
-
+  const {data: bonusOptions} = useQuery(bonusOptionsQuery);
+  const queryClient = useQueryClient();
+  const [logged, setLogged] = useState(false);
+  const {
+    data: user,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ['userData'],
+    queryFn: async () => {
+      const data = await agent.fetchUser();
+      return data.data;
+    },
+    retry: false,
+    onSuccess: async fetchedUser => {
+      setLogged(true);
+      if (!fetchedUser) return;
+      setValue('email', fetchedUser?.email);
+      setValue('phone', fetchedUser?.phone ?? '');
+      setValue('name', fetchedUser?.name ?? '');
+    },
+    onError: () => {
+      setLogged(false);
+    },
+  });
+  useEffect(() => {
+    if (user) {
+      setLogged(true);
+    }
+  }, [user]);
   const {data: cartRes} = useQuery(cartQuery(store.city));
 
   const {data: shippingRes} = useQuery(shippingQuery);
@@ -117,7 +151,11 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
   const total = ids.reduce((acc, id) => {
     return acc + cartRes?.[id].count * cartRes?.[id].price;
   }, 0);
-
+  interface ValidationContext {
+    user?: {
+      bonus_amount: number;
+    };
+  }
   const TakeAwaySchema = yup.object({
     phone: yup
       .string()
@@ -128,6 +166,20 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
         isValidUkrainianPhone,
       ),
     spotId: yup.number().required(validationRequired),
+    bonusesToUse: yup
+      .string()
+      .nullable()
+      .test('max-bonus', 'Недостатньо бонусів', function (value) {
+        const {user} = (this.options?.context as ValidationContext) ?? null;
+        const max = user?.bonus_amount ?? 0;
+        if (user === null || user === undefined) {
+          return true;
+        }
+        if (value === null || value === undefined) {
+          return true;
+        }
+        return +value <= max && +value >= 0;
+      }),
   });
   const CourierSchema = yup.object({
     phone: yup
@@ -141,6 +193,20 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     street: yup.string().required(validationRequired),
     house: yup.string().required(validationRequired),
     districtId: yup.number().required(validationRequired),
+    bonusesToUse: yup
+      .string()
+      .nullable()
+      .test('max-bonus', 'Недостатньо бонусів', function (value) {
+        const {user} = (this.options?.context as ValidationContext) ?? null;
+        const max = user?.bonus_amount ?? 0;
+        if (user === null || user === undefined) {
+          return true;
+        }
+        if (value === null || value === undefined) {
+          return true;
+        }
+        return +value <= max && +value >= 0;
+      }),
   });
   const CourierHighRiseBuildingSchema = yup.object({
     phone: yup
@@ -157,15 +223,29 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     entrance: yup.string().required(validationRequired),
     floor: yup.string().required(validationRequired),
     districtId: yup.number().required(validationRequired),
+    bonusesToUse: yup
+      .string()
+      .nullable()
+      .test('max-bonus', 'Недостатньо бонусів', function (value) {
+        const {user} = (this.options?.context as ValidationContext) ?? null;
+        const max = user?.bonus_amount ?? 0;
+        if (user === null || user === undefined) {
+          return true;
+        }
+        if (value === null || value === undefined) {
+          return true;
+        }
+        return +value <= max && +value >= 0;
+      }),
   });
   const InitialValue: FormValues = {
     shippingMethod: ShippingMethodEnum.Takeaway,
-    spotId: spots.length === 1 ? spots[0].id : undefined,
+    spotId: 1,
     districtId: districts.length === 1 ? districts[0].id : undefined,
     paymentMethod: PaymentMethodEnum.Cash,
-    name: '',
-    phone: '',
-    email: '',
+    name: user?.name ?? '',
+    phone: user?.phone ?? '',
+    email: user?.email ?? '',
     houseType: HouseTypeEnum.House,
     house: '',
     floor: '',
@@ -175,6 +255,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     comment: '',
     sticks: 0,
     change: '',
+    bonusesToUse: null,
   };
   const getValidationSchema = (values: FormValues) => {
     if (
@@ -225,13 +306,19 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     handleSubmit,
     control,
     formState: {errors},
-  } = useForm({
+    setError,
+    setValue,
+    watch,
+  } = useForm<FormValues>({
     defaultValues: InitialValue,
     resolver: yupResolver<FormValues>(
       // @ts-ignore
       validationSchema,
     ),
+    context: {user},
   });
+
+  const bonusesToUse = useWatch({control, name: 'bonusesToUse'});
   const shippingMethod = useWatch({control, name: 'shippingMethod'});
   const paymentMethod = useWatch({control, name: 'paymentMethod'});
   const houseType = useWatch({control, name: 'houseType'});
@@ -260,49 +347,48 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     }
     return selected?.name;
   };
+  const {mutate: orderMutation, isLoading: isSending} = useMutation({
+    mutationFn: async (data: FormValues) => {
+      const {
+        phone,
+        floor,
+        name,
+        street,
+        sticks,
+        shippingMethod,
+        spotId,
+        house,
+        paymentMethod,
+        districtId,
+        change,
+        comment,
+        entrance,
+        email,
+        apartment,
+        bonusesToUse,
+      } = data;
+      const [firstname, lastname] = name.split(' ');
+      const address = [
+        ['Вулиця', street],
+        ['Будинок', house],
+        ['Квартира', apartment],
+        ["Під'їзд", entrance],
+        ['Поверх', floor],
+      ]
+        .filter(([_, value]) => !!value)
+        .map(([label, value]) => `${label}: ${value}`)
+        .join(', ');
 
-  const onSubmit = async (data: FormValues) => {
-    setRequestLoading(true);
-    const {
-      phone,
-      floor,
-      name,
-      street,
-      sticks,
-      shippingMethod,
-      spotId,
-      house,
-      paymentMethod,
-      districtId,
-      change,
-      comment,
-      entrance,
-      email,
-      apartment,
-    } = data;
-    const [firstname, lastname] = name.split(' ');
-    const address = [
-      ['Вулиця', street],
-      ['Будинок', house],
-      ['Квартира', apartment],
-      ["Під'їзд", entrance],
-      ['Поверх', floor],
-    ]
-      .filter(([_, value]) => !!value)
-      .map(([label, value]) => `${label}: ${value}`)
-      .join(', ');
+      const paymentId = payments?.find(p => p.code === paymentMethod);
+      const shippingId = shippings.find(s => s.code === shippingMethod);
 
-    const paymentId = payments?.find(p => p.code === paymentMethod);
-    const shippingId = shippings.find(s => s.code === shippingMethod);
+      const district = city?.districts.find(d => d.id === districtId);
 
-    const district = city?.districts.find(d => d.id === districtId);
-
-    const resultantSpotId =
-      shippingMethod === ShippingMethodEnum.Takeaway
-        ? spotId
-        : getDistrictDefaultSpot(district!).id;
-
-    try {
+      const resultantSpotId =
+        shippingMethod === ShippingMethodEnum.Takeaway
+          ? spotId
+          : getDistrictDefaultSpot(district!).id;
+      console.log(shippingId, resultantSpotId);
       await agent.placeOrderV2({
         phone,
         email,
@@ -318,29 +404,64 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
         comment,
         cart: {items},
         sticks: +sticks,
+        ...(bonusesToUse != null && {bonuses_to_use: +bonusesToUse}),
       });
-      AsyncStorage.removeItem(CART_STORAGE_KEY + `_${store.city}`);
-      setRequestLoading(false);
+    },
+    onSuccess: async () => {
+      await AsyncStorage.removeItem(CART_STORAGE_KEY + `_${store.city}`);
+      await queryClient.invalidateQueries(['userData']);
       navigation.goBack();
       navigation.navigate('ThankYou');
-    } catch (e) {
-      if (e instanceof Error) {
-        throw new Error(e.message);
+    },
+    onError: e => {
+      if (axios.isAxiosError(e)) {
+        let error = e as AxiosError<{
+          message: string;
+          errors?: Record<string, string[]>;
+        }>;
+        const fieldErrors = error.response?.data.errors;
+
+        if (fieldErrors) {
+          Object.keys(fieldErrors).forEach(key => {
+            switch (key) {
+              case 'firstname': {
+                setError('name', {
+                  message: fieldErrors[key][0],
+                });
+                break;
+              }
+              default: {
+                setError(key as keyof FormValues, {
+                  message: fieldErrors[key][0],
+                });
+              }
+            }
+          });
+        }
       } else {
         throw new Error(`Unknown error ${e}`);
       }
-    } finally {
-      setRequestLoading(false);
-    }
+    },
+  });
+  const onSubmit = async (data: FormValues) => {
+    orderMutation(data);
   };
 
-  const spotError = errors.spotId?.message;
   const districtError = errors.districtId?.message;
+  const bonusAmount = useMemo(() => {
+    if (!bonusOptions) return;
+    const rate = bonusOptions.bonus_rate;
+    const max = bonusOptions.max_bonus;
+    const b = bonusOptions.get_bonus_from_used_bonus;
+    const dif = b ? +(bonusesToUse ?? 0) : 0;
+    const amount = (total - dif) * rate;
+    return Math.floor(amount);
+  }, [bonusOptions, bonusesToUse]);
 
   return (
     <View>
       <Spinner
-        visible={requestLoading}
+        visible={isSending || isLoading}
         textContent={'Loading...'}
         textStyle={{color: 'yellow'}}
         overlayColor="rgba(0, 0, 0, 0.75)"
@@ -525,45 +646,45 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
               )}
             </View>
           ) : (
-            spots.length !== 1 && (
-              <Controller
-                name="spotId"
-                control={control}
-                render={({field: {onChange, value}}) => (
-                  <View
-                    style={[
-                      styles.dropDownContainer,
-                      spotError ? styles.errorFocus : null,
-                      {marginTop: nh(15), zIndex: 5},
-                    ]}>
-                    <DropDown
-                      value={value}
-                      placeholder={
-                        <Text style={styles.whiteText}>
-                          Оберіть найближчий заклад
-                        </Text>
-                      }
-                      options={spots}
-                      onChange={s => onChange(s)}
-                      snapPoints={'30'}
-                      error={errors.spotId?.message}>
-                      <View style={styles.inputContainer}>
-                        <Text style={styles.selectOption}>
-                          {getSelectedSpot(value) ? (
-                            <Text style={styles.whiteText}>
-                              {getSelectedSpot(value)}
-                            </Text>
-                          ) : (
-                            'Оберіть найближчий заклад'
-                          )}
-                        </Text>
-                        <Caret color="#727272" width="15" />
-                      </View>
-                    </DropDown>
-                  </View>
-                )}
-              />
-            )
+            spots.length !== 1 //&& (
+            //   <Controller
+            //     name="spotId"
+            //     control={control}
+            //     render={({field: {onChange, value}}) => (
+            //       <View
+            //         style={[
+            //           styles.dropDownContainer,
+            //           spotError ? styles.errorFocus : null,
+            //           {marginTop: nh(15), zIndex: 5},
+            //         ]}>
+            //         <DropDown
+            //           value={value}
+            //           placeholder={
+            //             <Text style={styles.whiteText}>
+            //               Оберіть найближчий заклад
+            //             </Text>
+            //           }
+            //           options={spots}
+            //           onChange={s => onChange(s)}
+            //           snapPoints={'30'}
+            //           error={errors.spotId?.message}>
+            //           <View style={styles.inputContainer}>
+            //             <Text style={styles.selectOption}>
+            //               {getSelectedSpot(value) ? (
+            //                 <Text style={styles.whiteText}>
+            //                   {getSelectedSpot(value)}
+            //                 </Text>
+            //               ) : (
+            //                 'Оберіть найближчий заклад'
+            //               )}
+            //             </Text>
+            //             <Caret color="#727272" width="15" />
+            //           </View>
+            //         </DropDown>
+            //       </View>
+            //     )}
+            //   />
+            //)
           )}
           <Controller
             name="name"
@@ -575,6 +696,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                   inputMode="text"
                   value={value}
                   onChangeText={v => onChange(v)}
+                  error={errors.name?.message}
                 />
               </View>
             )}
@@ -590,6 +712,8 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                   inputMode="email"
                   value={value}
                   onChangeText={v => onChange(v)}
+                  error={errors.email?.message}
+                  editable={!logged}
                 />
               </View>
             )}
@@ -623,6 +747,29 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
               </View>
             )}
           />
+          {!!bonusOptions?.bonus_enabled && (
+            <Controller
+              name="bonusesToUse"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <View style={styles.inputWrapper}>
+                  <Input
+                    placeholder={
+                      logged
+                        ? `Бонуси для використання (баланс: ${user?.bonus_amount})`
+                        : 'Бонуси (тільки для зареєстрованих користувачів)'
+                    }
+                    inputMode="numeric"
+                    value={value?.toString() ?? ''}
+                    onChangeText={v => onChange(v)}
+                    editable={logged}
+                    error={errors.bonusesToUse?.message}
+                  />
+                </View>
+              )}
+            />
+          )}
+
           <View style={styles.textWrapper}>
             <View style={styles.circle}>
               <Text style={{color: 'black', lineHeight: nh(17)}}>2</Text>
@@ -697,15 +844,36 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
           </Text>
           <View style={styles.verticalBar} />
           <View style={styles.priceWrapper}>
-            <Text style={styles.whiteText}>До оплати</Text>
+            <Text style={styles.whiteText}>Сума замовлення</Text>
             <Text style={styles.whiteText}>{total} ₴</Text>
           </View>
+          {+(bonusesToUse ?? 0) > 0 && (
+            <View style={styles.priceWrapper}>
+              <Text style={styles.whiteText}>
+                Використано {bonusesToUse} бонусів
+              </Text>
+              <Text style={styles.whiteText}>-{bonusesToUse} ₴</Text>
+            </View>
+          )}
+          <View style={styles.priceWrapper}>
+            <Text style={styles.whiteText}>До оплати</Text>
+            <Text style={styles.whiteText}>
+              {total - +(bonusesToUse ?? 0)} ₴
+            </Text>
+          </View>
+          {logged && !!bonusAmount && !!bonusOptions?.bonus_enabled &&(
+            <View style={styles.priceWrapper}>
+              <Text style={styles.whiteText}>
+                Буде отримано {bonusAmount} бонусів
+              </Text>
+            </View>
+          )}
+
           <TouchableOpacity
             style={styles.orderBtn}
-            onPress={handleSubmit(
-              // @ts-ignore
-              onSubmit,
-            )}>
+            onPress={() => {
+              handleSubmit(onSubmit)();
+            }}>
             <Text style={styles.blackText}>Замовити</Text>
           </TouchableOpacity>
         </ScrollView>

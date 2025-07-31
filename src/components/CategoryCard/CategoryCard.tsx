@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {nw, nh} from '~/common/normalize.helper.ts';
-import {ICategory} from '@layerok/emojisushi-js-sdk';
+import {ICategory} from '~/api';
 import CategoryNullImage from '~/assets/Logo.svg';
 
 import categoryStore from '~/stores/store.ts';

@@ -1,5 +1,12 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  ScrollView,
+  RefreshControl,
+} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 
 import ProfileScreen from '../ProfileScreen/ProfileScreen.tsx';
@@ -16,133 +23,172 @@ import {observer} from 'mobx-react-lite';
 import {agent} from '~/../APIClient.tsx';
 import {QueryClient, useQuery, useQueryClient} from '@tanstack/react-query';
 import Spinner from 'react-native-loading-spinner-overlay/lib/index';
-import {clearToken} from '~/common/token/token.ts';
+import {clearToken, getToken} from '~/common/token/token.ts';
+import {bonusOptionsQuery} from '~/common/queries/bonusOptions.query.ts';
 
 const UserScreen = observer(({navigation}: {navigation: any}) => {
   const queryClient = useQueryClient();
   const [logged, setLogged] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-
+  const {data: bonusOptions} = useQuery(bonusOptionsQuery);
   const {
     data: user,
     isLoading,
     error,
   } = useQuery({
     queryKey: ['userData'],
-    queryFn: () => {
+    queryFn: async () => {
       setLogged(false);
-      return agent.fetchUser();
+
+      const d = await agent.fetchUser();
+      return d.data;
     },
-    select: req => req.data,
+    retry: false,
+    refetchOnWindowFocus: true,
     onSuccess: () => setLogged(true),
     onError: () => setLogged(false),
   });
+  useEffect(() => {
+    if (user) {
+      setLogged(true);
+    }
+  }, [user]);
   const signOut = async () => {
-    console.log('a')
     setLogged(false);
     await clearToken();
     queryClient.invalidateQueries(['userData']);
   };
-  return (
-    <View style={styles.container}>
-      <Spinner
-        visible={isLoading}
-        textContent={'Loading...'}
-        textStyle={{color: 'yellow'}}
-        overlayColor="rgba(0, 0, 0, 0.75)"
-      />
-      <Header />
-      {logged ? (
-        <>
-          <View style={styles.horizontalLine} />
-          <View style={styles.profileContainerColumn}>
-            <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
-              <View style={styles.profileContainer}>
-                <View style={styles.profileTextUserWrapper}>
-                  <View style={styles.userCircle}>
-                    <UserCircle color="#727272" />
-                  </View>
-                  <View style={styles.profileTextWrapper}>
-                    <Text style={styles.profileText}>Ваш профіль</Text>
-                    <Text style={styles.gmail}>{user?.email}</Text>
-                  </View>
-                </View>
-                <Caret
-                  style={styles.caret}
-                  width="15"
-                  height="15"
-                  color="#FFE600"
-                />
-              </View>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.signUpBtn} onPress={signOut}>
-              <Text style={styles.signUpBtnText} >
-                Выход
-              </Text>
-            </TouchableOpacity>
-          </View>
-        </>
-      ) : (
-        <View style={styles.withoutAccount}>
-          <View style={styles.withoutAccountWrapper}>
-            <View style={styles.userCircle}>
-              <UserCircle color="#727272" />
-            </View>
-            <Text style={styles.signInText}>Увійдіть в акаунт</Text>
-            <Text style={styles.descriptionText}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt.
-            </Text>
-            <View style={styles.btnWrapper}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('SignUp')}
-                style={styles.signUpBtn}>
-                <Text style={styles.signUpBtnText}>Реєстрація</Text>
-              </TouchableOpacity>
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
 
-              <TouchableOpacity
-                onPress={() => navigation.navigate('SignIn')}
-                style={styles.signInBtn}>
-                <Text style={styles.signInBtnText}>Увійти</Text>
+    try {
+      await queryClient.refetchQueries();
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
+  return (
+    <ScrollView
+      contentContainerStyle={{flexGrow: 1}}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }>
+      <View style={styles.container}>
+        <Spinner
+          visible={isLoading || refreshing}
+          textContent={'Loading...'}
+          textStyle={{color: 'yellow'}}
+          overlayColor="rgba(0, 0, 0, 0.75)"
+        />
+        <Header />
+        {logged || refreshing ? (
+          <>
+            <View style={styles.horizontalLine} />
+            <View style={styles.profileContainerColumn}>
+              <TouchableOpacity onPress={() => setIsVisible(!isVisible)}>
+                <View style={styles.profileContainer}>
+                  <View style={styles.profileTextUserWrapper}>
+                    <View style={styles.userCircle}>
+                      <UserCircle color="#727272" />
+                    </View>
+                    <View style={styles.profileTextWrapper}>
+                      <Text style={styles.profileText}>Ваш профіль</Text>
+                      <Text style={styles.gmail}>{user?.email}</Text>
+                    </View>
+                  </View>
+                  <Caret
+                    style={styles.caret}
+                    width="15"
+                    height="15"
+                    color="#FFE600"
+                  />
+                </View>
               </TouchableOpacity>
+              <View style={styles.loggedInBtnWrapper}>
+                <TouchableOpacity style={styles.signUpBtn} onPress={signOut}>
+                  <Text style={styles.signUpBtnText}>Вийти</Text>
+                </TouchableOpacity>
+                {!!bonusOptions?.bonus_enabled && (
+                  <TouchableOpacity
+                    style={styles.signInBtn}
+                    onPress={() => navigation.navigate('BonusHistory')}>
+                    <Text style={styles.signInBtnText}>
+                      Бонуси: {user?.bonus_amount}
+                    </Text>
+                  </TouchableOpacity>
+                )}
+              </View>
+            </View>
+          </>
+        ) : (
+          <View style={styles.withoutAccount}>
+            <View style={styles.withoutAccountWrapper}>
+              <View style={styles.userCircle}>
+                <UserCircle color="#727272" />
+              </View>
+              <Text style={styles.signInText}>Увійдіть в акаунт</Text>
+              <Text style={styles.descriptionText}>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+                eiusmod tempor incididunt.
+              </Text>
+              <View style={styles.btnWrapper}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('SignUp')}
+                  style={styles.signUpBtn}>
+                  <Text style={styles.signUpBtnText}>Реєстрація</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('SignIn')}
+                  style={styles.signInBtn}>
+                  <Text style={styles.signInBtnText}>Увійти</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
-        </View>
-      )}
-      <ProfileScreen visible={isVisible} setIsVisible={setIsVisible} />
-      <View style={styles.horizontalLine} />
-      <TouchableOpacity onPress={() => navigation.navigate('OrderHistory')}>
+        )}
+        {isVisible && (
+          <ProfileScreen
+            visible={isVisible}
+            setIsVisible={setIsVisible}
+            navigation={navigation}
+          />
+        )}
+        <View style={styles.horizontalLine} />
+        {/* <TouchableOpacity onPress={() => navigation.navigate('BonusHistory')}>
         <UserOption
-          title="Історія замовлень"
+          title="Історія бонусів"
           svgIcon={<ClockCounter color="#727272" />}
         />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('SavedAddresses')}>
+      </TouchableOpacity> */}
+        {/* <TouchableOpacity onPress={() => navigation.navigate('SavedAddresses')}>
         <UserOption
           title="Збережені адреси"
           svgIcon={<Truck color="#727272" />}
         />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
 
-      <View style={styles.horizontalLine} />
+        <View style={styles.horizontalLine} />
 
-      <TouchableOpacity onPress={() => navigation.navigate('Contacts')}>
-        <UserOption title="Контакти" svgIcon={<Phone color="#727272" />} />
-      </TouchableOpacity>
-      <TouchableOpacity
-        onPress={() => navigation.navigate('DeliveryAndPayment')}>
-        <UserOption
-          title="Доставка і оплата"
-          svgIcon={<CreditCard color="#727272" />}
-        />
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate('RefundRules')}>
-        <UserOption
-          title="Правила повернення коштів"
-          svgIcon={<Coins color="#727272" />}
-        />
-      </TouchableOpacity>
-    </View>
+        <TouchableOpacity onPress={() => navigation.navigate('Contacts')}>
+          <UserOption title="Контакти" svgIcon={<Phone color="#727272" />} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('DeliveryAndPayment')}>
+          <UserOption
+            title="Доставка і оплата"
+            svgIcon={<CreditCard color="#727272" />}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('RefundRules')}>
+          <UserOption
+            title="Правила повернення коштів"
+            svgIcon={<Coins color="#727272" />}
+          />
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 });
 
@@ -165,7 +211,7 @@ const styles = StyleSheet.create({
   },
   profileContainer: {
     width: '100%',
-    height: nh(102),
+    height: nh(78),
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
@@ -174,12 +220,11 @@ const styles = StyleSheet.create({
   },
   profileContainerColumn: {
     width: '100%',
-    height: nh(150),
+    //height: nh(152),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    marginLeft: nw(13),
+    // marginLeft: nw(13),
   },
   userCircle: {
     backgroundColor: '#1C1C1C',
@@ -280,6 +325,12 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: nh(15),
     marginBottom: nh(15),
+  },
+  loggedInBtnWrapper: {
+    width: nw(360),
+    display: 'flex',
+    justifyContent: 'space-around',
+    flexDirection: 'row',
   },
 });
 

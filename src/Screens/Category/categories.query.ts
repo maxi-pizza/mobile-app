@@ -1,4 +1,4 @@
-import {IGetCategoriesParams, IGetCategoriesRes} from '@layerok/emojisushi-js-sdk';
+import {IGetCategoriesParams, IGetCategoriesRes} from '~/api';
 import {QueryOptions} from '@tanstack/react-query';
 import {agent} from '../../../APIClient.tsx';
 
