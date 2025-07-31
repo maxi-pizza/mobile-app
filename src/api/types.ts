@@ -697,4 +697,6 @@ export type IGetBonusOptionsRes = {
 export type IGetAppAllowedVersionsRes = {
   android: string;
   ios: string;
+  android_link: string;
+  ios_link: string;
 };

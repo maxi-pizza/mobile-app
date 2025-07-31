@@ -1,14 +1,16 @@
 import React, {useEffect, useState} from 'react';
-import {Pressable, StyleSheet, Text, View} from 'react-native';
+import {Linking, Pressable, StyleSheet, Text, View} from 'react-native';
 import {version} from '../../../package.json';
 import {agent} from '~/../APIClient';
+import Spinner from 'react-native-loading-spinner-overlay/lib';
 
 type Props = {
   children?: React.ReactNode;
 };
 
 const OldAppVersion = ({children}: Props) => {
-  const [isOutdated, setIsOutdated] = useState(false);
+  const [isOutdated, setIsOutdated] = useState<boolean | null>(null);
+  const [link, setLink] = useState<string | null>(null);
 
   useEffect(() => {
     const checkVersion = async () => {
@@ -20,10 +22,24 @@ const OldAppVersion = ({children}: Props) => {
         }) < 0
       ) {
         setIsOutdated(true);
+      } else {
+        setIsOutdated(false);
       }
+      setLink(latestVersion.android_link);//todo  android/ios version switch
     };
     checkVersion();
   }, []);
+
+  if (isOutdated === null)
+    return (
+      <Spinner
+        visible={isOutdated === null}
+        textContent={'Loading...'}
+        textStyle={{color: 'yellow'}}
+        overlayColor="rgba(0, 0, 0, 0.75)"
+      />
+    );
+
   if (isOutdated)
     return (
       <View style={styles.container}>
@@ -32,10 +48,15 @@ const OldAppVersion = ({children}: Props) => {
         <Text style={styles.instruction}>
           Будь ласка, оновіть додаток до останньої версії.
         </Text>
-
-        <Pressable style={styles.button} onPress={() => {}}>
-          <Text style={styles.buttonText}>Оновити</Text>
-        </Pressable>
+        {link && (
+          <Pressable
+            style={styles.button}
+            onPress={() => {
+              Linking.openURL(link);
+            }}>
+            <Text style={styles.buttonText}>Оновити</Text>
+          </Pressable>
+        )}
       </View>
     );
 
