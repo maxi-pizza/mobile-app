@@ -453,7 +453,11 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     const rate = bonusOptions.bonus_rate;
     const max = bonusOptions.max_bonus;
     const b = bonusOptions.get_bonus_from_used_bonus;
-    const dif = b ? +(bonusesToUse ?? 0) : 0;
+    console.log(b)
+    let dif = 0;
+    if (!b) {
+      dif = +(bonusesToUse ?? 0);
+    }
     const amount = (total - dif) * rate;
     return Math.floor(amount);
   }, [bonusOptions, bonusesToUse]);
@@ -861,7 +865,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
               {total - +(bonusesToUse ?? 0)} ₴
             </Text>
           </View>
-          {logged && !!bonusAmount && !!bonusOptions?.bonus_enabled &&(
+          {logged && !!bonusAmount && !!bonusOptions?.bonus_enabled && (
             <View style={styles.priceWrapper}>
               <Text style={styles.whiteText}>
                 Буде отримано {bonusAmount} бонусів
