@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, {AxiosResponse} from 'axios';
 import {
   IGetProductsParams,
   IGetProductsRes,
@@ -23,17 +23,18 @@ import {
   IGetCheckoutFormRes,
   IGetBonusHistoryRes,
   IGetBonusOptionsRes,
-} from "./types";
+  IGetAppAllowedVersionsRes,
+} from './types';
 
-export function createEmojisushiAgent(options: { service: string }) {
-  const { service } = options;
+export function createEmojisushiAgent(options: {service: string}) {
+  const {service} = options;
   const axiosClient = axios.create({
     baseURL: service,
   });
   const client = axiosClient;
 
   function log(data: any, version: string) {
-    axiosClient.post("/log", {
+    axiosClient.post('/log', {
       version: version,
       navigator: {
         userAgent: navigator.userAgent,
@@ -47,7 +48,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     params: IGetProductsParams,
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.get<IGetProductsRes>("products", {
+    return client.get<IGetProductsRes>('products', {
       params,
       skipAuthRefresh: true,
       ...axiosConfig,
@@ -58,7 +59,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     params: any,
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.get<IGetCatalogRes>("catalog", {
+    return client.get<IGetCatalogRes>('catalog', {
       params,
       ...axiosConfig,
     });
@@ -68,7 +69,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     params: any,
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.get<IGetCheckoutFormRes>("checkout", {
+    return client.get<IGetCheckoutFormRes>('checkout', {
       params,
       ...axiosConfig,
     });
@@ -78,7 +79,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     params: IGetCategoriesParams,
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.get<IGetCategoriesRes>("categories", {
+    return client.get<IGetCategoriesRes>('categories', {
       params,
       skipAuthRefresh: true,
       ...axiosConfig,
@@ -89,7 +90,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     params = {},
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.get("ingredients", {
+    return client.get('ingredients', {
       params,
       skipAuthRefresh: true,
       ...axiosConfig,
@@ -114,7 +115,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     },
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.post("order/place", params, axiosConfig);
+    return client.post('order/place', params, axiosConfig);
   }
 
   function placeOrderV2(
@@ -143,7 +144,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     },
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.post("order/v2/place", params, axiosConfig);
+    return client.post('order/v2/place', params, axiosConfig);
   }
 
   function getCartProducts(
@@ -151,12 +152,12 @@ export function createEmojisushiAgent(options: { service: string }) {
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
     return client
-      .get<IGetCartRes>("cart/products", {
+      .get<IGetCartRes>('cart/products', {
         params,
         skipAuthRefresh: true,
         ...axiosConfig,
       } as AxiosAuthRefreshRequestConfig)
-      .then((res) => res.data);
+      .then(res => res.data);
   }
 
   function addCartProduct(
@@ -168,11 +169,11 @@ export function createEmojisushiAgent(options: { service: string }) {
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ): Promise<IGetCartRes> {
     return client
-      .post<IGetCartRes>("cart/add", data, {
+      .post<IGetCartRes>('cart/add', data, {
         skipAuthRefresh: true,
         ...axiosConfig,
       } as AxiosAuthRefreshRequestConfig)
-      .then((res) => res.data);
+      .then(res => res.data);
   }
 
   function removeCartProduct(
@@ -181,7 +182,7 @@ export function createEmojisushiAgent(options: { service: string }) {
   ): Promise<IGetCartRes> {
     return client
       .post<IGetCartRes>(
-        "cart/remove",
+        'cart/remove',
         {
           cart_product_id,
         },
@@ -190,14 +191,14 @@ export function createEmojisushiAgent(options: { service: string }) {
           ...axiosConfig,
         } as AxiosAuthRefreshRequestConfig,
       )
-      .then((res) => res.data);
+      .then(res => res.data);
   }
 
   function clearCart(
     data = {},
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.post<IGetCartRes>("cart/clear", data, {
+    return client.post<IGetCartRes>('cart/clear', data, {
       skipAuthRefresh: true,
       ...axiosConfig,
     } as AxiosAuthRefreshRequestConfig);
@@ -207,7 +208,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     params = {},
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ): Promise<AxiosResponse<IGetPaymentMethodsRes>> {
-    return client.get("payments", {
+    return client.get('payments', {
       params,
       ...axiosConfig,
     });
@@ -220,7 +221,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     },
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.get("wishlist/add", {
+    return client.get('wishlist/add', {
       params,
       ...axiosConfig,
     });
@@ -229,7 +230,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     params: {} = {},
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.get<IGetWishlistRes>("wishlist/list", {
+    return client.get<IGetWishlistRes>('wishlist/list', {
       params,
       ...axiosConfig,
     });
@@ -239,7 +240,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     params = {},
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ): Promise<AxiosResponse<IGetShippingMethodsRes>> {
-    return client.get("shipping", {
+    return client.get('shipping', {
       params,
       ...axiosConfig,
     });
@@ -250,12 +251,12 @@ export function createEmojisushiAgent(options: { service: string }) {
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
     return client
-      .get<IGetBannersRes>("banners", {
+      .get<IGetBannersRes>('banners', {
         params,
         skipAuthRefresh: true,
         ...axiosConfig,
       } as AxiosAuthRefreshRequestConfig)
-      .then((res) => res.data);
+      .then(res => res.data);
   }
 
   function register(
@@ -271,14 +272,14 @@ export function createEmojisushiAgent(options: { service: string }) {
     },
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.post<RegisterResData>("auth/register", data, axiosConfig);
+    return client.post<RegisterResData>('auth/register', data, axiosConfig);
   }
 
   function login(
-    data: { email: string; password: string },
+    data: {email: string; password: string},
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.post<LoginResData>("auth/login", data, axiosConfig);
+    return client.post<LoginResData>('auth/login', data, axiosConfig);
   }
 
   function restorePassword(
@@ -288,14 +289,14 @@ export function createEmojisushiAgent(options: { service: string }) {
     },
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.post("auth/restore-password", data, axiosConfig);
+    return client.post('auth/restore-password', data, axiosConfig);
   }
 
   function resetPassword(
-    data: { code: string; password: string },
+    data: {code: string; password: string},
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.post("auth/reset-password", data, axiosConfig);
+    return client.post('auth/reset-password', data, axiosConfig);
   }
 
   function updateUserPassword(
@@ -306,14 +307,14 @@ export function createEmojisushiAgent(options: { service: string }) {
     },
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.post("user/password", data, axiosConfig);
+    return client.post('user/password', data, axiosConfig);
   }
 
   function fetchUser(
     params: {} = {},
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.get<IFetchUserResData>("user", {
+    return client.get<IFetchUserResData>('user', {
       params,
       ...axiosConfig,
     });
@@ -327,14 +328,14 @@ export function createEmojisushiAgent(options: { service: string }) {
     },
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.post("user", data, axiosConfig);
+    return client.post('user', data, axiosConfig);
   }
 
   function updateCustomer(
-    data: { firstname?: string; lastname?: string },
+    data: {firstname?: string; lastname?: string},
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.post("user/customer", data, axiosConfig);
+    return client.post('user/customer', data, axiosConfig);
   }
 
   function addAddress(
@@ -347,7 +348,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     },
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.post<IAddress>("user/address", data, axiosConfig);
+    return client.post<IAddress>('user/address', data, axiosConfig);
   }
 
   function deleteAddress(
@@ -356,7 +357,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     },
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.delete("user/address", {
+    return client.delete('user/address', {
       data,
       ...axiosConfig,
     });
@@ -368,7 +369,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     },
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.post("user/address/default", data, axiosConfig);
+    return client.post('user/address/default', data, axiosConfig);
   }
 
   const getCitiesDefaults: IGetCitiesParams = {
@@ -380,19 +381,19 @@ export function createEmojisushiAgent(options: { service: string }) {
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
     return client
-      .get<IGetSpotsRes>("spots", {
+      .get<IGetSpotsRes>('spots', {
         params,
         skipAuthRefresh: true,
         ...axiosConfig,
       } as AxiosAuthRefreshRequestConfig)
-      .then((res) => res.data);
+      .then(res => res.data);
   }
 
   function getSpot(
-    params: { slug_or_id: string | number },
+    params: {slug_or_id: string | number},
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.get<ISpot>("spot", {
+    return client.get<ISpot>('spot', {
       params,
       skipAuthRefresh: true,
       ...axiosConfig,
@@ -403,7 +404,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     params: {} = {},
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.get<ISpot>("spot-main", {
+    return client.get<ISpot>('spot-main', {
       skipAuthRefresh: true,
       params,
       ...axiosConfig,
@@ -411,10 +412,10 @@ export function createEmojisushiAgent(options: { service: string }) {
   }
 
   function getCity(
-    params: { slug_or_id: string | number },
+    params: {slug_or_id: string | number},
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.get<ICity>("city", {
+    return client.get<ICity>('city', {
       params,
       skipAuthRefresh: true,
       ...axiosConfig,
@@ -425,7 +426,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     params: {} = {},
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.get<ICity>("city-main", {
+    return client.get<ICity>('city-main', {
       skipAuthRefresh: true,
       params,
       ...axiosConfig,
@@ -437,12 +438,12 @@ export function createEmojisushiAgent(options: { service: string }) {
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
     return client
-      .get<IGetCitiesRes>("cities", {
+      .get<IGetCitiesRes>('cities', {
         params,
         skipAuthRefresh: true,
         ...axiosConfig,
       } as AxiosAuthRefreshRequestConfig)
-      .then((res) => res.data);
+      .then(res => res.data);
   }
   function getBonusHistory(params = {}, axiosConfig = {}) {
     return client.get<IGetBonusHistoryRes>(
@@ -453,6 +454,12 @@ export function createEmojisushiAgent(options: { service: string }) {
   function getBonusOptions(params = {}, axiosConfig = {}) {
     return client.get<IGetBonusOptionsRes>(
       'bonuses/options',
+      Object.assign({params, skipAuthRefresh: true}, axiosConfig),
+    );
+  }
+  function getAppAllowedVersion(params = {}, axiosConfig = {}) {
+    return client.get<IGetAppAllowedVersionsRes>(
+      'app-version',
       Object.assign({params, skipAuthRefresh: true}, axiosConfig),
     );
   }
@@ -494,6 +501,7 @@ export function createEmojisushiAgent(options: { service: string }) {
     getSpots,
     log,
     getBonusHistory,
-    getBonusOptions
+    getBonusOptions,
+    getAppAllowedVersion
   };
 }

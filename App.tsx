@@ -16,6 +16,7 @@ import {
   ReanimatedLogLevel,
 } from 'react-native-reanimated';
 import {agent} from './APIClient.tsx';
+import OldAppVersion from '~/components/OldAppVersion/OldAppVersion.tsx';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -45,8 +46,10 @@ function App() {
           <NavigationContainer>
             <BottomSheetModalProvider>
               <View style={styles.container}>
-                <Navigation />
-                <ClosedRestaurant />
+                <OldAppVersion>
+                  <Navigation />
+                  <ClosedRestaurant />
+                </OldAppVersion>
               </View>
             </BottomSheetModalProvider>
           </NavigationContainer>

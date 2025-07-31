@@ -693,3 +693,8 @@ export type IGetBonusOptionsRes = {
   max_bonus: number;
   get_bonus_from_used_bonus: boolean;
 };
+
+export type IGetAppAllowedVersionsRes = {
+  android: string;
+  ios: string;
+};
