@@ -23,7 +23,7 @@ const ContactsScreen = observer(({navigation}: {navigation: any}) => {
   const {data: cityRes} = useQuery(cityQuery);
   const cities = (cityRes || []).map(city => city);
   const city = cities.filter(c => c.slug === store.city);
-  const phonesArray = city.map(c => c.phones.split(','));
+  const phonesArray = city.map(c => c.phones?.split(','));
   const openLinkHandler = async (appUrl: string, webUrl: string) => {
     try {
       const supported = await Linking.canOpenURL(appUrl);
@@ -71,9 +71,9 @@ const ContactsScreen = observer(({navigation}: {navigation: any}) => {
           <View
             key={index}
             style={[
-              phones.length > 1 ? styles.phonesWrapper : styles.phoneWrapper,
+              phones?.length > 1 ? styles.phonesWrapper : styles.phoneWrapper,
             ]}>
-            {phones.map(phone => (
+            {phones?.map(phone => (
               <Pressable
                 onPress={() => Linking.openURL(`tel:${phone}`)}
                 key={phone}
