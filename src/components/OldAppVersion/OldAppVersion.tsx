@@ -1,39 +1,37 @@
-import React, {useEffect, useState} from 'react';
-import {Linking, Pressable, StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {
+  Linking,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  Platform,
+} from 'react-native';
 import {version} from '../../../package.json';
-import {agent} from '~/../APIClient';
 import Spinner from 'react-native-loading-spinner-overlay/lib';
+import {useQuery} from '@tanstack/react-query';
+import {appAllowedVersion} from '~/common/queries/appAllowedVersion.query';
 
 type Props = {
   children?: React.ReactNode;
 };
 
 const OldAppVersion = ({children}: Props) => {
-  const [isOutdated, setIsOutdated] = useState<boolean | null>(null);
-  const [link, setLink] = useState<string | null>(null);
-
-  useEffect(() => {
-    const checkVersion = async () => {
-      const latestVersion = (await agent.getAppAllowedVersion()).data;
-      if (
-        version.localeCompare(latestVersion?.android, undefined, {
-          numeric: true,
-          sensitivity: 'base',
-        }) < 0
-      ) {
-        setIsOutdated(true);
-      } else {
-        setIsOutdated(false);
-      }
-      setLink(latestVersion.android_link);//todo  android/ios version switch
-    };
-    checkVersion();
-  }, []);
-
-  if (isOutdated === null)
+  const {data, isLoading} = useQuery(appAllowedVersion);
+  const latestVersion =
+    (Platform.OS === 'ios' ? data?.ios : data?.android) ?? '';
+  const link =
+    (Platform.OS === 'ios' ? data?.ios_link : data?.android_link) ?? '';
+  const isOutdated = latestVersion
+    ? version.localeCompare(latestVersion, undefined, {
+        numeric: true,
+        sensitivity: 'base',
+      }) < 0
+    : false;
+  if (isLoading)
     return (
       <Spinner
-        visible={isOutdated === null}
+        visible={isLoading}
         textContent={'Loading...'}
         textStyle={{color: 'yellow'}}
         overlayColor="rgba(0, 0, 0, 0.75)"
