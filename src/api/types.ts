@@ -700,3 +700,12 @@ export type IGetAppAllowedVersionsRes = {
   android_link: string;
   ios_link: string;
 };
+
+export type IGetContacts = {
+  instagram_display_text: string;
+  instagram_app: string;
+  instagram_web: string;
+  telegram_display_text: string;
+  telegram_app: string;
+  telegram_web: string;
+};

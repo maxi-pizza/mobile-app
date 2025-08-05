@@ -24,6 +24,7 @@ import {
   IGetBonusHistoryRes,
   IGetBonusOptionsRes,
   IGetAppAllowedVersionsRes,
+  IGetContacts,
 } from './types';
 
 export function createEmojisushiAgent(options: {service: string}) {
@@ -463,7 +464,12 @@ export function createEmojisushiAgent(options: {service: string}) {
       Object.assign({params, skipAuthRefresh: true}, axiosConfig),
     );
   }
-
+  function getContacts(params = {}, axiosConfig = {}) {
+    return client.get<IGetContacts>(
+      'contacts',
+      Object.assign({params, skipAuthRefresh: true}, axiosConfig),
+    );
+  }
   return {
     axiosClient,
     getProducts,
@@ -502,6 +508,7 @@ export function createEmojisushiAgent(options: {service: string}) {
     log,
     getBonusHistory,
     getBonusOptions,
-    getAppAllowedVersion
+    getAppAllowedVersion,
+    getContacts
   };
 }
