@@ -3,8 +3,9 @@ import {clearToken, getToken} from '~/common/token/token';
 
 //https://api.emojisushi.com.ua/api
 //https://stage-api.emojisushi.com.ua/api
+//http://192.168.100.19:8080/api
 export const agent = createEmojisushiAgent({
-  service: 'http://192.168.100.19:8080/api',
+  service: 'http://localhost:8080/api',
 });
 
 agent.axiosClient.interceptors.request.use(async config => {

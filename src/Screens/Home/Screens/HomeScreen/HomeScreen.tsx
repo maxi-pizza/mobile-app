@@ -1,13 +1,14 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   FlatList,
-  Pressable,
+
   RefreshControl,
-  ScrollView,
+
   StyleSheet,
   Text,
   View,
 } from 'react-native';
+import {Pressable} from "react-native-gesture-handler";
 import {nh, nw} from '~/common/normalize.helper.ts';
 
 import {Header, Category, Banner, Search, ProductCard} from '~/components';
@@ -99,6 +100,7 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
       setRefreshing(false);
     }
   }, []);
+
   return (
     <View style={styles.container}>
       <Spinner
@@ -114,7 +116,10 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
             <View>
               {banners.length > 0 && <Banner navigation={navigation} />}
               <View style={styles.searchWrapper}>
-                <Pressable onPress={() => navigation.navigate('SearchModal')}>
+                <Pressable style={{
+                  width: nw(365),
+                  height: nh(40),
+                }} onPress={() => navigation.navigate('SearchModal')}>
                   <Search onSearch={() => ''} editable={false} />
                 </Pressable>
               </View>

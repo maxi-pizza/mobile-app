@@ -85,7 +85,7 @@ const SearchModal = observer(({navigation}: {navigation: any}) => {
           <View>
             <Image source={require('~/assets/Icons/Sticks.png')} style={{
               width: nw(200),
-              height: nh(200)
+              height: nw(200)
             }}/>
             <Text style={styles.noResultText}>Нічого не знайдено</Text>
           </View>

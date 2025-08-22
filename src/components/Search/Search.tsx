@@ -23,6 +23,7 @@ export const Search = ({
         onFocus={() => setIsFocused(!isFocused)}
         onBlur={() => setIsFocused(false)}
         editable={editable}
+
         scrollEnabled={false}
         multiline={false}
         placeholderTextColor="#3F3F3F"
@@ -49,7 +50,7 @@ const styles = StyleSheet.create({
   },
   input: {
     paddingLeft: nw(35),
-    lineHeight: 18,
+    lineHeight: nh(18),
     height: '100%',
     fontSize: nh(12),
     borderWidth: 1,
