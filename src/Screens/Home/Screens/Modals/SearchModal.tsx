@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import {Header, Search, ProductCard, BackButton} from '~/components';
 import {nh, nw} from '~/common/normalize.helper.ts';
-import NoResultSearch from '~/assets/Icons/NoResultSearch.svg';
 import {useQuery} from '@tanstack/react-query';
 import {
   DEFAULT_PRODUCT_LIMIT,
@@ -84,11 +83,10 @@ const SearchModal = observer(({navigation}: {navigation: any}) => {
       ) : (
         <View style={styles.noResultSearch}>
           <View>
-            <NoResultSearch
-              color={'#393939'}
-              width={nw(200)}
-              height={nh(200)}
-            />
+            <Image source={require('~/assets/Icons/Sticks.png')} style={{
+              width: nw(200),
+              height: nh(200)
+            }}/>
             <Text style={styles.noResultText}>Нічого не знайдено</Text>
           </View>
         </View>

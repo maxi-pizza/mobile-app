@@ -1,5 +1,5 @@
 import React from 'react';
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import {Header, ProductCard} from '~/components';
 import {useQuery} from '@tanstack/react-query';
@@ -10,16 +10,15 @@ import {
   productsQuery,
 } from '~/Screens/Home/products.query.ts';
 
-import NoResult from '~/assets/Icons/NoResultSearch.svg';
 import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
 
 const FavouriteScreen = observer(({navigation}: {navigation: any}) => {
-  const {data: wishlists, isLoading: isWishlistLoading} = useQuery(
+  const {data: wishlists } = useQuery(
     wishlistQuery(store.city),
   );
 
-  const {data: productQueryRes, isLoading: isProductsLoading} = useQuery(
+  const {data: productQueryRes } = useQuery(
     productsQuery({
       category_slug: 'menu',
       limit: DEFAULT_PRODUCT_LIMIT,
@@ -36,7 +35,11 @@ const FavouriteScreen = observer(({navigation}: {navigation: any}) => {
       <Header />
       {wishlist.length === 0 ? (
         <View style={styles.noResultContainer}>
-          <NoResult height={nh(200)} width={nw(200)} color={'#393939'} />
+          <Image style={{
+            height: nw(200),
+            width: nw(200),
+          }} source={require('~/assets/Icons/Sticks.png')}/>
+
           <Text style={[styles.noResultText, {marginTop: nh(15)}]}>
             Вибрані товари не знайдено
           </Text>

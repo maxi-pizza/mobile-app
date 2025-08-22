@@ -1,5 +1,6 @@
 import React, {useEffect} from 'react';
 import {
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -8,6 +9,7 @@ import {
 } from 'react-native';
 
 import EmptyCart from '~/assets/Icons/EmptyCart.svg';
+import Sushi from '~/assets/Icons/Sushi.png';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import {ProductCartCard, Header, isClosed} from '~/components';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
@@ -81,7 +83,10 @@ const CartScreen = observer(({navigation}: {navigation: any}) => {
         </View>
       ) : (
         <View style={styles.emptyCart}>
-          <EmptyCart />
+          <Image style={{
+            width: nw(200),
+            height: nw(200),
+          }} source={require('~/assets/Icons/Sushi.png')}/>
           <Text style={styles.emptyCartText}>Ваш кошик порожній :(</Text>
         </View>
       )}
