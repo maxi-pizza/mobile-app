@@ -15,7 +15,6 @@
   "dependencies": {
     "@gorhom/bottom-sheet": "^4.6.4",
     "@hookform/resolvers": "^3.9.1",
-    "@layerok/emojisushi-js-sdk": "^1.0.11",
     "@react-native-async-storage/async-storage": "^2.0.0",
     "@react-navigation/bottom-tabs": "^6.6.1",
     "@react-navigation/native": "^6.1.18",
@@ -42,6 +41,7 @@
     "@babel/core": "^7.20.0",
     "@babel/preset-env": "^7.20.0",
     "@babel/runtime": "^7.20.0",
+    "@react-native-community/cli": "^19.1.0",
     "@react-native/babel-preset": "0.75.3",
     "@react-native/eslint-config": "0.75.3",
     "@react-native/metro-config": "0.75.3",

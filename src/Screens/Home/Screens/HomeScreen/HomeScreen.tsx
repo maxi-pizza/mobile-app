@@ -1,5 +1,13 @@
-import React, {useEffect} from 'react';
-import {FlatList, Pressable, StyleSheet, Text, View} from 'react-native';
+import React, {useCallback, useEffect, useState} from 'react';
+import {
+  FlatList,
+  Pressable,
+  RefreshControl,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 
 import {Header, Category, Banner, Search, ProductCard} from '~/components';
@@ -10,7 +18,7 @@ import {
 } from '~/Screens/Home/products.query.ts';
 import {Product} from '~/models/Product.ts';
 import {categoriesQuery} from '~/Screens/Category/categories.query.ts';
-import {IProduct} from '@layerok/emojisushi-js-sdk';
+import {IProduct} from '~/api';
 import {wishlistQuery} from '~/Screens/Favourite/wishlist.query.ts';
 import {observer} from 'mobx-react-lite';
 import store from '~/stores/store.ts';
@@ -81,11 +89,20 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
     return category.slug === store.categorySlug;
   });
   const isLoading = isWishlistLoading || isCategoryLoading || isProductsLoading;
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
 
+    try {
+      await queryClient.refetchQueries();
+    } finally {
+      setRefreshing(false);
+    }
+  }, []);
   return (
     <View style={styles.container}>
       <Spinner
-        visible={isLoading}
+        visible={isLoading || refreshing}
         textContent={'Loading...'}
         textStyle={{color: 'yellow'}}
         overlayColor="rgba(0, 0, 0, 0.75)"
@@ -116,6 +133,9 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
           )}
           contentContainerStyle={styles.grid}
           showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
         />
       </View>
     </View>

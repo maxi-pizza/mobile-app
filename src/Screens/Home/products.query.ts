@@ -1,4 +1,4 @@
-import {IGetProductsParams, IGetProductsRes} from '@layerok/emojisushi-js-sdk';
+import {IGetProductsParams, IGetProductsRes} from '~/api';
 import {QueryOptions} from '@tanstack/react-query';
 import {agent} from '../../../APIClient.tsx';
 

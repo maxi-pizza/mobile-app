@@ -18,23 +18,24 @@ import {useQuery} from '@tanstack/react-query';
 import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
 import {cityQuery} from '~/components/Header/city.query.ts';
+import {contactsQuery} from '~/common/queries/contactsQuery';
 
 const ContactsScreen = observer(({navigation}: {navigation: any}) => {
   const {data: cityRes} = useQuery(cityQuery);
+  const {data: contacts} = useQuery(contactsQuery);
   const cities = (cityRes || []).map(city => city);
-  const city = cities.filter(c => c.slug === store.city);
-  const phonesArray = city.map(c => c.phones.split(','));
+  const city = cities.filter(c => c.slug === store.city)[0];
+  const phonesArray =
+    city.phones && city.phones !== '' ? city.phones.split(',') : null;
   const openLinkHandler = async (appUrl: string, webUrl: string) => {
     try {
-      const supported = await Linking.canOpenURL(appUrl);
+      const supported = appUrl !== '' && (await Linking.canOpenURL(appUrl));
       if (supported) {
         await Linking.openURL(appUrl);
       } else {
         await Linking.openURL(webUrl);
       }
-    } catch (e) {
-      throw new Error(e);
-    }
+    } catch (e) {}
   };
   return (
     <View style={styles.container}>
@@ -43,49 +44,51 @@ const ContactsScreen = observer(({navigation}: {navigation: any}) => {
       <View style={styles.wrapper}>
         <Text style={styles.header}>Контакти</Text>
         <View style={styles.btnWrapper}>
-          <TouchableOpacity
-            onPress={() =>
-              openLinkHandler(
-                'instagram://user?username=emoji_sushi',
-                'https://www.instagram.com/emoji_sushi',
-              )
-            }
-            style={styles.btn}>
-            <Instagram width="17" height="17" color="black" />
-            <Text style={styles.btnText}> Наш інстаграм | @emoji_sushi</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() =>
-              openLinkHandler(
-                'tg://resolve?domain=Emojisushibot',
-                'https://t.me/Emojisushibot',
-              )
-            }
-            style={styles.btn}>
-            <Telegram width="17" height="17" color="black" />
-            <Text style={styles.btnText}> Наш телеграм | @Emojisushibot</Text>
-          </TouchableOpacity>
+          {contacts?.instagram_display_text && (
+            <TouchableOpacity
+              onPress={() =>
+                openLinkHandler(contacts.instagram_app, contacts.instagram_web)
+              }
+              style={styles.btn}>
+              <Instagram width="17" height="17" color="black" />
+              <Text style={styles.btnText}>
+                {contacts.instagram_display_text}
+              </Text>
+            </TouchableOpacity>
+          )}
+
+          {contacts?.telegram_display_text && (
+            <TouchableOpacity
+              onPress={() =>
+                openLinkHandler(contacts.telegram_app, contacts.telegram_web)
+              }
+              style={styles.btn}>
+              <Telegram width="17" height="17" color="black" />
+              <Text style={styles.btnText}>
+                {contacts.telegram_display_text}
+              </Text>
+            </TouchableOpacity>
+          )}
         </View>
 
-        {phonesArray.map((phones, index) => (
-          <View
-            key={index}
-            style={[
-              phones.length > 1 ? styles.phonesWrapper : styles.phoneWrapper,
-            ]}>
-            {phones.map(phone => (
-              <Pressable
-                onPress={() => Linking.openURL(`tel:${phone}`)}
-                key={phone}
-                style={styles.phoneSvgWrapper}>
-                <Text>
-                  <Phone width="15" color="#727272" />
-                </Text>
-                <Text style={styles.phoneText}>{phone}</Text>
-              </Pressable>
-            ))}
-          </View>
-        ))}
+        <View
+          style={[
+            phonesArray?.length ?? 0 > 1
+              ? styles.phonesWrapper
+              : styles.phoneWrapper,
+          ]}>
+          {phonesArray?.map((phone, index) => (
+            <Pressable
+              onPress={() => Linking.openURL(`tel:${phone}`)}
+              key={index}
+              style={styles.phoneSvgWrapper}>
+              <Text>
+                <Phone width="15" color="#727272" />
+              </Text>
+              <Text style={styles.phoneText}>{phone}</Text>
+            </Pressable>
+          ))}
+        </View>
       </View>
     </View>
   );

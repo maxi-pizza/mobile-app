@@ -4,11 +4,14 @@ import {nh, nw} from '~/common/normalize.helper.ts';
 
 import Check from '~/assets/Icons/Check.svg';
 
-export const CheckBox = () => {
-  const [isActive, setIsActive] = useState(false);
+type CheckBoxProps = {
+  onChange: (value: boolean) => void;
+  active: boolean;
+};
+export const CheckBox = ({onChange, active}: CheckBoxProps) => {
   return (
-    <Pressable style={styles.container} onPress={() => setIsActive(!isActive)}>
-      {isActive && <Check color="#FFE600" />}
+    <Pressable style={styles.container} onPress={() => onChange(!active)}>
+      {active && <Check color="#FFE600" />}
     </Pressable>
   );
 };

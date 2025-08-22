@@ -32,7 +32,7 @@ import {
   DEFAULT_PRODUCT_LIMIT,
   productsQuery,
 } from '~/Screens/Home/products.query.ts';
-import {IProduct} from '@layerok/emojisushi-js-sdk';
+import {IProduct} from '~/api';
 
 const ProductModal = observer(
   ({route, navigation}: {route: any; navigation: any}) => {
