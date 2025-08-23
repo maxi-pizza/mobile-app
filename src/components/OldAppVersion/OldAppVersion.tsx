@@ -33,7 +33,7 @@ const OldAppVersion = ({children}: Props) => {
       <Spinner
         visible={isLoading}
         textContent={'Loading...'}
-        textStyle={{color: 'yellow'}}
+        textStyle={{color: 'white'}}
         overlayColor="rgba(0, 0, 0, 0.75)"
       />
     );

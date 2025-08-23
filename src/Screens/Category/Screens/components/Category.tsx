@@ -13,8 +13,8 @@ const Category = ({
 }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={categoryHandle}>
-      {category.image?.path ? (
-        <Image style={styles.image} source={{uri: category?.image?.path}} />
+      {category.image ? (
+        <Image style={styles.image} source={{uri: category?.image}} />
       ) : (
         <Image style={styles.image} source={require('~/assets/Logo.png')} />
       )}

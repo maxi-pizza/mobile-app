@@ -102,7 +102,7 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
       <Spinner
         visible={isLoading}
         textContent={'Loading...'}
-        textStyle={{color: 'yellow'}}
+        textStyle={{color: 'white'}}
         overlayColor="rgba(0, 0, 0, 0.75)"
       />
       <Header />

@@ -63,6 +63,8 @@ const styles = StyleSheet.create({
     color: 'white',
     paddingLeft: nw(10),
     position: 'relative',
+    fontSize: nh(14),
+    fontFamily: 'MontserratRegular',
   },
   focused: {
     borderWidth: 1,

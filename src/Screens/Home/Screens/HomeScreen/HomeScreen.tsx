@@ -1,9 +1,7 @@
 import React, {useCallback, useEffect, useState} from 'react';
 import {
   FlatList,
-
   RefreshControl,
-
   StyleSheet,
   Text,
   View,
@@ -14,21 +12,16 @@ import {nh, nw} from '~/common/normalize.helper.ts';
 import {Header, Category, Banner, Search, ProductCard} from '~/components';
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
-  productsQuery,
-  DEFAULT_PRODUCT_LIMIT,
-} from '~/Screens/Home/products.query.ts';
-import {Product} from '~/models/Product.ts';
-import {categoriesQuery} from '~/Screens/Category/categories.query.ts';
-import {IProduct} from '~/api';
-import {wishlistQuery} from '~/Screens/Favourite/wishlist.query.ts';
+  dataQuery,
+} from '~/queries/data.query.ts';
+import {wishlistQuery} from '~/queries/wishlist.query.ts';
 import {observer} from 'mobx-react-lite';
 import store from '~/stores/store.ts';
-import {bannerQuery} from '~/components/Banner/banner.query.ts';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {
   cartQuery,
   removeOldProducts,
-} from '~/Screens/Cart/cart.query.ts';
+} from '~/queries/cart.query.ts';
 
 const HomeScreen = observer(({navigation}: {navigation: any}) => {
   const queryClient = useQueryClient();
@@ -38,18 +31,12 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
   );
 
   const {data: cartQueryRes} = useQuery(cartQuery());
-  const {data: categoryQueryRes, isLoading: isCategoryLoading} = useQuery({
-    ...categoriesQuery(),
-  });
-  const {data: bannerRes} = useQuery(bannerQuery);
-  const banners = (bannerRes?.data || []).map(banner => banner);
 
-  const {data: productQueryRes, isLoading: isProductsLoading} = useQuery(
-    productsQuery({
-      category_slug: 'menu',
-      limit: DEFAULT_PRODUCT_LIMIT,
-    }),
+  const {data: catalogQueryData, isLoading: isProductsLoading} = useQuery(
+    dataQuery(),
   );
+  const banners = (catalogQueryData?.banners || []).map(banner => banner);
+
   const cartIds = Object.keys(cartQueryRes || {});
   const {mutate: removeOldProductsMutation} = useMutation({
     mutationFn: ({ids}: {ids: string[];}) =>
@@ -60,8 +47,8 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
 
   useEffect(() => {
     if (cartIds.length > 0) {
-      const existProductsIds = (productQueryRes?.data || []).map(item =>
-        String(item.id),
+      const existProductsIds = (catalogQueryData?.categories || []).flatMap(category =>
+        category.products.map(product => String(product.id),)
       );
 
       const notExistProducts = cartIds.filter(
@@ -71,21 +58,15 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
         removeOldProductsMutation({ids: notExistProducts});
       }
     }
-  }, [productQueryRes, cartIds, removeOldProductsMutation]);
+  }, [catalogQueryData, cartIds, removeOldProductsMutation]);
 
-  const belongsToCategory = (product: IProduct) => {
-    return !!product.categories
-      .find(category => category.slug === store.categorySlug);
-  };
-
-  const categoryItems = (productQueryRes?.data || []).filter(belongsToCategory);
-
-  const items = categoryItems.map(item => new Product(item));
-
-  const selectedCategory = (categoryQueryRes?.data || []).find(category => {
+  const selectedCategory = (catalogQueryData?.categories || []).find(category => {
     return category.slug === store.categorySlug;
   });
-  const isLoading = isWishlistLoading || isCategoryLoading || isProductsLoading;
+
+  const items = selectedCategory?.products || [];
+
+  const isLoading = isWishlistLoading || isProductsLoading;
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = useCallback(async () => {
     setRefreshing(true);
@@ -102,15 +83,18 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
       <Spinner
         visible={isLoading || refreshing}
         textContent={'Loading...'}
-        textStyle={{color: 'rgb(225, 43, 23)'}}
+        textStyle={{color: 'white'}}
         overlayColor="rgba(0, 0, 0, 0.75)"
       />
       <Header />
       <View style={styles.productsWrapper}>
         <FlatList
+          // stickyHeaderIndices={[0]}
           ListHeaderComponent={
-            <View>
-              {banners.length > 0 && <Banner navigation={navigation} />}
+            <View style={{
+              backgroundColor:  '#141414',
+            }}>
+              {banners.length > 0 && <Banner  />}
               <View style={styles.searchWrapper}>
                 <Pressable style={{
                   width: nw(365),

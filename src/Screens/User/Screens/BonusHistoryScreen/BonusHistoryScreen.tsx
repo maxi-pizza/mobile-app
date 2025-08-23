@@ -27,7 +27,7 @@ const BonusHistoryScreen = () => {
       <Spinner
         visible={isHistoryLoading || isBonusAmountLoading}
         textContent={'Loading...'}
-        textStyle={{color: 'yellow'}}
+        textStyle={{color: 'white'}}
         overlayColor="rgba(0, 0, 0, 0.75)"
       />
       <ScrollView showsVerticalScrollIndicator={false}>

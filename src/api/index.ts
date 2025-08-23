@@ -1,2 +1,2 @@
-export * from "./emojisushi-agent";
+export * from "./agent.ts";
 export * from "./types";

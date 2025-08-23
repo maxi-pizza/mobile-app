@@ -22,7 +22,7 @@ const ContactsScreen = observer(({navigation}: {navigation: any}) => {
 
   const {data: contacts} = useQuery(contactsQuery);
 
-  const phonesArray = [];
+  const phonesArray = [] as string[];
   const openLinkHandler = async (appUrl: string, webUrl: string) => {
     try {
       const supported = appUrl !== '' && (await Linking.canOpenURL(appUrl));

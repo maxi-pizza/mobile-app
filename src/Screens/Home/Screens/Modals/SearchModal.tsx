@@ -4,32 +4,26 @@ import {Header, Search, ProductCard, BackButton} from '~/components';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import {useQuery} from '@tanstack/react-query';
 import {
-  DEFAULT_PRODUCT_LIMIT,
-  productsQuery,
-} from '~/Screens/Home/products.query.ts';
-import {Product} from '~/models/Product.ts';
+  dataQuery,
+} from '~/queries/data.query.ts';
 import {fuzzySearch} from '~/common/utils/fuzzySearch.ts';
-
 import {observer} from 'mobx-react-lite';
-import {wishlistQuery} from '~/Screens/Favourite/wishlist.query.ts';
+import {wishlistQuery} from '~/queries/wishlist.query.ts';
 
 const SearchModal = observer(({navigation}: {navigation: any}) => {
   const [search, setSearch] = useState('');
   const {data: wishlists } = useQuery(
     wishlistQuery(),
   );
-  const {data: productsRes} = useQuery(
-    productsQuery({
-      category_slug: 'menu',
-      limit: DEFAULT_PRODUCT_LIMIT,
-    }),
+  const {data: catalogQueryData} = useQuery(
+    dataQuery(),
   );
 
   const onSearchHandle = (e: string) => {
     setSearch(e);
   };
   const filtered =
-    productsRes?.data || [];
+    (catalogQueryData?.categories || []).flatMap(category => category.products);
 
   const searched =
     search.length > 2
@@ -38,7 +32,7 @@ const SearchModal = observer(({navigation}: {navigation: any}) => {
         })
       : [];
 
-  const items = searched.map(item => new Product(item));
+  const items = searched;
 
   const searchFeedback = () => {
     const getLetters = (length: number) => {

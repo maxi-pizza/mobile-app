@@ -1,11 +1,9 @@
-import {createEmojisushiAgent} from '~/api';
+import {createAgent} from '~/api';
 import {clearToken, getToken} from '~/common/token/token';
+import {API_BASE_URL} from "~/env.ts";
 
-//https://api.emojisushi.com.ua/api
-//https://stage-api.emojisushi.com.ua/api
-//http://192.168.100.19:8080/api
-export const agent = createEmojisushiAgent({
-  service: 'http://localhost:8080/api',
+export const agent = createAgent({
+  service: API_BASE_URL,
 });
 
 agent.axiosClient.interceptors.request.use(async config => {

@@ -3,12 +3,11 @@ import {FlatList, Image, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import {Header, ProductCard} from '~/components';
 import {useQuery} from '@tanstack/react-query';
-import {wishlistQuery} from '~/Screens/Favourite/wishlist.query.ts';
-import {Product} from '~/models/Product.ts';
+import {wishlistQuery} from '~/queries/wishlist.query.ts';
+
 import {
-  DEFAULT_PRODUCT_LIMIT,
-  productsQuery,
-} from '~/Screens/Home/products.query.ts';
+  dataQuery,
+} from '~/queries/data.query.ts';
 
 import {observer} from 'mobx-react-lite';
 
@@ -17,19 +16,14 @@ const FavouriteScreen = observer(({navigation}: {navigation: any}) => {
     wishlistQuery(),
   );
 
-
-
-  const {data: productQueryRes } = useQuery(
-    productsQuery({
-      category_slug: 'menu',
-      limit: DEFAULT_PRODUCT_LIMIT,
-    }),
+  const {data: catalogQueryData } = useQuery(
+    dataQuery(),
   );
   const idsWishlist = Object.keys(wishlists || {});
-  const items = (productQueryRes?.data || []).filter(item =>
+  const products = (catalogQueryData?.categories || []).flatMap(category => category.products).filter(item =>
     idsWishlist.includes(String(item.id)),
   );
-  const products = items.map(item => new Product(item));
+
   return (
     <View style={styles.container}>
       <Header />

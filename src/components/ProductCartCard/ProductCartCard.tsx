@@ -5,23 +5,25 @@ import {nh, nw} from '~/common/normalize.helper.ts';
 import Trash from '~/assets/Icons/Trash.svg';
 
 import {Counter} from '~/components';
-import {Product} from '~/models/Product.ts';
-import Logo from '~/assets/Logo.svg';
+
+
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
   addItem,
   CART_STORAGE_KEY,
   cartQuery,
-} from '~/Screens/Cart/cart.query.ts';
-import store from '~/stores/store.ts';
-import {observer} from 'mobx-react-lite';
+} from '~/queries/cart.query.ts';
 
-export const ProductCartCard = observer(({item}: {item: Product}) => {
+import {observer} from 'mobx-react-lite';
+import {IProduct} from "~/api";
+import {STORAGE_URL} from "~/env.ts";
+
+export const ProductCartCard = observer(({item}: {item: IProduct}) => {
   const queryClient = useQueryClient();
 
   const {data: cart} = useQuery(cartQuery());
   const count = cart?.[item.id]?.count || 0;
-  const storagePrice = item?.getNewPrice(undefined)?.price;
+  const storagePrice = +item?.price;
 
   const {mutate} = useMutation({
     mutationFn: ({count, price}: {count: number; price: number}) =>
@@ -46,19 +48,21 @@ export const ProductCartCard = observer(({item}: {item: Product}) => {
     });
   };
 
-  const price = item?.getOldPrice(undefined)?.price_formatted;
-  const discountPrice = item?.getNewPrice(undefined)?.price_formatted;
+  const price = item?.price + " грн.";
+  const discountPrice = undefined;
   return (
     <View style={styles.container}>
       <View style={styles.imageTitleContainer}>
-        {item.mainImage ? (
-          <Image style={styles.image} source={{uri: item.mainImage}} />
+        {item.images.length > 0 ? (
+          <Image style={styles.image} source={{uri: STORAGE_URL + '/' + item.images[0].full}} />
+        ) : item.image ? (
+          <Image style={styles.image} source={{uri: item.image}} />
         ) : (
-          <Logo style={styles.svg} fillOpacity={0.1} />
+          <Image style={styles.image} source={require('~/assets/Logo.png')} />
         )}
         <View style={styles.titleDescriptionContainer}>
           <Text style={styles.title}>{item.name}</Text>
-          <Text style={styles.description}>{item.descriptionShort}</Text>
+          <Text style={styles.description}>{item.description}</Text>
         </View>
       </View>
       <Pressable onPress={handleRemove} style={styles.trash}>

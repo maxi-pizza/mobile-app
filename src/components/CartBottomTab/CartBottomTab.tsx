@@ -3,7 +3,7 @@ import React from 'react';
 import CartIcon from '~/assets/Icons/Cart.svg';
 import {StyleSheet, Text, View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
-import {cartQuery} from '~/Screens/Cart/cart.query.ts';
+import {cartQuery} from '~/queries/cart.query.ts';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import {observer} from 'mobx-react-lite';
 

@@ -82,7 +82,7 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
       <Spinner
         visible={isLoading}
         textContent={'Loading...'}
-        textStyle={{color: 'rgb(225, 43, 23)'}}
+        textStyle={{color: 'white'}}
         overlayColor="rgba(0, 0, 0, 0.75)"
       />
       <Header />

@@ -4,17 +4,16 @@ import {nh, nw} from '~/common/normalize.helper.ts';
 
 import {Header} from '~/components';
 import {useQuery} from '@tanstack/react-query';
-import {categoriesQuery} from '~/Screens/Category/categories.query.ts';
 import {observer} from 'mobx-react-lite';
 import Category from '../components/Category.tsx';
 import store from '~/stores/store.ts';
+import {dataQuery} from "~/queries/data.query.ts";
 
 const CategoryScreen = observer(({navigation}: {navigation: any}) => {
-  const {data: categoriesRes} = useQuery({
-    ...categoriesQuery(),
+  const {data: catalogQueryData} = useQuery({
+    ...dataQuery(),
   });
-  const categories = (categoriesRes?.data || [])
-    .map(category => category);
+  const categories = (catalogQueryData?.categories || []);
   const onHandleCategory = (slug: string) => {
     store.changeCategory(slug);
     navigation.navigate('Home');

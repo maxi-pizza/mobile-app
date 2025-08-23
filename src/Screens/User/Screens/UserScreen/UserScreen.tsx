@@ -75,7 +75,7 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
         <Spinner
           visible={isLoading || refreshing}
           textContent={'Loading...'}
-          textStyle={{color: 'rgb(225, 43, 23)'}}
+          textStyle={{color: 'white'}}
           overlayColor="rgba(0, 0, 0, 0.75)"
         />
         <Header />

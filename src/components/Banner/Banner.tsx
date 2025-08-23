@@ -8,17 +8,18 @@ import Animated, {
   useDerivedValue,
   useSharedValue,
 } from 'react-native-reanimated';
-import {bannerQuery} from './banner.query.ts';
+import {dataQuery} from '~/queries/data.query.ts';
+import {STORAGE_URL} from "~/env.ts";
 
-export const Banner = ({navigation}: {navigation: any}) => {
+export const Banner = () => {
   const flatRef = useAnimatedRef<Animated.FlatList<any>>();
   const [isAuto, setIsAuto] = useState(true);
   const interval = useRef<NodeJS.Timeout>();
   const offset = useSharedValue(0);
   const width = nw(365);
 
-  const {data: bannerRes, isLoading: isBannerLoading} = useQuery(bannerQuery);
-  const banners = bannerRes?.data || [];
+  const {data: catalogQueryData} = useQuery(dataQuery());
+  const banners = catalogQueryData?.banners || [];
 
   useEffect(() => {
     if (isAuto) {
@@ -33,7 +34,7 @@ export const Banner = ({navigation}: {navigation: any}) => {
     return () => {
       clearInterval(interval.current);
     };
-  }, [isAuto, width, banners.length]);
+  }, [isAuto, width, banners.length, offset]);
 
   useDerivedValue(() => {
     scrollTo(flatRef, offset.value, 0, true);
@@ -46,15 +47,10 @@ export const Banner = ({navigation}: {navigation: any}) => {
         data={banners}
         keyExtractor={item => String(item.id)}
         renderItem={({item}) => (
-          <Pressable
-            onPress={() =>
-              navigation.navigate('ProductModal', {
-                product: item.product?.id,
-              })
-            }>
+          <Pressable>
             <Image
               style={styles.banner}
-              source={{uri: item.image_small.path}}
+              source={{uri: STORAGE_URL + '/' + item.image}}
             />
           </Pressable>
         )}
@@ -76,11 +72,11 @@ const styles = StyleSheet.create({
   wrapper: {
     marginTop: nh(40),
     width: nw(365),
-    height: nh(133),
+    height: nh(240),
   },
   banner: {
     width: nw(365),
-    height: nh(133),
+    height: nh(240),
     borderRadius: 10,
   },
 });

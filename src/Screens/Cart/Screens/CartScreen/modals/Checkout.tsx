@@ -8,23 +8,14 @@ import {
 } from 'react-native';
 
 import * as yup from 'yup';
-
 import Swiper from '../components/Swiper.tsx';
 import {Input, Counter, Header, BackButton} from '~/components';
-
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
-import {spotsQuery} from '~/Screens/Cart/spots.query.ts';
 
-import Truck from '~/assets/Icons/Truck.svg';
-import Package from '~/assets/Icons/Package.svg';
-import Card from '~/assets/Icons/CreditCard.svg';
-import Cash from '~/assets/Icons/Money.svg';
 import ForkKnife from '~/assets/Icons/ForkKnife.svg';
 
-import {shippingQuery} from '~/Screens/Cart/shipping.query.ts';
-import {paymentQuery} from '~/Screens/Cart/payment.query.ts';
 import {observer} from 'mobx-react-lite';
-import {CART_STORAGE_KEY, cartQuery} from '~/Screens/Cart/cart.query.ts';
+import {CART_STORAGE_KEY, cartQuery} from '~/queries/cart.query.ts';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {isValidUkrainianPhone} from '../../../utils.ts';
@@ -35,23 +26,24 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import {nh, nw} from '~/common/normalize.helper.ts';
 
 import axios, {AxiosError} from 'axios';
+import {dataQuery} from "~/queries/data.query.ts";
 
 enum HouseTypeEnum {
   Apartment = 'high_rise_building',
   House = 'private_house',
 }
 enum PaymentMethodEnum {
-  Cash = 'cash',
-  Card = 'card',
+  Cash = '2',
+  Card = '1',
 }
 enum ShippingMethodEnum {
-  Courier = 'courier',
-  Takeaway = 'takeaway',
+  Courier ='2',
+  Takeaway = '1',
 }
 
 type FormValues = {
-  shippingMethod: ShippingMethodEnum;
-  paymentMethod: PaymentMethodEnum;
+  shippingMethodId: string;
+  paymentMethodId: string;
   spotId?: number | undefined;
   districtId?: number | undefined;
   name: string;
@@ -72,7 +64,6 @@ const validationRequired = 'Заповніть це поле';
 
 
 const Checkout = observer(({navigation}: {navigation: any}) => {
-  const {data: spotsRes} = useQuery(spotsQuery);
   const {data: bonusOptions} = useQuery(bonusOptionsQuery);
   const queryClient = useQueryClient();
   const [logged, setLogged] = useState(false);
@@ -103,29 +94,23 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     }
   }, [user]);
   const {data: cartRes} = useQuery(cartQuery());
+  const {data: catalogData} = useQuery(dataQuery());
 
-  const {data: shippingRes} = useQuery(shippingQuery);
-  const {data: paymentRes} = useQuery(paymentQuery);
-  const shippings = (shippingRes?.data || []).map(ship => ship);
-  const shippingIcons = [Package, Truck];
-  const shippingObj = shippings.map((item, index) => ({
-    value: item.code,
+
+  const shippings = (catalogData?.shipping_methods || []);
+
+  const shippingObj = shippings.map((item) => ({
+    value: item.id + '',
     name: item.name,
-    icon: shippingIcons[index],
   }));
 
-  const paymentIcons = [Cash, Card];
-  const payments = (paymentRes?.data || []).map(item => item);
-  const paymentObj = payments.map((item, index) => ({
-    value: item.code,
+
+  const payments = (catalogData?.payment_methods || []).map(item => item);
+  const paymentObj = payments.map((item) => ({
+    value: item.id + '',
     name: item.name,
-    icon: paymentIcons[index],
+
   }));
-
-  const spots = (spotsRes || []).map(spot => spot);
-
-
-
 
   const apart = [
     {value: HouseTypeEnum.House, name: 'Приватний будинок'},
@@ -225,10 +210,10 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
       }),
   });
   const InitialValue: FormValues = {
-    shippingMethod: ShippingMethodEnum.Takeaway,
+    shippingMethodId: ShippingMethodEnum.Takeaway,
     spotId: 1,
     districtId: undefined,
-    paymentMethod: PaymentMethodEnum.Cash,
+    paymentMethodId: PaymentMethodEnum.Cash,
     name: user?.name ?? '',
     phone: user?.phone ?? '',
     email: user?.email ?? '',
@@ -246,11 +231,11 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
   const getValidationSchema = (values: FormValues) => {
     if (
       values.houseType === HouseTypeEnum.Apartment &&
-      values.shippingMethod === ShippingMethodEnum.Courier
+      values.shippingMethodId === ShippingMethodEnum.Courier
     ) {
       return CourierHighRiseBuildingSchema;
     }
-    if (values.shippingMethod === ShippingMethodEnum.Courier) {
+    if (values.shippingMethodId === ShippingMethodEnum.Courier) {
       return CourierSchema;
     }
     return TakeAwaySchema;
@@ -265,10 +250,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     setValidationSchema(
       getValidationSchema({
         ...InitialValue,
-        shippingMethod:
-          ShippingMethodEnum.Takeaway === value
-            ? ShippingMethodEnum.Takeaway
-            : ShippingMethodEnum.Courier,
+        shippingMethodId: value,
       }),
     );
   };
@@ -277,10 +259,6 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     setValidationSchema(
       getValidationSchema({
         ...InitialValue,
-        shippingMethod:
-          ShippingMethodEnum.Takeaway === value
-            ? ShippingMethodEnum.Takeaway
-            : ShippingMethodEnum.Courier,
         houseType:
           HouseTypeEnum.House === value
             ? HouseTypeEnum.House
@@ -304,8 +282,8 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
   });
 
   const bonusesToUse = useWatch({control, name: 'bonusesToUse'});
-  const shippingMethod = useWatch({control, name: 'shippingMethod'});
-  const paymentMethod = useWatch({control, name: 'paymentMethod'});
+  const shippingMethodId = useWatch({control, name: 'shippingMethodId'});
+  const paymentMethodId = useWatch({control, name: 'paymentMethodId'});
   const houseType = useWatch({control, name: 'houseType'});
   if (!cartRes || Object.keys(cartRes).length < 1) {
     navigation.navigate('CartScreen');
@@ -327,10 +305,10 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
         name,
         street,
         sticks,
-        shippingMethod,
+        shippingMethodId,
         spotId,
         house,
-        paymentMethod,
+        paymentMethodId,
         change,
         comment,
         entrance,
@@ -350,9 +328,6 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
         .map(([label, value]) => `${label}: ${value}`)
         .join(', ');
 
-      const paymentId = payments?.find(p => p.code === paymentMethod);
-      const shippingId = shippings.find(s => s.code === shippingMethod);
-
 
       const resultantSpotId = spotId;
 
@@ -363,8 +338,8 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
         lastname,
 
         address,
-        payment_method_id: paymentId!.id,
-        shipping_method_id: shippingId!.id,
+        payment_method_id: +paymentMethodId,
+        shipping_method_id: +shippingMethodId,
         spot_id: resultantSpotId!,
 
         change,
@@ -434,7 +409,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
       <Spinner
         visible={isSending || isLoading}
         textContent={'Loading...'}
-        textStyle={{color: 'rgb(225, 43, 23)'}}
+        textStyle={{color: 'white'}}
         overlayColor="rgba(0, 0, 0, 0.75)"
       />
       <Header />
@@ -453,7 +428,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
             </Text>
           </View>
           <Controller
-            name="shippingMethod"
+            name="shippingMethodId"
             control={control}
             render={({field: {onChange, value}}) => (
               <View style={{marginTop: nh(15)}}>
@@ -469,7 +444,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
             )}
           />
 
-          {shippingMethod === ShippingMethodEnum.Courier && (
+          {shippingMethodId === ShippingMethodEnum.Courier && (
             <View style={{
               position: 'relative',
               zIndex: 2,
@@ -673,7 +648,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
             </Text>
           </View>
           <Controller
-            name="paymentMethod"
+            name="paymentMethodId"
             control={control}
             render={({field: {onChange, value}}) => (
               <Swiper
@@ -689,7 +664,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
             control={control}
             render={({field: {onChange, value}}) => (
               <View style={[styles.inputWrapper, {marginTop: nh(15)}]}>
-                {paymentMethod === 'cash' && (
+                {paymentMethodId === PaymentMethodEnum.Cash && (
                   <Input
                     placeholder="Приготувати здачу з"
                     inputMode="text"

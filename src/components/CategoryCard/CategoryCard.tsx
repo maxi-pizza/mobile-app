@@ -13,8 +13,8 @@ export const CategoryCard = observer(({category}: {category: ICategory}) => {
         categoryStore.categorySlug === category.slug ? styles.active : '',
       ]}
       onPress={() => categoryStore.changeCategory(category.slug)}>
-      {category.image?.path ? (
-        <Image style={styles.image} source={{uri: category?.image?.path}} />
+      {category.image ? (
+        <Image style={styles.image} source={{uri: category?.image}} />
       ) : (
         <Image style={styles.image} source={require('~/assets/Logo.png')} />
       )}

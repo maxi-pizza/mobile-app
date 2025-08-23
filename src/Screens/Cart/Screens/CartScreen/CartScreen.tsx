@@ -12,22 +12,18 @@ import {nh, nw} from '~/common/normalize.helper.ts';
 import {ProductCartCard, Header, isClosed} from '~/components';
 import { useQuery} from '@tanstack/react-query';
 import {
-  DEFAULT_PRODUCT_LIMIT,
-  productsQuery,
-} from '~/Screens/Home/products.query.ts';
-import {Product} from '~/models/Product.ts';
-import {cartQuery} from '~/Screens/Cart/cart.query.ts';
+  dataQuery,
+} from '~/queries/data.query.ts';
+
+import {cartQuery} from '~/queries/cart.query.ts';
 import {appConfig} from '~/config/app.ts';
 import {observer} from 'mobx-react-lite';
 
 const CartScreen = observer(({navigation}: {navigation: any}) => {
   const {data: cartItems} = useQuery(cartQuery());
 
-  const {data: productQueryRes} = useQuery(
-    productsQuery({
-      category_slug: 'menu',
-      limit: DEFAULT_PRODUCT_LIMIT,
-    }),
+  const {data: catalogQueryData} = useQuery(
+    dataQuery(),
   );
 
   const closed = isClosed({
@@ -37,10 +33,9 @@ const CartScreen = observer(({navigation}: {navigation: any}) => {
 
   const ids = Object.keys(cartItems || {});
 
-  const cart = (productQueryRes?.data || []).filter(item =>
+  const cartProducts = (catalogQueryData?.categories || []).flatMap(category => category.products).filter(item =>
     ids.includes(String(item.id)),
   );
-  const cartProducts = cart.map(product => new Product(product));
 
   const sum = ids.reduce((acc, id) => {
     return acc + cartItems?.[id]?.price * cartItems?.[id].count;

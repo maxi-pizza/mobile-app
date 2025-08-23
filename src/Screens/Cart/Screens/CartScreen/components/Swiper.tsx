@@ -1,12 +1,10 @@
 import React from 'react';
 import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
-import {SvgProps} from 'react-native-svg';
 
 type Option = {
   name: string;
   value: string;
-  icon?: React.FC<SvgProps>;
 };
 
 const Swiper = ({
@@ -32,17 +30,9 @@ const Swiper = ({
             styles.textWrapper,
             option.value === value ? styles.active : '',
           ]}>
-          {option.icon && (
-            <option.icon
-              width={nw(15)}
-              height={nh(15)}
-              color={value === option.value ? 'white' : 'white'}
-            />
-          )}
           <Text
             style={[
               value === option.value ? styles.blackText : styles.whiteText,
-              option.icon ? {marginLeft: nw(15)} : {marginLeft: 0},
             ]}>
             {option.name}
           </Text>

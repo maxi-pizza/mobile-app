@@ -3,21 +3,23 @@ import {ScrollView, StyleSheet, Text, View} from 'react-native';
 import {CategoryCard} from '~/components';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import {useQuery} from '@tanstack/react-query';
-import {categoriesQuery} from '~/Screens/Category/categories.query.ts';
 import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
+import {dataQuery} from "~/queries/data.query.ts";
 
 export const Category = observer(() => {
-  const {data: categoriesRes} = useQuery({
-    ...categoriesQuery(),
+  const {data: catalogQueryData} = useQuery({
+    ...dataQuery(),
   });
-  const categories = (categoriesRes?.data || [])
-    .map(category => category);
+
   useEffect(() => {
+    const categories = catalogQueryData?.categories || [];
     if (categories.length > 0) {
       store.changeCategory(String(categories[0].slug));
     }
-  }, [categories]);
+  }, [catalogQueryData]);
+
+  const categories = catalogQueryData?.categories || [];
 
   return (
     <View style={styles.container}>

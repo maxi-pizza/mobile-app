@@ -12,45 +12,41 @@ import {Header, BackButton, Counter} from '~/components';
 import {nh, nw} from '~/common/normalize.helper.ts';
 
 import Heart from '~/assets/Icons/Heart.svg';
-import {Product} from '~/models/Product.ts';
+
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
   addItem,
   CART_STORAGE_KEY,
   cartQuery,
-} from '~/Screens/Cart/cart.query.ts';
+} from '~/queries/cart.query.ts';
 import {
   addToWishlist,
   WISHLIST_STORAGE_KEY,
   wishlistQuery,
-} from '~/Screens/Favourite/wishlist.query.ts';
+} from '~/queries/wishlist.query.ts';
 
-import NullImage from '~/assets/Logo.svg';
-import store from '~/stores/store.ts';
+
 import {observer} from 'mobx-react-lite';
 import {
-  DEFAULT_PRODUCT_LIMIT,
-  productsQuery,
-} from '~/Screens/Home/products.query.ts';
+  dataQuery,
+} from '~/queries/data.query.ts';
 import {IProduct} from '~/api';
+import {STORAGE_URL} from '~/env.ts';
 
 const ProductModal = observer(
   ({route, navigation}: {route: any; navigation: any}) => {
-    const {data: itemRes} = useQuery(
-      productsQuery({
-        category_slug: 'menu',
-        limit: DEFAULT_PRODUCT_LIMIT,
-      }),
+    const {data: catalogQueryData} = useQuery(
+      dataQuery(),
     );
     const queryClient = useQueryClient();
     const id = route.params.product || [];
-    const item: IProduct | undefined = (itemRes?.data || []).find(
+    const item: IProduct | undefined = (catalogQueryData?.categories || []).flatMap(category => category.products).find(
       i => i.id === id,
     );
     if (!item) {
       throw new Error('undefined product');
     }
-    const product = new Product(item);
+    const product = item;
 
     const {data: wishlists} = useQuery(wishlistQuery());
 
@@ -64,12 +60,12 @@ const ProductModal = observer(
         });
       },
     });
-    const price = product?.getOldPrice(undefined)?.price_formatted;
-    const discountPrice = product?.getNewPrice(undefined)?.price_formatted;
+    const price = product?.price + ' грн.';
+    const discountPrice = undefined;
 
     const count = cart?.[product.id]?.count || 0;
 
-    const storagePrice = product?.getNewPrice(undefined)?.price;
+    const storagePrice = +product?.price;
     const onHandleAdd = () => {
       cartMutation({
         count: count + 1,
@@ -105,10 +101,12 @@ const ProductModal = observer(
         <BackButton navigation={navigation} />
         <View style={styles.container}>
           <View style={styles.productContainer}>
-            {product.mainImage ? (
-              <Image source={{uri: product.mainImage}} style={styles.image} />
+            {product.images.length > 0 ? (
+              <Image source={{uri: STORAGE_URL + '/' + product.images[0].full}} style={styles.image} />
+            ): product.image ? (
+              <Image source={{uri: product.image}} style={styles.image} />
             ) : (
-              <NullImage width={nw(265)} height={nh(171)} opacity={0.2} />
+              <Image style={styles.nullImage} source={require('~/assets/Logo.png')} width={nw(265)} height={nh(171)}  />
             )}
             <View style={styles.heartTitleWrapper}>
               <View style={styles.titleWrapper}>
@@ -142,11 +140,11 @@ const ProductModal = observer(
               ]}
             />
             <Text style={styles.whiteText}>
-              {product.ingredients.length === 0 ? '' : 'Інгредієнти'}
+              {product.description ? '' : 'Інгредієнти'}
             </Text>
             <FlatList
               style={{marginTop: nh(10), height: nh(160)}}
-              data={product.ingredients}
+              data={product.description?.split(',')}
               renderItem={ingredient => (
                 <View style={styles.dotWrapper}>
                   <View style={styles.dot} />
@@ -188,6 +186,12 @@ const styles = StyleSheet.create({
     width: nw(265),
     height: nh(171),
     objectFit: 'contain',
+  },
+  nullImage: {
+    width: nw(265),
+    height: nh(171),
+    objectFit: 'contain',
+    opacity: 0.2
   },
   productContainer: {
     display: 'flex',

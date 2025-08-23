@@ -11,20 +11,21 @@ import {nh, nw} from '~/common/normalize.helper.ts';
 
 import {Counter} from '~/components';
 import Heart from '../../assets/Icons/Heart.svg';
-import {Product} from '~/models/Product.ts';
 
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
   addItem,
   CART_STORAGE_KEY,
   cartQuery,
-} from '~/Screens/Cart/cart.query.ts';
+} from '~/queries/cart.query.ts';
 import {
   addToWishlist,
   WISHLIST_STORAGE_KEY,
-} from '~/Screens/Favourite/wishlist.query.ts';
+} from '~/queries/wishlist.query.ts';
 
 import {observer} from 'mobx-react-lite';
+import {IProduct} from "~/api";
+import {STORAGE_URL} from "~/env.ts";
 
 export const ProductCard = observer(
   ({
@@ -32,7 +33,7 @@ export const ProductCard = observer(
     wishlists,
     navigation,
   }: {
-    product: Product;
+    product: IProduct;
     wishlists?: Record<string, number>;
     navigation: any;
   }) => {
@@ -60,10 +61,10 @@ export const ProductCard = observer(
         });
       },
     });
-    const price = product?.getOldPrice(undefined)?.price_formatted;
-    const discountPrice = product?.getNewPrice(undefined)?.price_formatted;
+    const price = product?.price + " грн.";
+    const discountPrice = undefined;
 
-    const storagePrice = product?.getNewPrice(undefined)?.price;
+    const storagePrice = +product?.price;
     const onHandleAdd = () => {
       cartMutation({
         count: count + 1,
@@ -113,8 +114,10 @@ export const ProductCard = observer(
           </Pressable>
 
           <View style={styles.imageDescriptionWrapper}>
-            {product.mainImage !== undefined ? (
-              <Image style={styles.image} source={{uri: product?.mainImage}} />
+            {product.images.length > 0 ? (
+              <Image style={styles.image} source={{uri: STORAGE_URL + '/' + product.images[0].full}} />
+            ) : product.image !== null ? (
+              <Image style={styles.image} source={{uri: product?.image}} />
             ) : (
               <Image style={styles.svg} source={require('~/assets/Logo.png')} />
 
@@ -122,7 +125,7 @@ export const ProductCard = observer(
             <View style={styles.textWrapper}>
               <Text style={styles.title}>{product.name}</Text>
               <Text style={styles.description}>
-                {descriptionThreeWords(product.descriptionShort)}
+                {descriptionThreeWords(product.description)}
               </Text>
             </View>
           </View>
