@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, View} from 'react-native';
+import {SafeAreaView, StyleSheet, View} from 'react-native';
 import 'react-native-gesture-handler';
 import {NavigationContainer} from '@react-navigation/native';
 import {BottomSheetModalProvider} from '@gorhom/bottom-sheet';
@@ -42,18 +42,20 @@ function App() {
       }
       fallback={({resetError}) => <ErrorScreen resetError={resetError} />}>
       <GestureHandlerRootView>
-        <QueryClientProvider client={queryClient}>
-          <NavigationContainer>
-            <BottomSheetModalProvider>
-              <View style={styles.container}>
-                <OldAppVersion>
-                  <Navigation />
-                  <ClosedRestaurant />
-                </OldAppVersion>
-              </View>
-            </BottomSheetModalProvider>
-          </NavigationContainer>
-        </QueryClientProvider>
+        <SafeAreaView style={{flex: 1}}>
+          <QueryClientProvider client={queryClient}>
+            <NavigationContainer>
+              <BottomSheetModalProvider>
+                <View style={styles.container}>
+                  <OldAppVersion>
+                    <Navigation />
+                    <ClosedRestaurant />
+                  </OldAppVersion>
+                </View>
+              </BottomSheetModalProvider>
+            </NavigationContainer>
+          </QueryClientProvider>
+        </SafeAreaView>
       </GestureHandlerRootView>
     </Sentry.ErrorBoundary>
   );
