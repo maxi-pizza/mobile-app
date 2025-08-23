@@ -86,7 +86,7 @@ export type IProduct = {
   image: string | null;
   description: null | string;
   weight: string;
-  price: string;
+  price: string | null;
   unit: string;
   sort_order: number;
   hidden:boolean;

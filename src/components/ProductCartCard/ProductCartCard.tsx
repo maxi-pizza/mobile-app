@@ -23,7 +23,7 @@ export const ProductCartCard = observer(({item}: {item: IProduct}) => {
 
   const {data: cart} = useQuery(cartQuery());
   const count = cart?.[item.id]?.count || 0;
-  const storagePrice = +item?.price;
+  const storagePrice = +(item?.price || 0);
 
   const {mutate} = useMutation({
     mutationFn: ({count, price}: {count: number; price: number}) =>
@@ -33,18 +33,18 @@ export const ProductCartCard = observer(({item}: {item: IProduct}) => {
     },
   });
   const handleAdd = () => {
-    mutate({count: count + 1, price: storagePrice ? storagePrice / 100 : 0});
+    mutate({count: count + 1, price: storagePrice ? storagePrice : 0});
   };
   const handleMinus = () => {
     mutate({
       count: Math.max(count - 1, 0),
-      price: storagePrice ? storagePrice / 100 : 0,
+      price: storagePrice ? storagePrice : 0,
     });
   };
   const handleRemove = () => {
     mutate({
       count: 0,
-      price: storagePrice ? storagePrice / 100 : 0,
+      price: storagePrice ? storagePrice : 0,
     });
   };
 

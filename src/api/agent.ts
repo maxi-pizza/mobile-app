@@ -39,25 +39,22 @@ export function createAgent(options: {service: string}) {
   function placeOrder(
     params: {
       phone: string;
-      firstname?: string; // це ім'я зберігаеться на сайті
-      lastname?: string;
+      name?: string;
       email?: string;
-      cart: {
-        items: Record<string, any>[]
-      }
-
-      shipping_method_id: number;
+      products:{
+        product_id: string;
+        count: number
+      }[];
+      delivery_method_id: number;
       payment_method_id: number;
-      spot_id: number;
       address?: string;
-
       comment?: string;
-      sticks?: number;
+      people_count?: number;
       change?: string;
     },
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.post('order/place', params, axiosConfig);
+    return client.post('/placeOrder', params, axiosConfig);
   }
 
   function register(

@@ -8,16 +8,19 @@ import {
   View,
 } from 'react-native';
 
+import {Pressable} from 'react-native-gesture-handler';
+
 import {nh, nw} from '~/common/normalize.helper.ts';
 import {ProductCartCard, Header, isClosed} from '~/components';
-import { useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
   dataQuery,
 } from '~/queries/data.query.ts';
 
-import {cartQuery} from '~/queries/cart.query.ts';
+import { CART_STORAGE_KEY, cartQuery, clearCart} from '~/queries/cart.query.ts';
 import {appConfig} from '~/config/app.ts';
 import {observer} from 'mobx-react-lite';
+import Trash from "~/assets/Icons/Trash.svg";
 
 const CartScreen = observer(({navigation}: {navigation: any}) => {
   const {data: cartItems} = useQuery(cartQuery());
@@ -25,6 +28,8 @@ const CartScreen = observer(({navigation}: {navigation: any}) => {
   const {data: catalogQueryData} = useQuery(
     dataQuery(),
   );
+
+  const queryClient = useQueryClient();
 
   const closed = isClosed({
     start: appConfig.workingHours[0],
@@ -41,12 +46,45 @@ const CartScreen = observer(({navigation}: {navigation: any}) => {
     return acc + cartItems?.[id]?.price * cartItems?.[id].count;
   }, 0);
 
+  const {mutate: clearCartMutation} = useMutation({
+    mutationFn: () => {
+      return clearCart();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [CART_STORAGE_KEY],
+      });
+    },
+  });
+
   return (
     <View style={styles.container}>
       <Header />
       {ids.length > 0 ? (
-        <View>
-          <Text style={[styles.cartTitle, styles.titleMargin]}>Кошик</Text>
+        <View style={{
+          position: 'relative'
+        }}>
+
+<View style={styles.titleContainer}>
+  <Text style={[styles.cartTitle]}>Кошик</Text>
+  <Pressable style={{
+    display: 'flex',
+    flexDirection: 'row',
+    height: nh(20),
+    alignItems: 'center'
+
+  }} onPress={() => {
+    clearCartMutation();
+  }}>
+    <Text style={{
+      color: 'white',
+      fontSize: nh(14),
+      fontFamily: 'MontserratRegular',
+    }}>Очистити кошик</Text>
+    <Trash  color="#CD3838" />
+  </Pressable>
+</View>
+
           <View
             style={[
               styles.productsWrapper,
@@ -62,11 +100,11 @@ const CartScreen = observer(({navigation}: {navigation: any}) => {
           </View>
 
           <TouchableOpacity
-            disabled={closed}
+            // disabled={closed}
             onPress={() => navigation.navigate('Checkout')}
             style={[
               styles.orderButton,
-              closed ? {backgroundColor: 'grey'} : '',
+              // closed ? {backgroundColor: 'grey'} : '',
             ]}>
             <Text style={styles.checkoutText}>
               Оформити замовлення | {sum} ₴
@@ -91,18 +129,25 @@ const styles = StyleSheet.create({
     backgroundColor: '#141414',
     height: '100%',
   },
+  titleContainer: {
+    marginLeft: nw(13),
+    marginRight: nw(13),
+    marginTop: nh(30),
+    marginBottom: nh(15),
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
   cartTitle: {
     fontFamily: 'MontserratRegular',
     fontWeight: '600',
     fontSize: nh(20),
     lineHeight: 24,
     color: 'white',
+
   },
-  titleMargin: {
-    marginTop: nh(30),
-    marginLeft: nw(13),
-    marginBottom: nh(15),
-  },
+
   emptyCart: {
     display: 'flex',
     justifyContent: 'center',

@@ -65,17 +65,17 @@ const ProductModal = observer(
 
     const count = cart?.[product.id]?.count || 0;
 
-    const storagePrice = +product?.price;
+    const storagePrice = +(product?.price || 0);
     const onHandleAdd = () => {
       cartMutation({
         count: count + 1,
-        price: storagePrice ? storagePrice / 100 : 0,
+        price: storagePrice ? storagePrice : 0,
       });
     };
     const onHandleMinus = () => {
       cartMutation({
         count: Math.max(count - 1, 0),
-        price: storagePrice ? storagePrice / 100 : 0,
+        price: storagePrice ? storagePrice : 0,
       });
     };
     const {mutate: addWishlist} = useMutation({

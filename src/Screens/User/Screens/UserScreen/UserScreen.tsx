@@ -37,7 +37,7 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
       setLogged(false);
 
       const d = await agent.auth.me();
-      console.log('d',d);
+
       return d.data;
     },
     retry: false,
@@ -46,7 +46,6 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
     onError: () => setLogged(false),
   });
 
-  console.log('user', user)
   useEffect(() => {
     if (user) {
       setLogged(true);

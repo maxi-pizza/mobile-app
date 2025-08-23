@@ -50,3 +50,8 @@ export const removeOldProducts = async ({
     JSON.stringify(cart),
   );
 };
+
+export const clearCart = async () => {
+  await AsyncStorage.removeItem(CART_STORAGE_KEY,);
+};
+

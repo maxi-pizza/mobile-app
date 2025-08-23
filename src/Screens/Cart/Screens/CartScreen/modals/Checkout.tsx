@@ -44,7 +44,6 @@ enum ShippingMethodEnum {
 type FormValues = {
   shippingMethodId: string;
   paymentMethodId: string;
-  spotId?: number | undefined;
   districtId?: number | undefined;
   name: string;
   phone: string;
@@ -136,7 +135,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
         () => 'Телефон повинен бути у форматі +380xxxxxxxxx',
         isValidUkrainianPhone,
       ),
-    spotId: yup.number().required(validationRequired),
+
     bonusesToUse: yup
       .string()
       .nullable()
@@ -211,7 +210,6 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
   });
   const InitialValue: FormValues = {
     shippingMethodId: ShippingMethodEnum.Takeaway,
-    spotId: 1,
     districtId: undefined,
     paymentMethodId: PaymentMethodEnum.Cash,
     name: user?.name ?? '',
@@ -291,9 +289,9 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
   }
 
   const items = ids.map(id => ({
-    id: id,
+    product_id: id,
     variant_id: undefined,
-    quantity: +cartRes[id].count,
+    count: +cartRes[id].count,
   }));
 
 
@@ -306,7 +304,6 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
         street,
         sticks,
         shippingMethodId,
-        spotId,
         house,
         paymentMethodId,
         change,
@@ -316,7 +313,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
         apartment,
         bonusesToUse,
       } = data;
-      const [firstname, lastname] = name.split(' ');
+
       const address = [
         ['Вулиця', street],
         ['Будинок', house],
@@ -329,23 +326,18 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
         .join(', ');
 
 
-      const resultantSpotId = spotId;
-
       await agent.placeOrder({
         phone,
         email,
-        firstname,
-        lastname,
-
+        name,
         address,
         payment_method_id: +paymentMethodId,
-        shipping_method_id: +shippingMethodId,
-        spot_id: resultantSpotId!,
+        delivery_method_id: +shippingMethodId,
 
         change,
         comment,
-        cart: {items},
-        sticks: +sticks,
+        products: items,
+        people_count: +sticks,
         ...(bonusesToUse != null && {bonuses_to_use: +bonusesToUse}),
       });
     },
@@ -394,10 +386,9 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     if (!bonusOptions) return;
     const rate = bonusOptions.bonus_rate;
    // const max = bonusOptions.max_bonus;
-    const b = bonusOptions.get_bonus_from_used_bonus;
 
     let dif = 0;
-    if (!b) {
+    if (!bonusOptions.get_bonus_from_used_bonus) {
       dif = +(bonusesToUse ?? 0);
     }
     const amount = (total - dif) * rate;

@@ -53,13 +53,13 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
     },
     onSuccess: async data => {
       queryClient.invalidateQueries(['userData']);
-      console.log('data', data);
+
       const {access_token} = data;
       await setToken(access_token);
       navigation.goBack();
     },
     onError: e => {
-      console.log('error', e);
+
       if (axios.isAxiosError(e)) {
         let error = e as AxiosError<{
           message: string;
