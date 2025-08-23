@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
   container: {
     width: nw(60),
     height: nw(60),
-    backgroundColor: '#FFE600',
+    backgroundColor: 'rgb(225, 43, 23)',
     borderRadius: nw(60),
     alignItems: 'center',
     justifyContent: 'center',
@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     height: nw(20),
   },
   shadowProp: {
-    shadowColor: '#FFE60080',
+    shadowColor: 'rgba(225,43,23,0.8)',
     elevation: 7,
   },
   margin: {

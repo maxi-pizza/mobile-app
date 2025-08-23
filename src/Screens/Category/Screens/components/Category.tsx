@@ -1,7 +1,7 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
-import CategoryNullImage from '~/assets/Logo.svg';
+
 import {ICategory} from '~/api';
 
 const Category = ({
@@ -16,7 +16,7 @@ const Category = ({
       {category.image?.path ? (
         <Image style={styles.image} source={{uri: category?.image?.path}} />
       ) : (
-        <CategoryNullImage style={styles.image} fillOpacity={0.2} />
+        <Image style={styles.image} source={require('~/assets/Logo.png')} />
       )}
       <Text style={styles.text}>{category.name}</Text>
     </TouchableOpacity>
@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     width: nw(40),
     height: nh(40),
     marginLeft: nw(10),
+    opacity: 0.2
   },
 });
 

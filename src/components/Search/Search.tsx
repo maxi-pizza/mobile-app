@@ -59,6 +59,6 @@ const styles = StyleSheet.create({
     color: 'white',
   },
   focused: {
-    borderColor: 'yellow',
+    borderColor: 'rgb(205, 56, 56)',
   },
 });

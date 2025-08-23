@@ -52,15 +52,15 @@ const ProductModal = observer(
     }
     const product = new Product(item);
 
-    const {data: wishlists} = useQuery(wishlistQuery(store.city));
+    const {data: wishlists} = useQuery(wishlistQuery());
 
-    const {data: cart} = useQuery(cartQuery(store.city));
+    const {data: cart} = useQuery(cartQuery());
     const {mutate: cartMutation} = useMutation({
       mutationFn: ({count, price}: {count: number; price: number}) =>
-        addItem(product.id, count, price, store.city),
+        addItem(product.id, count, price),
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: [CART_STORAGE_KEY, store.city],
+          queryKey: [CART_STORAGE_KEY],
         });
       },
     });
@@ -83,10 +83,10 @@ const ProductModal = observer(
       });
     };
     const {mutate: addWishlist} = useMutation({
-      mutationFn: ({id}: {id: number}) => addToWishlist(id, store.city),
+      mutationFn: ({id}: {id: number}) => addToWishlist(id),
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: [WISHLIST_STORAGE_KEY, store.city],
+          queryKey: [WISHLIST_STORAGE_KEY],
         });
       },
     });
@@ -101,7 +101,7 @@ const ProductModal = observer(
 
     return (
       <View>
-        <Header dropdownVisible={false} />
+        <Header  />
         <BackButton navigation={navigation} />
         <View style={styles.container}>
           <View style={styles.productContainer}>
@@ -118,7 +118,7 @@ const ProductModal = observer(
               <Pressable
                 style={styles.heartBtn}
                 onPress={handleFavouriteButton}>
-                <Heart width={nw(20)} color={favourite ? 'yellow' : 'white'} />
+                <Heart width={nw(20)} color={favourite ? 'rgb(225, 43, 23)' : 'white'} />
               </Pressable>
             </View>
             <View
@@ -284,12 +284,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'yellow',
+    backgroundColor: 'rgb(225, 43, 23)',
     borderRadius: 10,
     marginTop: nh(30),
   },
   blackText: {
-    color: 'black',
+    color: 'white',
     fontFamily: 'MontserratRegular',
     fontSize: nh(14),
     fontWeight: '600',

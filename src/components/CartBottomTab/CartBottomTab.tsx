@@ -5,11 +5,10 @@ import {StyleSheet, Text, View} from 'react-native';
 import {useQuery} from '@tanstack/react-query';
 import {cartQuery} from '~/Screens/Cart/cart.query.ts';
 import {nh, nw} from '~/common/normalize.helper.ts';
-import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
 
 const CartBottomTab = observer(({focused}: {focused: any}) => {
-  const {data: cart} = useQuery(cartQuery(store.city));
+  const {data: cart} = useQuery(cartQuery());
 
   const ids = Object.keys(cart || {});
   const count = ids.reduce((acc, id) => {
@@ -23,7 +22,7 @@ const CartBottomTab = observer(({focused}: {focused: any}) => {
           <Text style={styles.badgeText}>{count}</Text>
         </View>
       )}
-      <CartIcon width={26} color={focused ? 'yellow' : 'white'} />
+      <CartIcon width={26} color={focused ? 'rgb(225, 43, 23)' : 'white'} />
     </View>
   );
 });
@@ -33,7 +32,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 15,
     top: 15,
-    backgroundColor: 'yellow',
+    backgroundColor: 'rgb(225, 43, 23)',
     width: nw(17),
     height: nw(17),
     borderRadius: 10,
@@ -43,7 +42,7 @@ const styles = StyleSheet.create({
     zIndex: 1,
   },
   badgeText: {
-    color: 'black',
+    color: 'white',
     fontFamily: 'MontserratRegular',
     fontWeight: '700',
     fontSize: nh(12),

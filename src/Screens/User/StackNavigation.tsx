@@ -9,7 +9,7 @@ import ResetPasswordScreen from './Screens/ResetPasswordScreen/ResetPasswordScre
 import BonusHistoryScreen from './Screens/BonusHistoryScreen/BonusHistoryScreen.tsx';
 import SavedAddressesScreen from './Screens/SavedAddressesScreen/SavedAddressesScreen.tsx';
 import DeliveryAndPayment from './Screens/DeliveryAndPayment/DeliveryAndPayment.tsx';
-import RefundRules from './Screens/RefundRules/RefundRules.tsx';
+
 import UpdatePasswordScreen from './Screens/UpdatePasswordScreen/UpdatePasswordScreen.tsx';
 
 type ScreenProps = {
@@ -19,7 +19,6 @@ type ScreenProps = {
   UserScreen: undefined;
   SavedAddresses: undefined;
   DeliveryAndPayment: undefined;
-  RefundRules: undefined;
   Contacts: undefined;
   SignIn: undefined;
   SignUp: undefined;
@@ -65,14 +64,6 @@ const StackNavigation = () => {
       <Stack.Screen
         name="DeliveryAndPayment"
         component={DeliveryAndPayment}
-        options={{
-          gestureEnabled: true,
-          gestureDirection: 'horizontal',
-        }}
-      />
-      <Stack.Screen
-        name="RefundRules"
-        component={RefundRules}
         options={{
           gestureEnabled: true,
           gestureDirection: 'horizontal',

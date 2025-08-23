@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import {
   Image,
   ScrollView,
@@ -8,11 +8,9 @@ import {
   View,
 } from 'react-native';
 
-import EmptyCart from '~/assets/Icons/EmptyCart.svg';
-import Sushi from '~/assets/Icons/Sushi.png';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import {ProductCartCard, Header, isClosed} from '~/components';
-import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
+import { useQuery} from '@tanstack/react-query';
 import {
   DEFAULT_PRODUCT_LIMIT,
   productsQuery,
@@ -20,13 +18,12 @@ import {
 import {Product} from '~/models/Product.ts';
 import {cartQuery} from '~/Screens/Cart/cart.query.ts';
 import {appConfig} from '~/config/app.ts';
-import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
 
 const CartScreen = observer(({navigation}: {navigation: any}) => {
-  const {data: cartItems} = useQuery(cartQuery(store.city));
+  const {data: cartItems} = useQuery(cartQuery());
 
-  const {data: productQueryRes, isLoading: isProductsLoading} = useQuery(
+  const {data: productQueryRes} = useQuery(
     productsQuery({
       category_slug: 'menu',
       limit: DEFAULT_PRODUCT_LIMIT,
@@ -127,7 +124,7 @@ const styles = StyleSheet.create({
     marginLeft: nw(13),
   },
   orderButton: {
-    backgroundColor: '#FFE600',
+    backgroundColor: 'rgb(225, 43, 23)',
     width: nw(365),
     height: nh(50),
     display: 'flex',
@@ -142,7 +139,7 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: nh(14),
     lineHeight: 17,
-    color: 'black',
+    color: 'white',
   },
 });
 

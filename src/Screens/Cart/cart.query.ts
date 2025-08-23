@@ -1,18 +1,17 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import {useMutation} from '@tanstack/react-query';
-import store from '~/stores/store.ts';
+
 
 export const CART_STORAGE_KEY = 'cart';
 
-export const cartQuery = (slug: string) => {
+export const cartQuery = () => {
   return {
-    queryKey: [CART_STORAGE_KEY, slug],
-    queryFn: () => getItems(slug),
+    queryKey: [CART_STORAGE_KEY],
+    queryFn: () => getItems(),
   };
 };
 
-export const getItems = async (city: string): Promise<Record<string, any>> => {
-  const stored = await AsyncStorage.getItem(CART_STORAGE_KEY + `_${city}`);
+export const getItems = async (): Promise<Record<string, any>> => {
+  const stored = await AsyncStorage.getItem(CART_STORAGE_KEY );
   return stored ? JSON.parse(stored) : {};
 };
 
@@ -20,37 +19,34 @@ export const addItem = async (
   id: number,
   count: number,
   price: number,
-  city: string,
 ) => {
-  const currentCart = await getItems(city);
+  const currentCart = await getItems();
   if (count === 0) {
     const {[id]: _, ...remainingCart} = currentCart;
     await AsyncStorage.setItem(
-      CART_STORAGE_KEY + `_${city}`,
+      CART_STORAGE_KEY,
       JSON.stringify(remainingCart),
     );
   } else {
     const updatedCart = {...currentCart, [id]: {count: count, price: price}};
     await AsyncStorage.setItem(
-      CART_STORAGE_KEY + `_${city}`,
+      CART_STORAGE_KEY,
       JSON.stringify(updatedCart),
     );
   }
 
-  return await getItems(city);
+  return await getItems();
 };
 
 export const removeOldProducts = async ({
   ids,
-  city,
 }: {
   ids: string[];
-  city: string;
 }) => {
-  const cart = await getItems(city);
+  const cart = await getItems();
   ids.forEach(id => delete cart[id]);
   await AsyncStorage.setItem(
-    CART_STORAGE_KEY + `_${city}`,
+    CART_STORAGE_KEY ,
     JSON.stringify(cart),
   );
 };

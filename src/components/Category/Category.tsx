@@ -8,14 +8,11 @@ import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
 
 export const Category = observer(() => {
-  const {data: categoriesRes, isLoading} = useQuery({
+  const {data: categoriesRes} = useQuery({
     ...categoriesQuery(),
   });
   const categories = (categoriesRes?.data || [])
-    .map(category => category)
-    .filter(category =>
-      store.city === 'chorno' ? category.slug !== 'pitsa' : category.slug,
-    );
+    .map(category => category);
   useEffect(() => {
     if (categories.length > 0) {
       store.changeCategory(String(categories[0].slug));

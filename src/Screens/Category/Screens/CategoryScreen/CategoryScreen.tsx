@@ -10,14 +10,11 @@ import Category from '../components/Category.tsx';
 import store from '~/stores/store.ts';
 
 const CategoryScreen = observer(({navigation}: {navigation: any}) => {
-  const {data: categoriesRes, isLoading} = useQuery({
+  const {data: categoriesRes} = useQuery({
     ...categoriesQuery(),
   });
   const categories = (categoriesRes?.data || [])
-    .map(category => category)
-    .filter(category =>
-      store.city === 'chorno' ? category.slug !== 'pitsa' : true,
-    );
+    .map(category => category);
   const onHandleCategory = (slug: string) => {
     store.changeCategory(slug);
     navigation.navigate('Home');

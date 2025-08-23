@@ -9,11 +9,15 @@ import {
 } from '~/Screens/Home/products.query.ts';
 import {Product} from '~/models/Product.ts';
 import {fuzzySearch} from '~/common/utils/fuzzySearch.ts';
-import store from '~/stores/store.ts';
+
 import {observer} from 'mobx-react-lite';
+import {wishlistQuery} from '~/Screens/Favourite/wishlist.query.ts';
 
 const SearchModal = observer(({navigation}: {navigation: any}) => {
   const [search, setSearch] = useState('');
+  const {data: wishlists } = useQuery(
+    wishlistQuery(),
+  );
   const {data: productsRes} = useQuery(
     productsQuery({
       category_slug: 'menu',
@@ -25,13 +29,7 @@ const SearchModal = observer(({navigation}: {navigation: any}) => {
     setSearch(e);
   };
   const filtered =
-    store.city === 'chorno'
-      ? (productsRes?.data || []).filter(item => {
-          return !item.categories.find(c => {
-            return c.slug === 'pitsa';
-          });
-        })
-      : productsRes?.data || [];
+    productsRes?.data || [];
 
   const searched =
     search.length > 2
@@ -76,7 +74,7 @@ const SearchModal = observer(({navigation}: {navigation: any}) => {
           contentContainerStyle={styles.flatList}
           data={items}
           renderItem={({item}) => (
-            <ProductCard product={item} navigation={navigation} />
+            <ProductCard wishlists={wishlists} product={item} navigation={navigation} />
           )}
           keyExtractor={item => String(item.id)}
         />

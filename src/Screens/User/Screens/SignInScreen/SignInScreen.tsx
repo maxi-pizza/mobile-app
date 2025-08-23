@@ -1,12 +1,12 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import PasswordInput from '~/Screens/User/components/PasswordInput/PasswordInput.tsx';
-import {Header, Input} from '~/components';
+import {BackButton, Header, Input} from '~/components';
 
-import {Controller, useForm, useWatch} from 'react-hook-form';
+import {Controller, useForm} from 'react-hook-form';
 import * as yup from 'yup';
 import {yupResolver} from '@hookform/resolvers/yup';
 
@@ -82,68 +82,75 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
       <Spinner
         visible={isLoading}
         textContent={'Loading...'}
-        textStyle={{color: 'yellow'}}
+        textStyle={{color: 'rgb(225, 43, 23)'}}
         overlayColor="rgba(0, 0, 0, 0.75)"
       />
       <Header />
-      <Text style={styles.header}>Вход в аккаунт</Text>
-      <View>
-        {/* <Input placeholder={'Email'} inputMode={'email'} /> */}
-        <Controller
-          name="email"
-          control={control}
-          render={({field: {onChange, value}}) => (
-            <Input
-              placeholder="Email"
-              inputMode="email"
-              value={value}
-              onChangeText={v => onChange(v)}
-              error={errors.email?.message}
-            />
-          )}
-        />
-        <View style={styles.password}>
-          {/* <PasswordInput placeholder='Пароль' value='' /> */}
+      <BackButton navigation={navigation} />
+      <View style={{
+        display: 'flex',
+        alignItems: 'center',
+      }}>
+        <Text style={styles.header}>Вход в аккаунт</Text>
+        <View>
+          {/* <Input placeholder={'Email'} inputMode={'email'} /> */}
           <Controller
-            name="password"
+            name="email"
             control={control}
             render={({field: {onChange, value}}) => (
-              <PasswordInput
-                placeholder="Пароль"
+              <Input
+                placeholder="Email"
+                inputMode="email"
                 value={value}
                 onChangeText={v => onChange(v)}
-                error={errors.password?.message}
+                error={errors.email?.message}
               />
             )}
           />
+          <View style={styles.password}>
+            {/* <PasswordInput placeholder='Пароль' value='' /> */}
+            <Controller
+              name="password"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <PasswordInput
+                  placeholder="Пароль"
+                  value={value}
+                  onChangeText={v => onChange(v)}
+                  error={errors.password?.message}
+                />
+              )}
+            />
+          </View>
+        </View>
+        <View style={styles.textRight}>
+          <Text
+            onPress={() => navigation.navigate('ResetPassword')}
+            style={styles.forgotPass}>
+            Забыли пароль?
+          </Text>
+        </View>
+
+        <TouchableOpacity
+          style={styles.signInBtn}
+          onPress={handleSubmit(
+            // @ts-ignore
+            onSubmit,
+          )}>
+          <Text style={styles.btnText}>Войти</Text>
+        </TouchableOpacity>
+        <View style={styles.textRight}>
+          <Text style={styles.yellowText}>
+            Нет аккаунта?{' '}
+            <Text
+              style={styles.forgotPass}
+              onPress={() => navigation.navigate('SignUp')}>
+              Регистрация
+            </Text>
+          </Text>
         </View>
       </View>
-      <View style={styles.textRight}>
-        <Text
-          onPress={() => navigation.navigate('ResetPassword')}
-          style={styles.forgotPass}>
-          Забыли пароль?
-        </Text>
-      </View>
 
-      <TouchableOpacity
-        style={styles.signInBtn}
-        onPress={handleSubmit(
-          // @ts-ignore
-          onSubmit,
-        )}>
-        <Text style={styles.btnText}>Войти</Text>
-      </TouchableOpacity>
-      <View style={styles.textRight}>
-        <Text style={styles.yellowText}>
-          Нет аккаунта?{' '}
-          <Text
-            style={styles.forgotPass}
-            onPress={() => navigation.navigate('SignUp')}>
-            Регистрация
-          </Text>
-        </Text>
-      </View>
     </View>
   );
 };
@@ -152,8 +159,6 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     backgroundColor: '#141414',
-    display: 'flex',
-    alignItems: 'center',
   },
   header: {
     fontFamily: 'MontserratRegular',
@@ -172,7 +177,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 14,
     fontFamily: 'MontserratRegular',
-    color: 'yellow',
+    color: 'white',
     textDecorationLine: 'underline',
   },
   textRight: {
@@ -184,7 +189,7 @@ const styles = StyleSheet.create({
   signInBtn: {
     width: nw(365),
     height: nh(47),
-    backgroundColor: '#FFE600',
+    backgroundColor: 'rgb(225, 43, 23)',
     borderRadius: 10,
     display: 'flex',
     justifyContent: 'center',
@@ -192,7 +197,7 @@ const styles = StyleSheet.create({
     marginTop: nh(15),
   },
   btnText: {
-    color: 'black',
+    color: 'white',
     fontFamily: 'MontserratRegular',
     fontSize: nh(15),
     fontWeight: '500',
@@ -202,7 +207,7 @@ const styles = StyleSheet.create({
     fontWeight: '400',
     lineHeight: 14,
     fontFamily: 'MontserratRegular',
-    color: 'yellow',
+    color: 'white',
   },
 });
 

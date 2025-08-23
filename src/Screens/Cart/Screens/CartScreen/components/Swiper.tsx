@@ -36,7 +36,7 @@ const Swiper = ({
             <option.icon
               width={nw(15)}
               height={nh(15)}
-              color={value === option.value ? 'black' : 'white'}
+              color={value === option.value ? 'white' : 'white'}
             />
           )}
           <Text
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     zIndex: 2,
   },
   active: {
-    backgroundColor: '#FFE600',
+    backgroundColor: 'rgb(225, 43, 23)',
   },
   textWrapper: {
     display: 'flex',
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     marginLeft: nw(15),
   },
   blackText: {
-    color: 'black',
+    color: 'white',
     fontFamily: 'MontserratRegular',
     fontSize: nh(14),
     fontWeight: '500',

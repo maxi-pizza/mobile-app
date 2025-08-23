@@ -3,6 +3,7 @@ import {StyleSheet, TextInput, View, Text} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 
 import Eye from '~/assets/Icons/Eye.svg';
+import CrossedEye from '~/assets/Icons/CrossedEye.svg';
 
 type PasswordInputProps = {
   placeholder: string;
@@ -23,7 +24,7 @@ const PasswordInput = ({
   return (
     <View>
       <TextInput
-        style={[styles.input, isFocused ? styles.focused : null]}
+        style={[styles.input, isFocused ? styles.focused : null,     error && styles.errorFocus]}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         placeholder={placeholder}
@@ -33,7 +34,17 @@ const PasswordInput = ({
         onChangeText={onChangeText}
         value={value}
       />
-      <Eye onPress={() => setIsSecure(!isSecure)} style={styles.hideBtn} />
+      <View style={styles.hideBtn}>
+        {isSecure ? (
+          <Eye height="100%"
+               preserveAspectRatio="xMinYMin slice"
+               width="100%"  onPress={() => setIsSecure(false)} />
+        ):  <CrossedEye height="100%"
+          preserveAspectRatio="xMinYMin slice"
+          width="100%"  onPress={() => setIsSecure(true)}  />}
+      </View>
+
+
       {error && (
         <View style={styles.errorContainer}>
           <Text style={styles.errorText}>{error}</Text>
@@ -55,11 +66,13 @@ const styles = StyleSheet.create({
   },
   focused: {
     borderWidth: 1,
-    borderColor: '#FFE600',
   },
+
   hideBtn: {
     position: 'absolute',
     right: 0,
+    width: nw(20),
+    height: nh(21),
     marginTop: nh(13),
     marginRight: nw(10),
   },
@@ -68,12 +81,12 @@ const styles = StyleSheet.create({
     borderColor: 'red',
   },
   errorContainer: {
-    paddingHorizontal: 5,
-    paddingVertical: 2,
+    paddingHorizontal: nw(5),
+    paddingVertical: nh(2),
     backgroundColor: 'rgb(205, 56, 56)',
     position: 'absolute',
     right: 0,
-    top: 45,
+    top: nh(45),
   },
   errorText: {
     fontFamily: 'MontserratRegular',

@@ -12,7 +12,7 @@ const SavedAddress = ({address}: {address: string}) => {
     <View style={styles.container}>
       <Text style={styles.address}>{address}</Text>
       <Heart
-        color="yellow"
+        color="rgb(225, 43, 23)"
         width="20"
         fill={isFavourite ? 'yellow' : 'transparent'}
         onPress={() => setIsFavourite(!isFavourite)}

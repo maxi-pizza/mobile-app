@@ -10,13 +10,14 @@ import {
   productsQuery,
 } from '~/Screens/Home/products.query.ts';
 
-import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
 
 const FavouriteScreen = observer(({navigation}: {navigation: any}) => {
   const {data: wishlists } = useQuery(
-    wishlistQuery(store.city),
+    wishlistQuery(),
   );
+
+
 
   const {data: productQueryRes } = useQuery(
     productsQuery({
@@ -28,12 +29,11 @@ const FavouriteScreen = observer(({navigation}: {navigation: any}) => {
   const items = (productQueryRes?.data || []).filter(item =>
     idsWishlist.includes(String(item.id)),
   );
-  const wishlist = items.map(item => new Product(item));
-
+  const products = items.map(item => new Product(item));
   return (
     <View style={styles.container}>
       <Header />
-      {wishlist.length === 0 ? (
+      {products.length === 0 ? (
         <View style={styles.noResultContainer}>
           <Image style={{
             height: nw(200),
@@ -47,7 +47,7 @@ const FavouriteScreen = observer(({navigation}: {navigation: any}) => {
       ) : (
         <FlatList
           ListHeaderComponent={<Text style={styles.text}>Вибране</Text>}
-          data={wishlist}
+          data={products}
           renderItem={({item}) => (
             <ProductCard
               navigation={navigation}

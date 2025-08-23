@@ -11,7 +11,7 @@ type CheckBoxProps = {
 export const CheckBox = ({onChange, active}: CheckBoxProps) => {
   return (
     <Pressable style={styles.container} onPress={() => onChange(!active)}>
-      {active && <Check color="#FFE600" />}
+      {active && <Check color="white" />}
     </Pressable>
   );
 };

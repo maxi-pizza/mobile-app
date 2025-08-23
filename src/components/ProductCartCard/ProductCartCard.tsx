@@ -19,15 +19,15 @@ import {observer} from 'mobx-react-lite';
 export const ProductCartCard = observer(({item}: {item: Product}) => {
   const queryClient = useQueryClient();
 
-  const {data: cart} = useQuery(cartQuery(store.city));
+  const {data: cart} = useQuery(cartQuery());
   const count = cart?.[item.id]?.count || 0;
   const storagePrice = item?.getNewPrice(undefined)?.price;
 
   const {mutate} = useMutation({
     mutationFn: ({count, price}: {count: number; price: number}) =>
-      addItem(item.id, count, price, store.city),
+      addItem(item.id, count, price),
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey: [CART_STORAGE_KEY, store.city]});
+      queryClient.invalidateQueries({queryKey: [CART_STORAGE_KEY]});
     },
   });
   const handleAdd = () => {

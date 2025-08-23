@@ -15,7 +15,7 @@ const ThankYou = ({navigation}: {navigation: any}) => {
               Ваше замовлення успішно прийнято та відправлено в роботу!
             </Text>
           </View>
-          <Success width={nw(100)} height={nh(100)} color={'yellow'} />
+          <Success width={nw(100)} height={nh(100)} color={'green'} />
           <View>
             <Text style={[styles.whiteText, {width: nw(300)}]}>
               Найближчим часом Вам зателефонує менеджер для підтвердження
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   },
   btn: {
     marginTop: nh(15),
-    backgroundColor: '#FFE600',
+    backgroundColor: 'rgb(225, 43, 23)',
     width: nw(340),
     height: nh(47),
     borderRadius: 10,
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   btnText: {
-    color: 'black',
+    color: 'white',
     fontFamily: 'MontserratRegular',
     fontSize: nh(15),
     fontWeight: '700',

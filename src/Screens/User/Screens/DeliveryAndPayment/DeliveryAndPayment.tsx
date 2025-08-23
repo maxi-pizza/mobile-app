@@ -2,29 +2,25 @@ import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Header, BackButton} from '~/components';
 import WebView from 'react-native-webview';
-import {useQuery} from '@tanstack/react-query';
-import store from '~/stores/store.ts';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import {observer} from 'mobx-react-lite';
-import {cityQuery} from '~/components/Header/city.query.ts';
 
 const DeliveryAndPayment = observer(({navigation}: {navigation: any}) => {
-  const {data: cityRes} = useQuery(cityQuery);
 
-  const city = (cityRes || []).find(city => city.slug === store.city);
+  const city = {
+    google_map_url: undefined,
+  }
   return (
     <View style={styles.container}>
       <Header />
       <BackButton navigation={navigation} />
       <View style={styles.map}>
         <Text style={styles.text}>Доставка і оплата</Text>
-        {city !== undefined && (
-          <View style={{width: nw(365), height: nh(365)}}>
-            <WebView
-              source={{uri: city?.google_map_url ? city.google_map_url : ''}}
-            />
-          </View>
-        )}
+        <View style={{width: nw(365), height: nh(365)}}>
+          <WebView
+            source={{uri: city?.google_map_url ? city.google_map_url : ''}}
+          />
+        </View>
       </View>
     </View>
   );

@@ -15,18 +15,14 @@ import Telegram from '~/assets/Icons/Telegram.svg';
 import {Header, BackButton} from '~/components';
 import {useQuery} from '@tanstack/react-query';
 
-import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
-import {cityQuery} from '~/components/Header/city.query.ts';
 import {contactsQuery} from '~/common/queries/contactsQuery';
 
 const ContactsScreen = observer(({navigation}: {navigation: any}) => {
-  const {data: cityRes} = useQuery(cityQuery);
+
   const {data: contacts} = useQuery(contactsQuery);
-  const cities = (cityRes || []).map(city => city);
-  const city = cities.filter(c => c.slug === store.city)[0];
-  const phonesArray =
-    city.phones && city.phones !== '' ? city.phones.split(',') : null;
+
+  const phonesArray = [];
   const openLinkHandler = async (appUrl: string, webUrl: string) => {
     try {
       const supported = appUrl !== '' && (await Linking.canOpenURL(appUrl));

@@ -14,19 +14,19 @@ const styles = StyleSheet.create({
   },
   focused: {
     borderWidth: 1,
-    borderColor: '#FFE600',
   },
   errorFocus: {
     borderWidth: 1,
     borderColor: 'red',
   },
   errorContainer: {
-    paddingHorizontal: 5,
-    paddingVertical: 2,
+    paddingHorizontal: nw(5),
+    paddingVertical: nh(2),
     backgroundColor: 'rgb(205, 56, 56)',
     position: 'absolute',
     right: 0,
-    top: 45,
+    top: nh(45),
+    zIndex: 10,
   },
   errorText: {
     fontFamily: 'MontserratRegular',

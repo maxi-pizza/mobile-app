@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useMemo, useState} from 'react';
+import React, { useEffect, useMemo, useState} from 'react';
 import {
   ScrollView,
   StyleSheet,
@@ -10,7 +10,7 @@ import {
 import * as yup from 'yup';
 
 import Swiper from '../components/Swiper.tsx';
-import {Input, Counter, Header, BackButton, DropDown} from '~/components';
+import {Input, Counter, Header, BackButton} from '~/components';
 
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {spotsQuery} from '~/Screens/Cart/spots.query.ts';
@@ -19,27 +19,22 @@ import Truck from '~/assets/Icons/Truck.svg';
 import Package from '~/assets/Icons/Package.svg';
 import Card from '~/assets/Icons/CreditCard.svg';
 import Cash from '~/assets/Icons/Money.svg';
-import Caret from '~/assets/Icons/Caret.svg';
 import ForkKnife from '~/assets/Icons/ForkKnife.svg';
 
 import {shippingQuery} from '~/Screens/Cart/shipping.query.ts';
 import {paymentQuery} from '~/Screens/Cart/payment.query.ts';
-import store from '~/stores/store.ts';
 import {observer} from 'mobx-react-lite';
 import {CART_STORAGE_KEY, cartQuery} from '~/Screens/Cart/cart.query.ts';
 import {Controller, useForm, useWatch} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import {isValidUkrainianPhone} from '../../../utils.ts';
 import {agent} from '~/../APIClient.tsx';
-import {IDistrict} from '~/api';
-import {cityQuery} from '~/components/Header/city.query.ts';
 import {bonusOptionsQuery} from '~/common/queries/bonusOptions.query.ts';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {nh, nw} from '~/common/normalize.helper.ts';
 
 import axios, {AxiosError} from 'axios';
-import {getToken} from '~/common/token/token.ts';
 
 enum HouseTypeEnum {
   Apartment = 'high_rise_building',
@@ -75,21 +70,15 @@ type FormValues = {
 };
 const validationRequired = 'Заповніть це поле';
 
-const getDistrictDefaultSpot = (district: IDistrict) => {
-  //@ts-ignore
-  return district.spot;
-};
 
 const Checkout = observer(({navigation}: {navigation: any}) => {
   const {data: spotsRes} = useQuery(spotsQuery);
-  const {data: cityRes} = useQuery(cityQuery);
   const {data: bonusOptions} = useQuery(bonusOptionsQuery);
   const queryClient = useQueryClient();
   const [logged, setLogged] = useState(false);
   const {
     data: user,
     isLoading,
-    error,
   } = useQuery({
     queryKey: ['userData'],
     queryFn: async () => {
@@ -113,7 +102,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
       setLogged(true);
     }
   }, [user]);
-  const {data: cartRes} = useQuery(cartQuery(store.city));
+  const {data: cartRes} = useQuery(cartQuery());
 
   const {data: shippingRes} = useQuery(shippingQuery);
   const {data: paymentRes} = useQuery(paymentQuery);
@@ -133,13 +122,10 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     icon: paymentIcons[index],
   }));
 
-  const addresses = (spotsRes || []).map(spot => spot);
-  const spots = addresses.filter(spot => spot.city?.slug === store.city);
+  const spots = (spotsRes || []).map(spot => spot);
 
-  const cities = (cityRes || []).map(city => city);
 
-  const city = cities.find(c => c.slug === store.city);
-  const districts = city?.districts || [];
+
 
   const apart = [
     {value: HouseTypeEnum.House, name: 'Приватний будинок'},
@@ -241,7 +227,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
   const InitialValue: FormValues = {
     shippingMethod: ShippingMethodEnum.Takeaway,
     spotId: 1,
-    districtId: districts.length === 1 ? districts[0].id : undefined,
+    districtId: undefined,
     paymentMethod: PaymentMethodEnum.Cash,
     name: user?.name ?? '',
     phone: user?.phone ?? '',
@@ -308,7 +294,6 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     formState: {errors},
     setError,
     setValue,
-    watch,
   } = useForm<FormValues>({
     defaultValues: InitialValue,
     resolver: yupResolver<FormValues>(
@@ -332,21 +317,8 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     variant_id: undefined,
     quantity: +cartRes[id].count,
   }));
-  const getSelectedDistrict = (id: number | undefined) => {
-    const selected = districts.find(d => d.id === id);
 
-    if (!selected) {
-      return null;
-    }
-    return selected?.name;
-  };
-  const getSelectedSpot = (id: number | undefined) => {
-    const selected = spots.find(d => d.id === id);
-    if (!selected) {
-      return null;
-    }
-    return selected?.name;
-  };
+
   const {mutate: orderMutation, isLoading: isSending} = useMutation({
     mutationFn: async (data: FormValues) => {
       const {
@@ -359,7 +331,6 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
         spotId,
         house,
         paymentMethod,
-        districtId,
         change,
         comment,
         entrance,
@@ -382,13 +353,9 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
       const paymentId = payments?.find(p => p.code === paymentMethod);
       const shippingId = shippings.find(s => s.code === shippingMethod);
 
-      const district = city?.districts.find(d => d.id === districtId);
 
-      const resultantSpotId =
-        shippingMethod === ShippingMethodEnum.Takeaway
-          ? spotId
-          : getDistrictDefaultSpot(district!).id;
-      console.log(shippingId, resultantSpotId);
+      const resultantSpotId = spotId;
+
       await agent.placeOrderV2({
         phone,
         email,
@@ -408,7 +375,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
       });
     },
     onSuccess: async () => {
-      await AsyncStorage.removeItem(CART_STORAGE_KEY + `_${store.city}`);
+      await AsyncStorage.removeItem(CART_STORAGE_KEY);
       await queryClient.invalidateQueries(['userData']);
       navigation.goBack();
       navigation.navigate('ThankYou');
@@ -447,11 +414,11 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     orderMutation(data);
   };
 
-  const districtError = errors.districtId?.message;
+
   const bonusAmount = useMemo(() => {
     if (!bonusOptions) return;
     const rate = bonusOptions.bonus_rate;
-    const max = bonusOptions.max_bonus;
+   // const max = bonusOptions.max_bonus;
     const b = bonusOptions.get_bonus_from_used_bonus;
     console.log(b)
     let dif = 0;
@@ -460,14 +427,14 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     }
     const amount = (total - dif) * rate;
     return Math.floor(amount);
-  }, [bonusOptions, bonusesToUse]);
+  }, [bonusOptions, bonusesToUse, total]);
 
   return (
     <View>
       <Spinner
         visible={isSending || isLoading}
         textContent={'Loading...'}
-        textStyle={{color: 'yellow'}}
+        textStyle={{color: 'rgb(225, 43, 23)'}}
         overlayColor="rgba(0, 0, 0, 0.75)"
       />
       <Header />
@@ -479,7 +446,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
           <Text style={styles.header}>Оформлення замовлення</Text>
           <View style={styles.textWrapper}>
             <View style={styles.circle}>
-              <Text style={{color: 'black', lineHeight: nh(17)}}>1</Text>
+              <Text style={{color: 'white', lineHeight: nh(17)}}>1</Text>
             </View>
             <Text style={[styles.greyText, {marginLeft: nw(15)}]}>
               Введіть дані
@@ -502,48 +469,11 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
             )}
           />
 
-          {shippingMethod === ShippingMethodEnum.Courier ? (
-            <View>
-              {districts.length !== 1 && (
-                <Controller
-                  name="districtId"
-                  control={control}
-                  render={({field: {onChange, value}}) => (
-                    <View
-                      style={[
-                        styles.dropDownContainer,
-                        districtError ? styles.errorFocus : null,
-                        {marginTop: nh(15), zIndex: 5},
-                      ]}>
-                      <DropDown
-                        value={value}
-                        placeholder={
-                          <Text style={styles.whiteText}>
-                            Виберіть район доставки
-                          </Text>
-                        }
-                        options={districts}
-                        onChange={d => onChange(d)}
-                        error={errors.districtId?.message}
-                        snapPoints={'30'}>
-                        <View style={styles.inputContainer}>
-                          <Text style={styles.selectOption}>
-                            {getSelectedDistrict(value) ? (
-                              <Text style={styles.whiteText}>
-                                {getSelectedDistrict(value)}
-                              </Text>
-                            ) : (
-                              'Виберіть район доставки'
-                            )}
-                          </Text>
-                          <Caret color="#727272" width="15" />
-                        </View>
-                      </DropDown>
-                    </View>
-                  )}
-                />
-              )}
-
+          {shippingMethod === ShippingMethodEnum.Courier && (
+            <View style={{
+              position: 'relative',
+              zIndex: 2,
+            }}>
               <Controller
                 name="houseType"
                 control={control}
@@ -649,46 +579,6 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                 </View>
               )}
             </View>
-          ) : (
-            spots.length !== 1 //&& (
-            //   <Controller
-            //     name="spotId"
-            //     control={control}
-            //     render={({field: {onChange, value}}) => (
-            //       <View
-            //         style={[
-            //           styles.dropDownContainer,
-            //           spotError ? styles.errorFocus : null,
-            //           {marginTop: nh(15), zIndex: 5},
-            //         ]}>
-            //         <DropDown
-            //           value={value}
-            //           placeholder={
-            //             <Text style={styles.whiteText}>
-            //               Оберіть найближчий заклад
-            //             </Text>
-            //           }
-            //           options={spots}
-            //           onChange={s => onChange(s)}
-            //           snapPoints={'30'}
-            //           error={errors.spotId?.message}>
-            //           <View style={styles.inputContainer}>
-            //             <Text style={styles.selectOption}>
-            //               {getSelectedSpot(value) ? (
-            //                 <Text style={styles.whiteText}>
-            //                   {getSelectedSpot(value)}
-            //                 </Text>
-            //               ) : (
-            //                 'Оберіть найближчий заклад'
-            //               )}
-            //             </Text>
-            //             <Caret color="#727272" width="15" />
-            //           </View>
-            //         </DropDown>
-            //       </View>
-            //     )}
-            //   />
-            //)
           )}
           <Controller
             name="name"
@@ -776,7 +666,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
 
           <View style={styles.textWrapper}>
             <View style={styles.circle}>
-              <Text style={{color: 'black', lineHeight: nh(17)}}>2</Text>
+              <Text style={{color: 'white', lineHeight: nh(17)}}>2</Text>
             </View>
             <Text style={[styles.greyText, {marginLeft: nw(15)}]}>
               Спосіб оплати
@@ -979,7 +869,7 @@ const styles = StyleSheet.create({
     fontSize: nh(14),
     fontWeight: '700',
     lineHeight: 17,
-    color: 'black',
+    color: 'white',
   },
   greyText: {
     fontFamily: 'MontserratRegular',
@@ -991,7 +881,7 @@ const styles = StyleSheet.create({
   circle: {
     width: nw(20),
     height: nw(20),
-    backgroundColor: '#FFE600',
+    backgroundColor: 'rgb(225, 43, 23)',
     borderRadius: 10,
     display: 'flex',
     justifyContent: 'center',
@@ -1024,7 +914,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFE600',
+    backgroundColor: 'rgb(225, 43, 23)',
     borderRadius: 10,
     marginBottom: nh(180),
   },

@@ -34,7 +34,7 @@ const TabBarIcon: React.FC<TabBarIconProps> = ({
 
   return IconComponent ? (
     <TouchableOpacity onPress={onPress} onLongPress={onPress}>
-      <IconComponent color={focused ? 'yellow' : 'white'} />
+      <IconComponent color={focused ? 'rgb(225, 43, 23)' : 'white'} />
     </TouchableOpacity>
   ) : null;
 };

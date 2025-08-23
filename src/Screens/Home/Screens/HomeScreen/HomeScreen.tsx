@@ -26,7 +26,6 @@ import store from '~/stores/store.ts';
 import {bannerQuery} from '~/components/Banner/banner.query.ts';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {
-  CART_STORAGE_KEY,
   cartQuery,
   removeOldProducts,
 } from '~/Screens/Cart/cart.query.ts';
@@ -35,10 +34,10 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
   const queryClient = useQueryClient();
   store.changeNavigation(navigation);
   const {data: wishlists, isLoading: isWishlistLoading} = useQuery(
-    wishlistQuery(store.city),
+    wishlistQuery(),
   );
 
-  const {data: cartQueryRes} = useQuery(cartQuery(store.city));
+  const {data: cartQueryRes} = useQuery(cartQuery());
   const {data: categoryQueryRes, isLoading: isCategoryLoading} = useQuery({
     ...categoriesQuery(),
   });
@@ -53,10 +52,10 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
   );
   const cartIds = Object.keys(cartQueryRes || {});
   const {mutate: removeOldProductsMutation} = useMutation({
-    mutationFn: ({ids, city}: {ids: string[]; city: string}) =>
-      removeOldProducts({ids, city}),
-    onSuccess: (data, variables) =>
-      queryClient.invalidateQueries(cartQuery(variables.city)),
+    mutationFn: ({ids}: {ids: string[];}) =>
+      removeOldProducts({ids}),
+    onSuccess: () =>
+      queryClient.invalidateQueries(cartQuery()),
   });
 
   useEffect(() => {
@@ -69,16 +68,13 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
         cartId => !existProductsIds.includes(cartId),
       );
       if (notExistProducts.length > 0) {
-        removeOldProductsMutation({ids: notExistProducts, city: store.city});
+        removeOldProductsMutation({ids: notExistProducts});
       }
     }
-  }, [productQueryRes]);
+  }, [productQueryRes, cartIds, removeOldProductsMutation]);
 
   const belongsToCategory = (product: IProduct) => {
     return !!product.categories
-      .filter(category =>
-        store.city === 'chorno' ? category.slug !== 'pitsa' : true,
-      )
       .find(category => category.slug === store.categorySlug);
   };
 
@@ -99,14 +95,14 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
     } finally {
       setRefreshing(false);
     }
-  }, []);
+  }, [queryClient]);
 
   return (
     <View style={styles.container}>
       <Spinner
         visible={isLoading || refreshing}
         textContent={'Loading...'}
-        textStyle={{color: 'yellow'}}
+        textStyle={{color: 'rgb(225, 43, 23)'}}
         overlayColor="rgba(0, 0, 0, 0.75)"
       />
       <Header />

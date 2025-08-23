@@ -12,7 +12,6 @@ import {nh, nw} from '~/common/normalize.helper.ts';
 import {Counter} from '~/components';
 import Heart from '../../assets/Icons/Heart.svg';
 import {Product} from '~/models/Product.ts';
-import Logo from '../../assets/Logo.svg';
 
 import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import {
@@ -24,7 +23,7 @@ import {
   addToWishlist,
   WISHLIST_STORAGE_KEY,
 } from '~/Screens/Favourite/wishlist.query.ts';
-import store from '~/stores/store.ts';
+
 import {observer} from 'mobx-react-lite';
 
 export const ProductCard = observer(
@@ -39,24 +38,25 @@ export const ProductCard = observer(
   }) => {
     const queryClient = useQueryClient();
 
-    const {data: cart} = useQuery(cartQuery(store.city));
+    const {data: cart} = useQuery(cartQuery());
     const count = cart?.[product.id]?.count || 0;
     const {mutate: cartMutation} = useMutation({
       mutationFn: ({count, price}: {count: number; price: number}) =>
-        addItem(product.id, count, price, store.city),
+        addItem(product.id, count, price),
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: [CART_STORAGE_KEY, store.city],
+          queryKey: [CART_STORAGE_KEY],
         });
       },
     });
     const wishIds = Object.keys(wishlists || {});
+    console.log(wishIds);
     const favourite = wishIds.includes(String(product.id));
     const {mutate: addWishlist} = useMutation({
-      mutationFn: ({id}: {id: number}) => addToWishlist(id, store.city),
+      mutationFn: ({id}: {id: number}) => addToWishlist(id),
       onSuccess: () => {
         queryClient.invalidateQueries({
-          queryKey: [WISHLIST_STORAGE_KEY, store.city],
+          queryKey: [WISHLIST_STORAGE_KEY],
         });
       },
     });
@@ -108,7 +108,7 @@ export const ProductCard = observer(
             <Heart
               width="14"
               height="12"
-              color={favourite ? 'yellow' : 'white'}
+              color={favourite ? 'rgb(225, 43, 23)' : 'white'}
             />
           </Pressable>
 
@@ -116,7 +116,8 @@ export const ProductCard = observer(
             {product.mainImage !== undefined ? (
               <Image style={styles.image} source={{uri: product?.mainImage}} />
             ) : (
-              <Logo style={styles.svg} fillOpacity={0.1} />
+              <Image style={styles.svg} source={require('~/assets/Logo.png')} />
+
             )}
             <View style={styles.textWrapper}>
               <Text style={styles.title}>{product.name}</Text>
@@ -171,10 +172,11 @@ const styles = StyleSheet.create({
     objectFit: 'contain',
   },
   svg: {
-    width: nw(111),
-    height: nh(68),
-    marginTop: nh(20),
+    width: nw(81),
+    height: nh(60),
+    marginTop: nh(40),
     marginLeft: nw(15),
+    opacity: 0.1,
   },
   imageDescriptionWrapper: {
     display: 'flex',
@@ -271,11 +273,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    borderColor: 'yellow',
+    borderColor: 'rgb(225, 43, 23)',
     borderWidth: 1,
   },
   btnText: {
-    color: 'yellow',
+    color: 'white',
     fontFamily: 'MontserratRegular',
     fontSize: nh(13),
     fontWeight: '800',

@@ -13,17 +13,14 @@ import ProfileScreen from '../ProfileScreen/ProfileScreen.tsx';
 
 import UserCircle from '~/assets/Icons/UserCircle.svg';
 import Caret from '~/assets/Icons/Caret.svg';
-import ClockCounter from '~/assets/Icons/ClockCounterClockwise.svg';
-import Truck from '~/assets/Icons/Truck.svg';
 import Phone from '~/assets/Icons/Phone.svg';
 import CreditCard from '~/assets/Icons/CreditCard.svg';
-import Coins from '~/assets/Icons/Coins.svg';
 import {Header, UserOption} from '~/components';
 import {observer} from 'mobx-react-lite';
 import {agent} from '~/../APIClient.tsx';
-import {QueryClient, useQuery, useQueryClient} from '@tanstack/react-query';
+import { useQuery, useQueryClient} from '@tanstack/react-query';
 import Spinner from 'react-native-loading-spinner-overlay/lib/index';
-import {clearToken, getToken} from '~/common/token/token.ts';
+import {clearToken} from '~/common/token/token.ts';
 import {bonusOptionsQuery} from '~/common/queries/bonusOptions.query.ts';
 
 const UserScreen = observer(({navigation}: {navigation: any}) => {
@@ -34,7 +31,6 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
   const {
     data: user,
     isLoading,
-    error,
   } = useQuery({
     queryKey: ['userData'],
     queryFn: async () => {
@@ -67,7 +63,8 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
     } finally {
       setRefreshing(false);
     }
-  }, []);
+  }, [queryClient]);
+
   return (
     <ScrollView
       contentContainerStyle={{flexGrow: 1}}
@@ -78,7 +75,7 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
         <Spinner
           visible={isLoading || refreshing}
           textContent={'Loading...'}
-          textStyle={{color: 'yellow'}}
+          textStyle={{color: 'rgb(225, 43, 23)'}}
           overlayColor="rgba(0, 0, 0, 0.75)"
         />
         <Header />
@@ -179,12 +176,6 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
           <UserOption
             title="Доставка і оплата"
             svgIcon={<CreditCard color="#727272" />}
-          />
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => navigation.navigate('RefundRules')}>
-          <UserOption
-            title="Правила повернення коштів"
-            svgIcon={<Coins color="#727272" />}
           />
         </TouchableOpacity>
       </View>
@@ -288,7 +279,7 @@ const styles = StyleSheet.create({
     height: nh(37),
     borderRadius: 10,
     color: 'black',
-    backgroundColor: '#FFE600',
+    backgroundColor: 'rgb(225, 43, 23)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -299,7 +290,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     backgroundColor: 'transparent',
     borderWidth: 1,
-    borderColor: '#FFE600',
+    borderColor: 'rgb(225, 43, 23)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -316,7 +307,7 @@ const styles = StyleSheet.create({
     fontSize: nh(14),
     fontWeight: '500',
     lineHeight: 17,
-    color: 'black',
+    color: 'white',
   },
   btnWrapper: {
     display: 'flex',

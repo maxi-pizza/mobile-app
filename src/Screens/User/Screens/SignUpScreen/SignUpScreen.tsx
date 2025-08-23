@@ -3,7 +3,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import PasswordInput from '~/Screens/User/components/PasswordInput/PasswordInput.tsx';
 
-import {Header, Input, CheckBox} from '~/components';
+import {Header, Input, CheckBox, BackButton} from '~/components';
 
 import {Controller, useForm} from 'react-hook-form';
 import * as yup from 'yup';
@@ -106,103 +106,109 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
         overlayColor="rgba(0, 0, 0, 0.75)"
       />
       <Header />
-      <Text style={styles.header}>Регистрация</Text>
-      <View>
-        <View style={styles.inputMargin}>
-          <Controller
-            name="name"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <Input
-                placeholder="Имя"
-                inputMode="text"
-                value={value}
-                onChangeText={v => onChange(v)}
-                error={errors.name?.message}
-              />
-            )}
-          />
-          {/* <Input placeholder={'Имя'} inputMode={'text'} /> */}
-        </View>
-        <View style={styles.inputMargin}>
-          <Controller
-            name="surname"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <Input
-                placeholder="Фамилия"
-                inputMode="text"
-                value={value}
-                onChangeText={v => onChange(v)}
-                error={errors.surname?.message}
-              />
-            )}
-          />
-          {/* <Input placeholder={'Фамилия'} inputMode={'text'} /> */}
-        </View>
-        <View style={styles.inputMargin}>
-          <Controller
-            name="email"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <Input
-                placeholder="Email"
-                inputMode="email"
-                value={value}
-                onChangeText={v => onChange(v)}
-                error={errors.email?.message}
-              />
-            )}
-          />
-          {/* <Input placeholder={'Email'} inputMode={'email'} /> */}
-        </View>
-        <View style={styles.inputMargin}>
-          <Controller
-            name="password"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <PasswordInput
-                placeholder="Пароль"
-                value={value}
-                onChangeText={v => onChange(v)}
-                error={errors.password?.message}
-              />
-            )}
-          />
-          {/* <PasswordInput /> */}
-        </View>
-        <Controller
-          name="agree"
-          control={control}
-          render={({field: {onChange, value}}) => (
-            <View style={styles.agreementWrapper}>
-              <CheckBox active={value} onChange={onChange}></CheckBox>
-              <Text style={styles.agreementText}>
-                Я согласен с условиями использования и обработки моих
-                персональных данных
-              </Text>
-              {errors.agree?.message && (
-                <View style={styles.errorContainer}>
-                  <Text style={styles.errorText}>{errors.agree?.message}</Text>
-                </View>
+      <BackButton navigation={navigation} />
+      <View style={{
+        display: 'flex',
+        alignItems: 'center',
+      }}>
+        <Text style={styles.header}>Регистрация</Text>
+        <View>
+          <View style={styles.inputMargin}>
+            <Controller
+              name="name"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <Input
+                  placeholder="Имя"
+                  inputMode="text"
+                  value={value}
+                  onChangeText={v => onChange(v)}
+                  error={errors.name?.message}
+                />
               )}
-            </View>
-          )}
-        />
-        {/* <CheckBox /> */}
+            />
+            {/* <Input placeholder={'Имя'} inputMode={'text'} /> */}
+          </View>
+          <View style={styles.inputMargin}>
+            <Controller
+              name="surname"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <Input
+                  placeholder="Фамилия"
+                  inputMode="text"
+                  value={value}
+                  onChangeText={v => onChange(v)}
+                  error={errors.surname?.message}
+                />
+              )}
+            />
+            {/* <Input placeholder={'Фамилия'} inputMode={'text'} /> */}
+          </View>
+          <View style={styles.inputMargin}>
+            <Controller
+              name="email"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <Input
+                  placeholder="Email"
+                  inputMode="email"
+                  value={value}
+                  onChangeText={v => onChange(v)}
+                  error={errors.email?.message}
+                />
+              )}
+            />
+            {/* <Input placeholder={'Email'} inputMode={'email'} /> */}
+          </View>
+          <View style={styles.inputMargin}>
+            <Controller
+              name="password"
+              control={control}
+              render={({field: {onChange, value}}) => (
+                <PasswordInput
+                  placeholder="Пароль"
+                  value={value}
+                  onChangeText={v => onChange(v)}
+                  error={errors.password?.message}
+                />
+              )}
+            />
+            {/* <PasswordInput /> */}
+          </View>
+          <Controller
+            name="agree"
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <View style={styles.agreementWrapper}>
+                <CheckBox active={value} onChange={onChange}></CheckBox>
+                <Text style={styles.agreementText}>
+                  Я согласен с условиями использования и обработки моих
+                  персональных данных
+                </Text>
+                {errors.agree?.message && (
+                  <View style={styles.errorContainer}>
+                    <Text style={styles.errorText}>{errors.agree?.message}</Text>
+                  </View>
+                )}
+              </View>
+            )}
+          />
+          {/* <CheckBox /> */}
 
-        <TouchableOpacity style={styles.btn} onPress={handleSubmit(onSubmit)}>
-          <Text style={styles.btnText}>Регистрация</Text>
-        </TouchableOpacity>
-        <View style={styles.textWrapper}>
-          <Text style={styles.yellowText}>
-            Уже есть аккаунт?
-            <Text
-              onPress={() => navigation.navigate('SignIn')}
-              style={styles.link}>
-              Войти
+          <TouchableOpacity style={styles.btn} onPress={handleSubmit(onSubmit)}>
+            <Text style={styles.btnText}>Регистрация</Text>
+          </TouchableOpacity>
+          <View style={styles.textWrapper}>
+            <Text style={styles.yellowText}>
+              Уже есть аккаунт?
+              <Text
+                onPress={() => navigation.navigate('SignIn')}
+                style={styles.link}>
+                Войти
+              </Text>
             </Text>
-          </Text>
+          </View>
         </View>
       </View>
     </View>
@@ -213,8 +219,7 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     backgroundColor: '#141414',
-    display: 'flex',
-    alignItems: 'center',
+
   },
   header: {
     color: 'white',
@@ -227,6 +232,7 @@ const styles = StyleSheet.create({
   },
   inputMargin: {
     marginBottom: nh(15),
+    position: 'relative',
   },
   check: {
     width: nw(50),
@@ -235,7 +241,7 @@ const styles = StyleSheet.create({
     width: nw(365),
     height: nh(47),
     borderRadius: 10,
-    backgroundColor: '#FFE600',
+    backgroundColor: 'rgb(225, 43, 23)',
 
     display: 'flex',
     alignItems: 'center',
@@ -246,13 +252,13 @@ const styles = StyleSheet.create({
     fontFamily: 'MontserratRegular',
     fontWeight: '500',
     fontSize: nh(15),
-    color: 'black',
+    color: 'white',
   },
   yellowText: {
     fontFamily: 'MontserratRegular',
     fontWeight: '400',
     fontSize: nh(12),
-    color: '#FFE600',
+    color: 'white',
   },
   link: {
     textDecorationLine: 'underline',

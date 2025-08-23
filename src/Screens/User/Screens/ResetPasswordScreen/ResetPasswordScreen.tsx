@@ -5,7 +5,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import * as yup from 'yup';
 
-import {Header, Input} from '~/components';
+import {BackButton, Header, Input} from '~/components';
 import {useMutation} from '@tanstack/react-query';
 import {agent} from '~/../APIClient';
 import axios, {AxiosError} from 'axios';
@@ -21,7 +21,7 @@ type FormValues = {
 const InitialValue: FormValues = {
   email: '',
 };
-const ResetPasswordScreen = () => {
+const ResetPasswordScreen = ({navigation}: {navigation: any}) => {
   const [isSent, setIsSent] = useState(false);
   const {mutate: resetMutation, isLoading} = useMutation({
     mutationFn: async (data: FormValues) => {
@@ -72,49 +72,57 @@ const ResetPasswordScreen = () => {
         textStyle={{color: 'yellow'}}
         overlayColor="rgba(0, 0, 0, 0.75)"
       />
-      <Header />
-      <Text style={styles.header}>Восстановление пароля</Text>
-      <View style={styles.inputTextWrapper}>
-        <Controller
-          name="email"
-          control={control}
-          render={({field: {onChange, value}}) => (
-            <Input
-              placeholder="Email"
-              inputMode="text"
-              value={value}
-              onChangeText={v => onChange(v)}
-              error={errors.email?.message}
-            />
-          )}
-        />
+      <View>
+        <Header />
+        <BackButton navigation={navigation} />
       </View>
-      {isSent && (
-        <Text style={styles.checkEmailText}>
-          Будь ласка перевірте Вашу пошту. Ми надіслали Вам лист, що містить
-          посилання для відновлення пароля
-        </Text>
-      )}
 
-      {!isSent && (
-        <>
-          <Text style={styles.emailText}>
-            Введите Ваш E-mail адрес для которого необходимо скинуть пароль
+      <View style={{
+        alignItems: 'center'
+      }}>
+        <Text style={styles.header}>Восстановление пароля</Text>
+        <View style={styles.inputTextWrapper}>
+          <Controller
+            name="email"
+            control={control}
+            render={({field: {onChange, value}}) => (
+              <Input
+                placeholder="Email"
+                inputMode="text"
+                value={value}
+                onChangeText={v => onChange(v)}
+                error={errors.email?.message}
+              />
+            )}
+          />
+        </View>
+        {isSent && (
+          <Text style={styles.checkEmailText}>
+            Будь ласка перевірте Вашу пошту. Ми надіслали Вам лист, що містить
+            посилання для відновлення пароля
           </Text>
-          <TouchableOpacity style={styles.btn} onPress={handleSubmit(onSubmit)}>
-            <Text style={styles.btnText}>Отправить</Text>
+        )}
+
+        {!isSent && (
+          <>
+            <Text style={styles.emailText}>
+              Введите Ваш E-mail адрес для которого необходимо скинуть пароль
+            </Text>
+            <TouchableOpacity style={styles.btn} onPress={handleSubmit(onSubmit)}>
+              <Text style={styles.btnText}>Отправить</Text>
+            </TouchableOpacity>
+          </>
+        )}
+        {isSent && (
+          <TouchableOpacity
+            style={styles.textWrapper}
+            onPress={handleSubmit(onSubmit)}>
+            <Text style={styles.yellowText}>
+              Не пришел код? <Text style={styles.link}>Отправить ещё</Text>
+            </Text>
           </TouchableOpacity>
-        </>
-      )}
-      {isSent && (
-        <TouchableOpacity
-          style={styles.textWrapper}
-          onPress={handleSubmit(onSubmit)}>
-          <Text style={styles.yellowText}>
-            Не пришел код? <Text style={styles.link}>Отправить ещё</Text>
-          </Text>
-        </TouchableOpacity>
-      )}
+        )}
+      </View>
     </View>
   );
 };
@@ -123,7 +131,6 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     backgroundColor: '#141414',
-    alignItems: 'center',
   },
   header: {
     fontFamily: 'MontserratRegular',
@@ -163,21 +170,21 @@ const styles = StyleSheet.create({
     width: nw(365),
     height: nh(47),
     borderRadius: 10,
-    backgroundColor: '#FFE600',
+    backgroundColor: 'rgb(225, 43, 23)',
   },
   btnText: {
     fontFamily: 'MontserratRegular',
     fontSize: nh(15),
     lineHeight: 18,
     fontWeight: '500',
-    color: 'black',
+    color: 'white',
   },
   yellowText: {
     fontFamily: 'MontserratRegular',
     fontSize: nh(12),
     lineHeight: 14,
     fontWeight: '400',
-    color: '#FFE600',
+    color: 'rgb(225, 43, 23)',
   },
   link: {
     textDecorationLine: 'underline',
