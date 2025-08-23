@@ -11,7 +11,6 @@ import {nh, nw} from '~/common/normalize.helper.ts';
 
 import Phone from '~/assets/Icons/Phone.svg';
 import Instagram from '~/assets/Icons/Instagram.svg';
-import Telegram from '~/assets/Icons/Telegram.svg';
 import {Header, BackButton} from '~/components';
 import {useQuery} from '@tanstack/react-query';
 
@@ -49,19 +48,6 @@ const ContactsScreen = observer(({navigation}: {navigation: any}) => {
               <Instagram width="17" height="17" color="black" />
               <Text style={styles.btnText}>
                 {contacts.instagram_display_text}
-              </Text>
-            </TouchableOpacity>
-          )}
-
-          {contacts?.telegram_display_text && (
-            <TouchableOpacity
-              onPress={() =>
-                openLinkHandler(contacts.telegram_app, contacts.telegram_web)
-              }
-              style={styles.btn}>
-              <Telegram width="17" height="17" color="black" />
-              <Text style={styles.btnText}>
-                {contacts.telegram_display_text}
               </Text>
             </TouchableOpacity>
           )}

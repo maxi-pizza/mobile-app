@@ -46,18 +46,20 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
   const {mutate: loginMutation, isLoading} = useMutation({
     mutationFn: async (data: FormValues) => {
       const {email, password} = data;
-      return await agent.login({
+      return (await agent.auth.login({
         email,
         password,
-      });
+      })).data;
     },
     onSuccess: async data => {
       queryClient.invalidateQueries(['userData']);
-      const {token} = data.data.data;
-      await setToken(token);
+      console.log('data', data);
+      const {access_token} = data;
+      await setToken(access_token);
       navigation.goBack();
     },
     onError: e => {
+      console.log('error', e);
       if (axios.isAxiosError(e)) {
         let error = e as AxiosError<{
           message: string;
@@ -127,7 +129,7 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
           <Text
             onPress={() => navigation.navigate('ResetPassword')}
             style={styles.forgotPass}>
-            Забыли пароль?
+            Забули пароль?
           </Text>
         </View>
 
@@ -137,15 +139,15 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
             // @ts-ignore
             onSubmit,
           )}>
-          <Text style={styles.btnText}>Войти</Text>
+          <Text style={styles.btnText}>Увійти</Text>
         </TouchableOpacity>
         <View style={styles.textRight}>
           <Text style={styles.yellowText}>
-            Нет аккаунта?{' '}
+            Немає облікового запису?{' '}
             <Text
               style={styles.forgotPass}
               onPress={() => navigation.navigate('SignUp')}>
-              Регистрация
+              Регістрація
             </Text>
           </Text>
         </View>

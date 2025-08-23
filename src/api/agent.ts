@@ -3,7 +3,7 @@ import {
   AxiosAuthRefreshRequestConfig,
   RegisterResData,
   LoginResData,
-  IFetchUserResData,
+  IMeResData,
   IGetDataRes,
   IGetBonusHistoryRes,
   IGetBonusOptionsRes,
@@ -42,6 +42,9 @@ export function createAgent(options: {service: string}) {
       firstname?: string; // це ім'я зберігаеться на сайті
       lastname?: string;
       email?: string;
+      cart: {
+        items: Record<string, any>[]
+      }
 
       shipping_method_id: number;
       payment_method_id: number;
@@ -57,45 +60,13 @@ export function createAgent(options: {service: string}) {
     return client.post('order/place', params, axiosConfig);
   }
 
-  function placeOrderV2(
-    params: {
-      phone: string;
-      firstname?: string;
-      lastname?: string;
-      email?: string;
-
-      shipping_method_id: number;
-      payment_method_id: number;
-      spot_id: number;
-      address?: string;
-
-      comment?: string;
-      sticks?: number;
-      change?: string;
-
-      cart: {
-        items: {
-          id: string;
-          variant_id?: string;
-          quantity: number;
-        }[];
-      };
-    },
-    axiosConfig: AxiosAuthRefreshRequestConfig = {},
-  ) {
-    return client.post('order/v2/place', params, axiosConfig);
-  }
-
   function register(
     data: {
       email: string;
+      phone: string;
       password: string;
       password_confirmation: string;
       name: string;
-      surname: string;
-      activate: boolean;
-      auto_login: boolean;
-      agree: boolean;
     },
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
@@ -107,6 +78,12 @@ export function createAgent(options: {service: string}) {
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
     return client.post<LoginResData>('auth/login', data, axiosConfig);
+  }
+
+  function logout(
+    axiosConfig: AxiosAuthRefreshRequestConfig = {},
+  ) {
+    return client.post<LoginResData>('auth/logout', undefined, axiosConfig);
   }
 
   function restorePassword(
@@ -137,11 +114,11 @@ export function createAgent(options: {service: string}) {
     return client.post('user/password', data, axiosConfig);
   }
 
-  function fetchUser(
+  function me(
     params: {} = {},
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
-    return client.get<IFetchUserResData>('user', {
+    return client.get<IMeResData>('/auth/me', {
       params,
       ...axiosConfig,
     });
@@ -156,13 +133,6 @@ export function createAgent(options: {service: string}) {
     axiosConfig: AxiosAuthRefreshRequestConfig = {},
   ) {
     return client.post('user', data, axiosConfig);
-  }
-
-  function updateCustomer(
-    data: {firstname?: string; lastname?: string},
-    axiosConfig: AxiosAuthRefreshRequestConfig = {},
-  ) {
-    return client.post('user/customer', data, axiosConfig);
   }
 
   function getBonusHistory(params = {}, axiosConfig = {}) {
@@ -191,17 +161,18 @@ export function createAgent(options: {service: string}) {
   }
   return {
     axiosClient,
+    auth: {
+      register,
+      login,
+      me,
+      logout,
+      restorePassword,
+      resetPassword,
+    },
     getData,
     placeOrder,
-    placeOrderV2,
-    register,
-    login,
-    restorePassword,
-    resetPassword,
     updateUserPassword,
-    fetchUser,
     updateUser,
-    updateCustomer,
     log,
     getBonusHistory,
     getBonusOptions,

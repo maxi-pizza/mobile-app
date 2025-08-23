@@ -119,7 +119,9 @@ export const ProductCard = observer(
             ) : product.image !== null ? (
               <Image style={styles.image} source={{uri: product?.image}} />
             ) : (
-              <Image style={styles.svg} source={require('~/assets/Logo.png')} />
+              <View style={styles.image}>
+                <Image style={styles.svg} source={require('~/assets/Logo.png')} />
+              </View>
 
             )}
             <View style={styles.textWrapper}>

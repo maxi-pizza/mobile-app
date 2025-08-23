@@ -8,7 +8,7 @@ export const Header = observer(
     return (
       <View style={styles.container}>
         <View style={styles.block} />
-        <Image style={styles.logo} source={require('~/assets/Logo.png')}/>
+        <Image   style={styles.logo} source={require('~/assets/Logo.png')}/>
 
       </View>
     );

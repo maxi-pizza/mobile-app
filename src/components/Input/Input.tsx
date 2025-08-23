@@ -14,6 +14,10 @@ const styles = StyleSheet.create({
   },
   focused: {
     borderWidth: 1,
+    borderColor: 'white',
+  },
+  disabled: {
+    opacity: 0.4,
   },
   errorFocus: {
     borderWidth: 1,
@@ -60,6 +64,7 @@ export const Input = ({
           styles.input,
           isFocused ? styles.focused : null,
           error && styles.errorFocus,
+          editable ? null: styles.disabled
         ]}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}

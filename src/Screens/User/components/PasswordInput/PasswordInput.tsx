@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
   },
   focused: {
     borderWidth: 1,
+    borderColor: 'white',
   },
-
   hideBtn: {
     position: 'absolute',
     right: 0,

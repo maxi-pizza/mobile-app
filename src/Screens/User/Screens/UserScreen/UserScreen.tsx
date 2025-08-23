@@ -36,7 +36,8 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
     queryFn: async () => {
       setLogged(false);
 
-      const d = await agent.fetchUser();
+      const d = await agent.auth.me();
+      console.log('d',d);
       return d.data;
     },
     retry: false,
@@ -44,6 +45,8 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
     onSuccess: () => setLogged(true),
     onError: () => setLogged(false),
   });
+
+  console.log('user', user)
   useEffect(() => {
     if (user) {
       setLogged(true);
@@ -98,7 +101,7 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
                     style={styles.caret}
                     width="15"
                     height="15"
-                    color="#FFE600"
+                    color="rgb(225, 43, 23)"
                   />
                 </View>
               </TouchableOpacity>
@@ -176,6 +179,15 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
           <UserOption
             title="Доставка і оплата"
             svgIcon={<CreditCard color="#727272" />}
+          />
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() => navigation.navigate('UpdatePassword')}>
+          <UserOption
+            title="Зміна паролю"
+            svgIcon={<Text style={{
+              color: '#727272',
+            }}>***</Text>}
           />
         </TouchableOpacity>
       </View>

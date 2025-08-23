@@ -73,7 +73,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
   } = useQuery({
     queryKey: ['userData'],
     queryFn: async () => {
-      const data = await agent.fetchUser();
+      const data = await agent.auth.me();
       return data.data;
     },
     retry: false,
@@ -331,7 +331,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
 
       const resultantSpotId = spotId;
 
-      await agent.placeOrderV2({
+      await agent.placeOrder({
         phone,
         email,
         firstname,

@@ -18,7 +18,7 @@ const BonusHistoryScreen = () => {
   const {data: user, isLoading: isBonusAmountLoading} = useQuery({
     queryKey: ['userData'],
     queryFn: async () => {
-      const req = await agent.fetchUser();
+      const req = await agent.auth.me();
       return req.data;
     },
   });

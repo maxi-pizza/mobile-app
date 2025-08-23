@@ -26,7 +26,7 @@ const ResetPasswordScreen = ({navigation}: {navigation: any}) => {
   const {mutate: resetMutation, isLoading} = useMutation({
     mutationFn: async (data: FormValues) => {
       const {email} = data;
-      return await agent.restorePassword({
+      return await agent.auth.restorePassword({
         email: email,
         redirect_url: '',
       });
@@ -80,7 +80,7 @@ const ResetPasswordScreen = ({navigation}: {navigation: any}) => {
       <View style={{
         alignItems: 'center'
       }}>
-        <Text style={styles.header}>Восстановление пароля</Text>
+        <Text style={styles.header}>Відновлення паролю</Text>
         <View style={styles.inputTextWrapper}>
           <Controller
             name="email"
@@ -106,10 +106,10 @@ const ResetPasswordScreen = ({navigation}: {navigation: any}) => {
         {!isSent && (
           <>
             <Text style={styles.emailText}>
-              Введите Ваш E-mail адрес для которого необходимо скинуть пароль
+              Введіть Ваш E-mail адрес для якого необхідно зкинути пароль
             </Text>
             <TouchableOpacity style={styles.btn} onPress={handleSubmit(onSubmit)}>
-              <Text style={styles.btnText}>Отправить</Text>
+              <Text style={styles.btnText}>Відправити</Text>
             </TouchableOpacity>
           </>
         )}
@@ -118,7 +118,7 @@ const ResetPasswordScreen = ({navigation}: {navigation: any}) => {
             style={styles.textWrapper}
             onPress={handleSubmit(onSubmit)}>
             <Text style={styles.yellowText}>
-              Не пришел код? <Text style={styles.link}>Отправить ещё</Text>
+              Не прийшов код? <Text style={styles.link}>Відправити ще</Text>
             </Text>
           </TouchableOpacity>
         )}
@@ -184,7 +184,7 @@ const styles = StyleSheet.create({
     fontSize: nh(12),
     lineHeight: 14,
     fontWeight: '400',
-    color: 'rgb(225, 43, 23)',
+    color: 'white',
   },
   link: {
     textDecorationLine: 'underline',

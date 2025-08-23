@@ -3,7 +3,7 @@ import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import PasswordInput from '~/Screens/User/components/PasswordInput/PasswordInput.tsx';
 
-import {Header, Input, CheckBox, BackButton} from '~/components';
+import {Header, Input, BackButton} from '~/components';
 
 import {Controller, useForm} from 'react-hook-form';
 import * as yup from 'yup';
@@ -18,24 +18,21 @@ import {setToken} from '~/common/token/token';
 const validationRequired = 'Заповніть це поле';
 const RegisterSchema = yup.object({
   name: yup.string().min(2).required(validationRequired),
-  surname: yup.string().min(2).required(validationRequired),
+  phone: yup.string().required(validationRequired),
   email: yup.string().email().min(6).max(255).required(validationRequired),
   password: yup.string().min(8).max(255).required(validationRequired),
-  agree: yup.boolean().isTrue(validationRequired),
 });
 type FormValues = {
   name: string;
-  surname: string;
   email: string;
   password: string;
-  agree: boolean;
+  phone: string;
 };
 const InitialValue: FormValues = {
   name: '',
-  surname: '',
+  phone: '',
   email: '',
   password: '',
-  agree: false,
 };
 
 const SignUpScreen = ({navigation}: {navigation: any}) => {
@@ -55,25 +52,23 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
 
   const {mutate: registerMutation, isLoading} = useMutation({
     mutationFn: async (data: FormValues) => {
-      const {email, password, name, surname, agree} = data;
-      return await agent.register({
+      const {email, password, name, phone} = data;
+      return (await agent.auth.register({
         email,
         password,
         password_confirmation: password,
         name,
-        surname,
-        activate: true,
-        auto_login: true,
-        agree,
-      });
+        phone
+      })).data;
     },
     onSuccess: async data => {
       queryClient.invalidateQueries(['userData']);
-      const {token} = data.data.data;
+      const {token} = data;
       await setToken(token);
       navigation.goBack();
     },
     onError: e => {
+
       if (axios.isAxiosError(e)) {
         let error = e as AxiosError<{
           message: string;
@@ -82,11 +77,10 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
         const fieldErrors = error.response?.data.errors;
         if (fieldErrors) {
           Object.keys(fieldErrors).forEach(key => {
-            if (key === 'email') {
-              setError('email', {
-                message: fieldErrors[key][0],
-              });
-            }
+            // @ts-ignore
+            setError(key, {
+              message: fieldErrors[key][0],
+            });
           });
         }
       } else {
@@ -111,7 +105,7 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
         display: 'flex',
         alignItems: 'center',
       }}>
-        <Text style={styles.header}>Регистрация</Text>
+        <Text style={styles.header}>Регістрація</Text>
         <View>
           <View style={styles.inputMargin}>
             <Controller
@@ -131,15 +125,15 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
           </View>
           <View style={styles.inputMargin}>
             <Controller
-              name="surname"
+              name="phone"
               control={control}
               render={({field: {onChange, value}}) => (
                 <Input
-                  placeholder="Фамилия"
+                  placeholder="Телефон"
                   inputMode="text"
                   value={value}
                   onChangeText={v => onChange(v)}
-                  error={errors.surname?.message}
+                  error={errors.phone?.message}
                 />
               )}
             />
@@ -176,36 +170,17 @@ const SignUpScreen = ({navigation}: {navigation: any}) => {
             />
             {/* <PasswordInput /> */}
           </View>
-          <Controller
-            name="agree"
-            control={control}
-            render={({field: {onChange, value}}) => (
-              <View style={styles.agreementWrapper}>
-                <CheckBox active={value} onChange={onChange}></CheckBox>
-                <Text style={styles.agreementText}>
-                  Я согласен с условиями использования и обработки моих
-                  персональных данных
-                </Text>
-                {errors.agree?.message && (
-                  <View style={styles.errorContainer}>
-                    <Text style={styles.errorText}>{errors.agree?.message}</Text>
-                  </View>
-                )}
-              </View>
-            )}
-          />
-          {/* <CheckBox /> */}
 
           <TouchableOpacity style={styles.btn} onPress={handleSubmit(onSubmit)}>
-            <Text style={styles.btnText}>Регистрация</Text>
+            <Text style={styles.btnText}>Регістрація</Text>
           </TouchableOpacity>
           <View style={styles.textWrapper}>
             <Text style={styles.yellowText}>
-              Уже есть аккаунт?
+              Вже маєте обліковий запис?
               <Text
                 onPress={() => navigation.navigate('SignIn')}
                 style={styles.link}>
-                Войти
+                Увійти
               </Text>
             </Text>
           </View>
@@ -268,19 +243,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginTop: nh(10),
   },
-  agreementText: {
-    fontFamily: 'MontserratRegular',
-    fontSize: nh(11),
-    fontWeight: '400',
-    color: 'white',
-    width: nw(266),
-    height: nh(30),
-    marginLeft: nw(10),
-  },
-  agreementWrapper: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
+
   errorContainer: {
     paddingHorizontal: 5,
     paddingVertical: 2,

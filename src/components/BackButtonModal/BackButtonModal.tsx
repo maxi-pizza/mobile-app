@@ -13,7 +13,7 @@ export const BackButtonModal = ({
 }) => {
   return (
     <Pressable style={styles.hideBtn} onPress={() => setIsVisible(!visible)}>
-      <Caret style={styles.caret} width="21" height="21" color="black" />
+      <Caret style={styles.caret} width="21" height="21" color="white" />
     </Pressable>
   );
 };
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFE600',
+    backgroundColor: 'rgb(225, 43, 23)',
     borderRadius: 5,
   },
 });
