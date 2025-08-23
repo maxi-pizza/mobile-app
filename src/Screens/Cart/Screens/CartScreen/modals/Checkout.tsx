@@ -420,7 +420,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
     const rate = bonusOptions.bonus_rate;
    // const max = bonusOptions.max_bonus;
     const b = bonusOptions.get_bonus_from_used_bonus;
-    console.log(b)
+
     let dif = 0;
     if (!b) {
       dif = +(bonusesToUse ?? 0);

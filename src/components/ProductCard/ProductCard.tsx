@@ -50,7 +50,7 @@ export const ProductCard = observer(
       },
     });
     const wishIds = Object.keys(wishlists || {});
-    console.log(wishIds);
+
     const favourite = wishIds.includes(String(product.id));
     const {mutate: addWishlist} = useMutation({
       mutationFn: ({id}: {id: number}) => addToWishlist(id),
