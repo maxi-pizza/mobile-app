@@ -5,8 +5,9 @@ import {
   StyleSheet,
   Text,
   View,
+  Pressable, Platform
 } from 'react-native';
-import {Pressable} from "react-native-gesture-handler";
+
 import {nh, nw} from '~/common/normalize.helper.ts';
 
 import {Header, Category, Banner, Search, ProductCard} from '~/components';
@@ -100,7 +101,12 @@ const HomeScreen = observer(({navigation}: {navigation: any}) => {
                   width: nw(365),
                   height: nh(40),
                 }} onPress={() => navigation.navigate('SearchModal')}>
-                  <Search onSearch={() => ''} editable={false} />
+                  <Search onInputPress={() => {
+                    // on ios onPress event from TextInput doesn't propagate to Pressable component
+                    if(Platform.OS === 'ios') {
+                      navigation.navigate('SearchModal');
+                    }
+                  }} onSearch={() => ''} editable={false} />
                 </Pressable>
               </View>
               <Category />

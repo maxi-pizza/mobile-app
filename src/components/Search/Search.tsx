@@ -8,10 +8,12 @@ export const Search = ({
   editable,
   autoFocus,
   onSearch,
+  onInputPress,
 }: {
   editable?: boolean;
   autoFocus?: boolean;
   onSearch: (value: string) => void;
+  onInputPress: () => void;
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   return (
@@ -19,11 +21,11 @@ export const Search = ({
       <MagnifyingGlass style={styles.magnify} />
       <TextInput
         maxLength={30}
+        onPress={onInputPress}
         onChangeText={e => onSearch(e)}
         onFocus={() => setIsFocused(!isFocused)}
         onBlur={() => setIsFocused(false)}
         editable={editable}
-
         scrollEnabled={false}
         multiline={false}
         placeholderTextColor="#3F3F3F"
@@ -41,7 +43,7 @@ const styles = StyleSheet.create({
     height: nh(40),
     backgroundColor: '#1C1C1C',
     borderRadius: nw(10),
-    position: 'relative',
+    // position: 'relative',
   },
   magnify: {
     position: 'absolute',
