@@ -1,25 +1,24 @@
 import React from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {Header, BackButton} from '~/components';
-import WebView from 'react-native-webview';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import {observer} from 'mobx-react-lite';
+import {useQuery} from '@tanstack/react-query';
+import {contactsQuery} from '~/common/queries/contactsQuery.ts';
 
 const DeliveryAndPayment = observer(({navigation}: {navigation: any}) => {
 
-  const city = {
-    google_map_url: undefined,
-  }
+  const {data: contacts} = useQuery(contactsQuery);
   return (
     <View style={styles.container}>
       <Header />
       <BackButton navigation={navigation} />
       <View style={styles.map}>
-        <Text style={styles.text}>Доставка і оплата</Text>
+        <Text style={styles.title}>Доставка і оплата</Text>
         <View style={{width: nw(365), height: nh(365)}}>
-          <WebView
-            source={{uri: city?.google_map_url ? city.google_map_url : ''}}
-          />
+          <Text  style={styles.description}>
+            {contacts?.delivery_and_payment_info}
+          </Text>
         </View>
       </View>
     </View>
@@ -36,7 +35,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: nh(30),
   },
-  text: {
+  title: {
     color: 'white',
     fontFamily: 'MontserratRegular',
     fontSize: nh(20),
@@ -44,6 +43,15 @@ const styles = StyleSheet.create({
     width: nw(365),
     marginBottom: nh(15),
   },
+  description: {
+    color: 'white',
+    fontFamily: 'MontserratRegular',
+    fontSize: nh(14),
+    fontWeight: '400',
+    width: nw(365),
+    marginBottom: nh(15),
+  },
+
 });
 
 export default DeliveryAndPayment;

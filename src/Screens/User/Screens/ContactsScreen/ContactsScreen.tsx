@@ -21,7 +21,7 @@ const ContactsScreen = observer(({navigation}: {navigation: any}) => {
 
   const {data: contacts} = useQuery(contactsQuery);
 
-  const phonesArray = [] as string[];
+  const phonesArray = contacts?.phones || [];
   const openLinkHandler = async (appUrl: string, webUrl: string) => {
     try {
       const supported = appUrl !== '' && (await Linking.canOpenURL(appUrl));
@@ -45,7 +45,7 @@ const ContactsScreen = observer(({navigation}: {navigation: any}) => {
                 openLinkHandler(contacts.instagram_app, contacts.instagram_web)
               }
               style={styles.btn}>
-              <Instagram width="17" height="17" color="black" />
+              <Instagram width="17" height="17" color="white" />
               <Text style={styles.btnText}>
                 {contacts.instagram_display_text}
               </Text>
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     width: nw(365),
     height: nh(42),
     borderRadius: 10,
-    backgroundColor: '#FFE600',
+    backgroundColor: 'rgb(225, 43, 23)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     fontSize: nh(14),
     lineHeight: 17,
-    color: 'black',
+    color: 'white',
   },
   phonesWrapper: {
     display: 'flex',

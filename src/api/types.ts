@@ -216,4 +216,5 @@ export type IGetContacts = {
   instagram_app: string;
   instagram_web: string;
   phones: string[];
+  delivery_and_payment_info: string;
 };
