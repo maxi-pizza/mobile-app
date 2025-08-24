@@ -96,7 +96,13 @@ export const ProductCard = observer(
     };
     return (
       <View style={styles.wrapper}>
-        <Text style={styles.weight}>{product.weight} г</Text>
+        {product.weight && (
+          <Text style={styles.weight}>
+            {product.weight}&nbsp;г&nbsp;
+            {/* non breaking spaces needed to preserve г symbol. for some reason it is hidden on android devices  */}
+          </Text>
+        )}
+
         <Pressable
           onPress={() =>
             navigation.navigate('ProductModal', {

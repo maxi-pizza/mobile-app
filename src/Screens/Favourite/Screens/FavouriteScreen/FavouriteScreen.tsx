@@ -40,7 +40,7 @@ const FavouriteScreen = observer(({navigation}: {navigation: any}) => {
         </View>
       ) : (
         <FlatList
-          ListHeaderComponent={<Text style={styles.text}>Вибране</Text>}
+          ListHeaderComponent={<Text style={styles.text}>Улюблені</Text>}
           data={products}
           renderItem={({item}) => (
             <ProductCard
