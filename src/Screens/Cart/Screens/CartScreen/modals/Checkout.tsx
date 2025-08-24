@@ -678,7 +678,7 @@ const Checkout = observer(({navigation}: {navigation: any}) => {
                   color="white"
                 />
                 <Text style={styles.personText}>Кількість персон?</Text>
-                <View style={{marginLeft: nw(45)}}>
+                <View style={styles.personCounter}>
                   <Counter
                     count={Number(value)}
                     onHandleAdd={() => onChange(Number(value) + 1)}
@@ -827,8 +827,12 @@ const styles = StyleSheet.create({
     color: 'white',
     fontSize: nh(14),
     fontFamily: 'MontserratRegular',
-    lineHeight: 17,
+    lineHeight: nh(17),
     fontWeight: '400',
+  },
+  personCounter: {
+    position: 'absolute',
+    right: nw(15),
   },
   blackText: {
     fontFamily: 'MontserratRegular',

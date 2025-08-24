@@ -66,9 +66,9 @@ const SignInScreen = ({navigation}: {navigation: any}) => {
           errors?: Record<string, string[]>;
         }>;
         const code = error.response?.status;
-        if (code === 422) {
+        if (code === 401) {
           setError('password', {
-            message: 'Неверное имя пользователя или пароль',
+            message: 'Невірний логін або пароль користувача',
           });
         }
       } else {
