@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "EmojiSushiMobile.app"
-               BlueprintName = "EmojiSushiMobile"
-               ReferencedContainer = "container:EmojiSushiMobile.xcodeproj">
+               BuildableName = "MaxiPizza.app"
+               BlueprintName = "MaxiPizza"
+               ReferencedContainer = "container:MaxiPizza.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "EmojiSushiMobileTests.xctest"
-               BlueprintName = "EmojiSushiMobileTests"
-               ReferencedContainer = "container:EmojiSushiMobile.xcodeproj">
+               BuildableName = "MaxiPizzaTests.xctest"
+               BlueprintName = "MaxiPizzaTests"
+               ReferencedContainer = "container:MaxiPizza.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "EmojiSushiMobile.app"
-            BlueprintName = "EmojiSushiMobile"
-            ReferencedContainer = "container:EmojiSushiMobile.xcodeproj">
+            BuildableName = "MaxiPizza.app"
+            BlueprintName = "MaxiPizza"
+            ReferencedContainer = "container:MaxiPizza.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "EmojiSushiMobile.app"
-            BlueprintName = "EmojiSushiMobile"
-            ReferencedContainer = "container:EmojiSushiMobile.xcodeproj">
+            BuildableName = "MaxiPizza.app"
+            BlueprintName = "MaxiPizza"
+            ReferencedContainer = "container:MaxiPizza.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

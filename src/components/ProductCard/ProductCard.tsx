@@ -25,7 +25,7 @@ import {
 
 import {observer} from 'mobx-react-lite';
 import {IProduct} from "~/api";
-import {STORAGE_URL} from "~/env.ts";
+import {STORAGE_URL} from "~/constants.ts";
 
 export const ProductCard = observer(
   ({

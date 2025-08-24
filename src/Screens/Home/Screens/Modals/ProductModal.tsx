@@ -31,7 +31,7 @@ import {
   dataQuery,
 } from '~/queries/data.query.ts';
 import {IProduct} from '~/api';
-import {STORAGE_URL} from '~/env.ts';
+import {STORAGE_URL} from '~/constants.ts';
 
 const ProductModal = observer(
   ({route, navigation}: {route: any; navigation: any}) => {

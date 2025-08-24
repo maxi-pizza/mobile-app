@@ -9,7 +9,7 @@ import Animated, {
   useSharedValue,
 } from 'react-native-reanimated';
 import {dataQuery} from '~/queries/data.query.ts';
-import {STORAGE_URL} from "~/env.ts";
+import {STORAGE_URL} from "~/constants.ts";
 
 export const Banner = () => {
   const flatRef = useAnimatedRef<Animated.FlatList<any>>();

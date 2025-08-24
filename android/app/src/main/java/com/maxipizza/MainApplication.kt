@@ -1,4 +1,4 @@
-package com.emojisushimobile
+package com.maxipizza
 
 import android.app.Application
 import com.facebook.react.PackageList

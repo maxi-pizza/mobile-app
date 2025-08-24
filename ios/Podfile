@@ -14,7 +14,7 @@ if linkage != nil
   use_frameworks! :linkage => linkage.to_sym
 end
 
-target 'EmojiSushiMobile' do
+target 'MaxiPizza' do
   config = use_native_modules!
 
   use_react_native!(
@@ -23,7 +23,7 @@ target 'EmojiSushiMobile' do
     :app_path => "#{Pod::Config.instance.installation_root}/.."
   )
 
-  target 'EmojiSushiMobileTests' do
+  target 'MaxiPizzaTests' do
     inherit! :complete
     # Pods for testing
   end

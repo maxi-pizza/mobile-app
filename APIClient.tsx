@@ -1,6 +1,6 @@
 import {createAgent} from '~/api';
 import {clearToken, getToken} from '~/common/token/token';
-import {API_BASE_URL} from "~/env.ts";
+import {API_BASE_URL} from "~/constants.ts";
 
 export const agent = createAgent({
   service: API_BASE_URL,
