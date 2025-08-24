@@ -48,7 +48,7 @@ const ClosedRestaurant = () => {
       backgroundStyle={styles.container}
       handleIndicatorStyle={styles.indicator}>
       <View style={styles.backgroundContainer}>
-        <LockKeySvg color={'yellow'} width={100} height={100} />
+        <LockKeySvg color={'rgb(225, 43, 23)'} width={100} height={100} />
         <Text style={styles.whiteText}>Ресторан зачинено</Text>
         <Text
           style={[
@@ -89,7 +89,7 @@ const styles = StyleSheet.create({
   btn: {
     width: nw(255),
     height: nh(37),
-    backgroundColor: 'yellow',
+    backgroundColor: 'rgb(225, 43, 23)',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
     fontFamily: 'MontserratRegular',
     fontSize: nh(14),
     fontWeight: '700',
-    color: 'black',
+    color: 'white',
   },
   whiteText: {
     fontFamily: 'MontserratRegular',

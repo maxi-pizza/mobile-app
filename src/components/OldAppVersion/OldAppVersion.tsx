@@ -87,12 +87,12 @@ const styles = StyleSheet.create({
   button: {
     paddingVertical: 10,
     paddingHorizontal: 24,
-    backgroundColor: '#FFE600',
+    backgroundColor: 'rgb(225, 43, 23)',
     borderRadius: 6,
   },
   buttonText: {
     fontWeight: '600',
-    color: 'black',
+    color: 'white',
   },
 });
 export default OldAppVersion;
