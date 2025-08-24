@@ -72,11 +72,12 @@ const styles = StyleSheet.create({
   wrapper: {
     marginTop: nh(40),
     width: nw(365),
-    height: nh(240),
+    height: nw(205),
   },
   banner: {
     width: nw(365),
-    height: nh(240),
+    height: nw(205),
     borderRadius: 10,
   },
 });
+// aspect ratio 1.7776470588235294
