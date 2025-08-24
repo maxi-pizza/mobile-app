@@ -165,7 +165,7 @@ const ProductModal = observer(
               <TouchableOpacity
                 style={styles.addBtn}
                 onPress={() => onHandleAdd()}>
-                <Text style={styles.blackText}>Купити зараз</Text>
+                <Text style={styles.blackText}>Додати в кошик</Text>
               </TouchableOpacity>
             )}
           </View>
