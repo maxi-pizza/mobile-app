@@ -209,7 +209,7 @@ const styles = StyleSheet.create({
     color: '#727272',
     fontWeight: '400',
     marginLeft: nw(10),
-    lineHeight: 17,
+    lineHeight: nh(17),
   },
   titleWrapper: {
     display: 'flex',
@@ -258,14 +258,14 @@ const styles = StyleSheet.create({
   price: {
     fontSize: nh(18),
     fontWeight: '600',
-    lineHeight: 18,
+    lineHeight: nh(18),
     color: 'white',
   },
   discountPrice: {
     fontSize: nh(14),
     color: '#727272',
     fontWeight: '600',
-    lineHeight: 15,
+    lineHeight: nh(15),
     marginLeft: nw(5),
     textDecorationLine: 'line-through',
   },
