@@ -1,16 +1,23 @@
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, Pressable, StyleSheet, View} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 import {observer} from 'mobx-react-lite';
+import {useNavigation} from '@react-navigation/native';
 
 export const Header = observer(
   () => {
+    const navigation = useNavigation();
     return (
-      <View style={styles.container}>
-        <View style={styles.block} >
-          <Image  style={styles.logo} source={require('~/assets/Logo.png')}/>
+      <Pressable onPress={() => {
+        // @ts-ignore
+        navigation.navigate('Home');
+      }}>
+        <View style={styles.container}>
+          <View style={styles.block} >
+            <Image  style={styles.logo} source={require('~/assets/Logo.png')}/>
+          </View>
         </View>
-      </View>
+      </Pressable>
     );
   },
 );

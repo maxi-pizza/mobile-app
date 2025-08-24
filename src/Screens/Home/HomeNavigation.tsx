@@ -4,7 +4,7 @@ import ProductModal from '~/Screens/Home/Screens/Modals/ProductModal.tsx';
 import SearchModal from '~/Screens/Home/Screens/Modals/SearchModal.tsx';
 import ThankYou from '~/Screens/Cart/Screens/CartScreen/ThankYou.tsx';
 
-type ScreenProps = {
+export type ScreenProps = {
   Home: undefined;
   ProductModal: undefined;
   SearchModal: undefined;
