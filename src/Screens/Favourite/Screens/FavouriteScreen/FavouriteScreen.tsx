@@ -35,7 +35,7 @@ const FavouriteScreen = observer(({navigation}: {navigation: any}) => {
           }} source={require('~/assets/Icons/Sticks.png')}/>
 
           <Text style={[styles.noResultText, {marginTop: nh(15)}]}>
-            Вибрані товари не знайдено
+            Ви поки не додали жодного товару в улюблені
           </Text>
         </View>
       ) : (
