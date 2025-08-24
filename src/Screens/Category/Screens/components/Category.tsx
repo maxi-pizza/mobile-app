@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {nh, nw} from '~/common/normalize.helper.ts';
 
 import {ICategory} from '~/api';
@@ -13,11 +13,6 @@ const Category = ({
 }) => {
   return (
     <TouchableOpacity style={styles.container} onPress={categoryHandle}>
-      {category.image ? (
-        <Image style={styles.image} source={{uri: category?.image}} />
-      ) : (
-        <Image style={styles.image} source={require('~/assets/Logo.png')} />
-      )}
       <Text style={styles.text}>{category.name}</Text>
     </TouchableOpacity>
   );
@@ -26,7 +21,7 @@ const Category = ({
 const styles = StyleSheet.create({
   container: {
     width: nw(175),
-    height: nh(70),
+    height: nh(35),
     backgroundColor: '#1C1C1C',
     display: 'flex',
     flexDirection: 'row',

@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import { StyleSheet, Text, TouchableOpacity} from 'react-native';
 import {nw, nh} from '~/common/normalize.helper.ts';
 import {ICategory} from '~/api';
 import categoryStore from '~/stores/store.ts';
@@ -13,11 +13,6 @@ export const CategoryCard = observer(({category}: {category: ICategory}) => {
         categoryStore.categorySlug === category.slug ? styles.active : '',
       ]}
       onPress={() => categoryStore.changeCategory(category.slug)}>
-      {category.image ? (
-        <Image style={styles.image} source={{uri: category?.image}} />
-      ) : (
-        <Image style={styles.image} source={require('~/assets/Logo.png')} />
-      )}
       <Text style={styles.text}>{category?.name}</Text>
     </TouchableOpacity>
   );
@@ -26,8 +21,8 @@ export const CategoryCard = observer(({category}: {category: ICategory}) => {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#1C1C1C',
-    width: nw(165),
-    height: nh(70),
+
+    height: nh(35),
     borderRadius: nw(10),
     display: 'flex',
     flexDirection: 'row',
@@ -47,9 +42,7 @@ const styles = StyleSheet.create({
   text: {
     fontFamily: 'MontserratRegular',
     color: 'white',
-    paddingLeft: nw(15),
     fontSize: nh(13),
     fontWeight: '400',
-    width: nw(100),
   },
 });

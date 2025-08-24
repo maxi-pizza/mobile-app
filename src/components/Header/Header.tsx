@@ -7,9 +7,9 @@ export const Header = observer(
   () => {
     return (
       <View style={styles.container}>
-        <View style={styles.block} />
-        <Image   style={styles.logo} source={require('~/assets/Logo.png')}/>
-
+        <View style={styles.block} >
+          <Image  style={styles.logo} source={require('~/assets/Logo.png')}/>
+        </View>
       </View>
     );
   },
@@ -26,14 +26,16 @@ const styles = StyleSheet.create({
     width: '100%',
   },
   logo: {
-    position: 'absolute',
-    left: '50%',
-    transform: [{translateX: -nw(36.5)}],
-    width: nw(68 / 1.5),
-     height: nw(50 / 1.5),
+    width: nw(61 / 1.5),
+    height: nh(50 / 1.5),
   },
   block: {
-    width: nw(79),
+
+    width: "100%",
     height: nh(18),
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    flexDirection: 'row'
   },
 });

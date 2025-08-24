@@ -127,10 +127,10 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
                 <UserCircle color="#727272" />
               </View>
               <Text style={styles.signInText}>Увійдіть в акаунт</Text>
-              <Text style={styles.descriptionText}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt.
-              </Text>
+              {/*<Text style={styles.descriptionText}>*/}
+              {/*  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do*/}
+              {/*  eiusmod tempor incididunt.*/}
+              {/*</Text>*/}
               <View style={styles.btnWrapper}>
                 <TouchableOpacity
                   onPress={() => navigation.navigate('SignUp')}
@@ -180,15 +180,17 @@ const UserScreen = observer(({navigation}: {navigation: any}) => {
             svgIcon={<CreditCard color="#727272" />}
           />
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => navigation.navigate('UpdatePassword')}>
-          <UserOption
-            title="Зміна паролю"
-            svgIcon={<Text style={{
-              color: '#727272',
-            }}>***</Text>}
-          />
-        </TouchableOpacity>
+        {logged && (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('UpdatePassword')}>
+            <UserOption
+              title="Зміна паролю"
+              svgIcon={<Text style={{
+                color: '#727272',
+              }}>***</Text>}
+            />
+          </TouchableOpacity>
+        )}
       </View>
     </ScrollView>
   );
@@ -231,7 +233,7 @@ const styles = StyleSheet.create({
   userCircle: {
     backgroundColor: '#1C1C1C',
     width: nw(72),
-    height: nh(72),
+    height: nw(72),
     borderRadius: 36,
     display: 'flex',
     justifyContent: 'center',
@@ -241,14 +243,14 @@ const styles = StyleSheet.create({
     fontFamily: 'MontserratRegular',
     fontWeight: '400',
     fontSize: nh(13),
-    lineHeight: 16,
+    lineHeight: nh(16),
     color: '#757575',
   },
   profileText: {
     fontFamily: 'MontserratRegular',
     fontSize: nh(15),
     fontWeight: '400',
-    lineHeight: 18,
+    lineHeight: nh(18),
     color: 'white',
   },
   profileTextUserWrapper: {
@@ -271,7 +273,7 @@ const styles = StyleSheet.create({
   signInText: {
     fontFamily: 'MontserratRegular',
     fontSize: nh(15),
-    lineHeight: 18,
+    lineHeight: nh(18),
     fontWeight: '500',
     color: 'white',
     marginTop: nh(15),
@@ -279,7 +281,7 @@ const styles = StyleSheet.create({
   descriptionText: {
     fontFamily: 'MontserratRegular',
     fontSize: nh(12),
-    lineHeight: 14,
+    lineHeight: nh(14),
     fontWeight: '400',
     color: 'white',
     textAlign: 'center',
@@ -317,7 +319,7 @@ const styles = StyleSheet.create({
     fontFamily: 'MontserratRegular',
     fontSize: nh(14),
     fontWeight: '500',
-    lineHeight: 17,
+    lineHeight: nh(17),
     color: 'white',
   },
   btnWrapper: {
